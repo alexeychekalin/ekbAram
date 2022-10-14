@@ -1,0 +1,147 @@
+<template>
+    <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <h1 class="uk-text-center">Добавление нового поставщика</h1>
+        <form @submit.prevent="newProvider()" class="uk-width-1-1">
+            <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
+                <div>
+                    <div class="uk-card-default uk-card-body">
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Legal Name</label>
+                                <input class="uk-input" type="text" required placeholder="" required v-model="name" >
+                            </div>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Trade Name</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="tradename" >
+                            </div>
+                        </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Bill to Address</label>
+                                <input class="uk-input" type="text" placeholder="" required v-model="address" >
+                            </div>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Ship from Address</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="address1" >
+                            </div>
+                        </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">E-mail</label>
+                                <input class="uk-input" type="text" required placeholder="" required v-model="email" >
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Phone</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="phone" >
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Fax</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="fax" >
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Primary Contact</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                            </div>
+                        </div>
+                    </div>
+                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                </div>
+            </div>
+        </form>
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" style="background-color: white;" v-if="results.length != 0">
+            <thead>
+            <tr>
+                <th class="uk-table-shrink">#</th>
+                <th class="">Legal Name</th>
+                <th class="">Trade Name</th>
+                <th class="">Bill to Address</th>
+                <th class="">Ship from Address</th>
+                <th class="">Email</th>
+                <th class="">Phone</th>
+                <th class="">Fax</th>
+                <th class="">Primary Contact</th>
+            </tr>
+            </thead>
+            <tbody v-for="(result, cnt) in results">
+            <tr>
+                <td>{{cnt + 1}}</td>
+                <td>{{result.name || '-'}}</td>
+                <td>{{result.tradename || '-'}}</td>
+                <td class="uk-text-nowrap">{{result.address || '-'}}</td>
+                <td class="uk-text-truncate">{{result.address1 || '-'}}</td>
+                <td>{{result.email || '-'}}</td>
+                <td>{{result.phone || '-'}}</td>
+                <td>{{result.fax || '-'}}</td>
+                <td>{{result.contact || '-'}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "NewProvider",
+    data:() => ({
+        name: '',
+        address:'',
+        address1:'',
+        tradename:'',
+        email:'',
+        fax:'',
+        phone:'',
+        contact:'',
+        result:'',
+        results: [],
+    }),
+    methods:{
+        newProvider(){
+            axios.post('/api/provider', {
+                                                    name: this.name,
+                                                    address: this.address,
+                                                    address1: this.address1,
+                                                    tradename: this.tradename,
+                                                    email: this.email,
+                                                    fax: this.fax,
+                                                    phone: this.phone,
+                                                    contact: this.contact,})
+                .then(res =>{
+                    UIkit.notification({message: 'Новый поставщик добавлен', status:'success'})
+                    this.$data.results.push(
+                        {
+                            name: this.name,
+                            address: this.address,
+                            address1: this.address1,
+                            tradename: this.tradename,
+                            email: this.email,
+                            fax: this.fax,
+                            phone: this.phone,
+                            contact: this.contact
+                        }
+                    )
+                    this.name = ''
+                    this.address = ''
+                    this.address1 = ''
+                    this.tradename = ''
+                    this.email = ''
+                    this.fax = ''
+                    this.phone = ''
+                    this.contact = ''
+                })
+                .catch(error => {
+                    UIkit.notification({message: error, status:'danger'})
+                    console.log(error);
+                })
+        }
+    },
+    mounted() {
+
+    }
+}
+</script>
+
+<style scoped>
+.uk-notification {
+    background-color: #0f6ecd;
+}
+</style>

@@ -1,0 +1,384 @@
+<template xmlns="http://www.w3.org/1999/html">
+    <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <div id="modal-newClient" class="uk-modal-container" uk-modal>
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+                <modalClients/>
+        </div>
+        <div id="modal-newParts" class="uk-modal-container" uk-modal>
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <modalParts/>
+        </div>
+        <div id="modal-newProvider" class="uk-modal-container" uk-modal>
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <modalProvider/>
+        </div>
+        <h1 class="uk-text-center">Новый заказ</h1>
+            <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
+                <div>
+                    <div class="uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Детали заказа</h3>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Номер</label>
+                                <input class="uk-input" type="text" placeholder="" required v-model="number" >
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Дата заказа</label>
+                                <date-picker style="display: block" class="uk-input" v-model="timeStart" valueType="format"></date-picker>
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Дата исполнения</label>
+                                <date-picker style="display: block" class="uk-input" v-model="timeStop" valueType="format"></date-picker>
+                            </div>
+                            <div class="uk-width-expand">
+                                <label class="uk-form-label">IPO</label>
+                                <div style="display: block" class="js-upload" uk-form-custom>
+                                    <input v-on:change="onFileChange" type="file" single accept="application/pdf" >
+                                    <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
+                                    <p style="display: inline" class="uk-margin-small-left uk-text-primary uk-text-medium">{{filename}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-default uk-card-body uk-margin-top">
+                        <div class="uk-width-1-1" uk-grid>
+                            <div>
+                                <h3 class="uk-card-title">Клиент</h3>
+                            </div>
+                            <div>
+                                <select class="uk-select" @change="selectClient" v-model="client" >
+                                    <option v-for="(cl, index) in clients" v-bind:value="index">
+                                        {{ cl.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div style="margin-left: auto">
+                                <a style="margin-top: 5px;" uk-tooltip="Новый клиент" uk-icon="icon: credit-card" href="#modal-newClient" uk-toggle ></a>
+                            </div>
+                        </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-expand">
+                                <label class="uk-form-label">Customer Name</label>
+                                <input class="uk-input" type="text" required placeholder="" v-model="nameClient" disabled>
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Reference number</label>
+                                <input class="uk-input" type="text" required placeholder="" v-model="code" disabled>
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Primary Contact</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="contact" disabled>
+                            </div>
+                            <!--
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">IPO</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="ipo" >
+                            </div>
+                            -->
+                        </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Bill to Address</label>
+                                <input class="uk-input" type="text" required placeholder="" v-model="address" disabled >
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">E-mail</label>
+                                <input class="uk-input" type="text" required placeholder="" required v-model="email" disabled>
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Phone</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="phone" disabled>
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Fax</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="fax" disabled >
+                            </div>
+                        </div>
+                        <div class="uk-grid-small" uk-grid v-show="client !== ''">
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Ship to</label>
+                                <select class="uk-select" @change="clearNewAddress" v-model="shipto" >
+                                    <option :value="address1">
+                                        {{address1}}
+                                    </option>
+                                    <option :value="address2" v-if="address2 != ''">
+                                        {{address2}}
+                                    </option>
+                                    <option :value="address3" v-if="address3 != ''">
+                                        {{address3}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">NEW SHIP ADDRESS</label>
+                                <input class="uk-input" @blur="clearAddress" type="text" placeholder="" v-model="newaddress"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-default uk-card-body uk-margin-top">
+                        <div class="uk-width-1-1" uk-grid>
+                            <div>
+                                <h3 class="uk-card-title">Заказ</h3>
+                            </div>
+                            <div style="margin-left: auto">
+                                <a class="uk-margin-small-right"  uk-tooltip="Новая позиция" uk-icon="icon: cart" href="#modal-newParts" uk-toggle ></a>
+                                 <a uk-tooltip="Новый поставщик" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
+                            </div>
+                        </div>
+                        <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
+                            <div class="uk-grid-small" uk-grid>
+                                <div class="uk-width-1-4@s">
+                                    <label class="uk-form-label">Позиция</label>
+                                    <select class="uk-select"  v-model="order.part" >
+                                        <option v-for="p in parts" v-bind:value="p.id">
+                                            {{ p.pn }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="uk-width-1-4@s">
+                                    <label class="uk-form-label">Поставщик</label>
+                                    <select class="uk-select" v-model="order.provider" >
+                                        <option v-for="pr in providers" v-bind:value="pr.id">
+                                            {{ pr.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="uk-width-1-6@s">
+                                    <label class="uk-form-label">Количество</label>
+                                    <input class="uk-input" type="number" placeholder="" v-model="order.quantity" >
+                                </div>
+                                <div class="uk-width-1-6@s">
+                                    <label class="uk-form-label">Цена</label>
+                                    <input class="uk-input" type="number" placeholder="" v-model="order.price" >
+                                </div>
+                                <div style="margin-top: 1.8%">
+                                    <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                                </div>
+                            </div>
+                        </div>
+                        <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
+                    </div>
+                    <button @click="createOrder" class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                </div>
+            </div>
+    </div>
+</template>
+
+<script>
+import {eventBus} from '../../app'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import modalClients from "../modals/ModalClient";
+import modalParts from "../modals/ModalParts";
+import modalProvider from "../modals/ModalProvider";
+import store from '../../../store'
+
+export default {
+    name: "NewOrder",
+    data:() => ({
+        number: '',
+        ipo: '',
+        timeStart:'',
+        timeStop:'',
+        filename:'',
+        file:'',
+        clients: [],
+        client:'',
+        nameClient: '',
+        address:'',
+        address1:'',
+        address2:'',
+        address3:'',
+        email:'',
+        fax:'',
+        phone:'',
+        contact:'',
+        code:'',
+        parts:[],
+        providers:[],
+        orders:[{
+            part:'',
+            provider:'',
+            price: '',
+            quantity:'',
+            order_number: ''
+        }],
+        shipto:'',
+        newaddress:''
+    }),
+    components:{
+        DatePicker, modalClients, modalParts, modalProvider
+    },
+    methods:{
+        clearAddress(){
+          this.shipto = this.newaddress
+        },
+        clearNewAddress(){
+            this.newaddress = ''
+        },
+        newParts(){
+            axios.post('/api/parts', {pn: this.pn, description: this.description})
+                .then(res =>{
+                    UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
+                    this.pn = ''
+                    this.description = ''
+                })
+                .catch(error => {
+                    UIkit.notification({message: error, status:'danger'})
+                    console.log(error);
+                })
+        },
+        onFileChange(e){
+            this.filename = e.target.files[0].name
+            this.file = e.target.files[0]
+        },
+        getClients (){
+            axios.get('/api/clients')
+                .then(res => {
+                    this.$data.clients = res.data;
+                })
+        },
+        selectClient(){
+            this.nameClient = this.clients[this.client].name
+            this.address = this.clients[this.client].address
+            this.address1 = this.clients[this.client].address1
+            this.address2 = this.clients[this.client].address2
+            this.address3 = this.clients[this.client].address3
+            this.phone = this.clients[this.client].phone
+            this.fax = this.clients[this.client].fax
+            this.email = this.clients[this.client].email
+            this.contact = this.clients[this.client].contact
+            this.code = this.clients[this.client].code
+        },
+        getParts(){
+            axios.get('/api/parts',{withCredentials: true} )
+                .then(res => {
+                    this.$data.parts = res.data;
+                })
+        },
+        getProvider(){
+            axios.get('/api/provider')
+                .then(res => {
+                    this.$data.providers = res.data;
+                })
+        },
+        addOrder(){
+            this.orders.push(
+                {
+                    part:'',
+                    provider:'',
+                    price: '',
+                    quantity:''
+                }
+            )
+            console.log(this.orders)
+        },
+        deleteOrder(index){
+            this.orders.splice(index,1)
+        },
+        createOrder(){
+            // upload file
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+
+            // update address3 if new posted
+            if(this.newaddress != ''){
+                console.log(this.newaddress)
+                axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
+                    .then(res => {
+                        UIkit.notification({message: 'Адрес клиета добавлн', status:'success'})
+                        console.log('address 3 updated')
+                        this.clients[this.client].address3 = this.shipto
+                        this.address3 = this.shipto
+                    })
+                    .catch(function (error) {
+                    UIkit.notification({message: error, status:'danger'})
+                    console.log("error in update address")
+                });
+            }
+
+            let formData = new FormData();
+            formData.append('file', this.file);
+            axios.post('api/fileupload', formData, config)
+                .then(res =>{
+                    this.ipo = res.data.success
+                    // create order
+                    axios.post('api/order', {number: this.number, datestart: this.timeStart, dateend: this.timeStop, ipo: this.ipo, client:this.clients[this.client].id, shipto:this.shipto, manager:store.state.auth.user.id })
+                        .then(response => {
+                            // create order list
+                            this.orders.forEach(el => {el.order_number = response.data.id})
+                            axios.post('api/orderlist', this.$data.orders)
+                                .then(response => {
+                                    UIkit.notification({message: 'Заказ добавлен!', status:'success'})
+                                    this.$data.number = ''
+                                    this.$data.ipo = ''
+                                    this.$data.timeStart =''
+                                    this.$data.timeStop = ''
+                                    this.$data.filename =''
+                                    this.$data.file =''
+                                    this.$data.client =''
+                                    this.$data.nameClient = ''
+                                    this.$data.address =''
+                                    this.$data.address1 = ''
+                                    this.$data.address2 = ''
+                                    this.$data.address3 = ''
+                                    this.$data.email = ''
+                                    this.$data.fax = ''
+                                    this.$data.phone =''
+                                    this.$data.contact =''
+                                    this.$data.code =''
+                                    this.$data.newaddress =''
+                                    this.$data.orders = [{
+                                        part:'',
+                                        provider:'',
+                                        price: '',
+                                        quantity:'',
+                                        order_number: ''
+                                    }]
+                                })
+                                .catch(function (error) {
+                                    UIkit.notification({message: error, status:'danger'})
+                                    console.log("error in create order list")
+                                });
+                        })
+                        .catch(function (error) {
+                            UIkit.notification({message: error, status:'danger'})
+                            console.log("error in create order")
+                        });
+                })
+                .catch(function (error) {
+                    UIkit.notification({message: error, status:'danger'})
+                    console.log("error in file upload")
+                });
+        },
+    },
+    mounted() {
+        this.getClients()
+        this.getParts()
+        this.getProvider()
+
+        eventBus.$on('newClient', () => {
+            this.getClients()
+        })
+
+        eventBus.$on('newParts', () => {
+            this.getParts()
+        })
+
+        eventBus.$on('newProvider', () => {
+            this.getProvider()
+        })
+    }
+}
+</script>
+
+<style>
+.uk-notification {
+    background-color: #0f6ecd;
+}
+.mx-input{
+    box-shadow: inset 0 0 0 rgba(0,0,0,.075);
+    border: 0 !important;
+}
+</style>
