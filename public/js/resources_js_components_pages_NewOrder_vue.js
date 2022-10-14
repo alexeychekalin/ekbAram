@@ -576,6 +576,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -587,6 +594,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "NewOrder",
   data: function data() {
     return {
+      description: '',
+      filter: [],
       number: '',
       ipo: '',
       timeStart: '',
@@ -614,6 +623,9 @@ __webpack_require__.r(__webpack_exports__);
         quantity: '',
         order_number: ''
       }],
+      descriptions: [{
+        description: ''
+      }],
       shipto: '',
       newaddress: ''
     };
@@ -625,6 +637,21 @@ __webpack_require__.r(__webpack_exports__);
     modalProvider: _modals_ModalProvider__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   methods: {
+    search: function search(val) {
+      var _this = this;
+
+      var filterValue = function filterValue(part) {
+        return _this.$data.parts.filter(function (data) {
+          return data.pn.toLowerCase().indexOf(part.toLowerCase()) > -1;
+        });
+      };
+
+      this.filter = filterValue(val).splice(0, 5);
+    },
+    selectPosition: function selectPosition(ind, index) {
+      this.orders[index].part = this.parts[ind].pn;
+      this.descriptions[index].description = this.parts[ind].description;
+    },
     clearAddress: function clearAddress() {
       this.shipto = this.newaddress;
     },
@@ -632,7 +659,7 @@ __webpack_require__.r(__webpack_exports__);
       this.newaddress = '';
     },
     newParts: function newParts() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post('/api/parts', {
         pn: this.pn,
@@ -642,8 +669,8 @@ __webpack_require__.r(__webpack_exports__);
           message: 'Новая позиция добавлена!',
           status: 'success'
         });
-        _this.pn = '';
-        _this.description = '';
+        _this2.pn = '';
+        _this2.description = '';
       })["catch"](function (error) {
         UIkit.notification({
           message: error,
@@ -657,10 +684,10 @@ __webpack_require__.r(__webpack_exports__);
       this.file = e.target.files[0];
     },
     getClients: function getClients() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/api/clients').then(function (res) {
-        _this2.$data.clients = res.data;
+        _this3.$data.clients = res.data;
       });
     },
     selectClient: function selectClient() {
@@ -676,42 +703,74 @@ __webpack_require__.r(__webpack_exports__);
       this.code = this.clients[this.client].code;
     },
     getParts: function getParts() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/api/parts', {
         withCredentials: true
       }).then(function (res) {
-        _this3.$data.parts = res.data;
+        _this4.$data.parts = res.data;
       });
     },
     getProvider: function getProvider() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/api/provider').then(function (res) {
-        _this4.$data.providers = res.data;
+        _this5.$data.providers = res.data;
       });
     },
     addOrder: function addOrder() {
+      this.filter = [];
       this.orders.push({
         part: '',
         provider: '',
         price: '',
-        quantity: ''
+        quantity: '',
+        order_number: ''
       });
-      console.log(this.orders);
+      this.descriptions.push({
+        description: ''
+      });
     },
     deleteOrder: function deleteOrder(index) {
       this.orders.splice(index, 1);
+      this.descriptions.splice(index, 1);
     },
     createOrder: function createOrder() {
-      var _this5 = this;
+      var _this6 = this;
 
       // upload file
       var config = {
         headers: {
           'content-type': 'multipart/form-data'
         }
-      }; // update address3 if new posted
+      }; // add new parts in db
+
+      this.orders.forEach(function (el, i) {
+        if (!_this6.parts.find(function (e) {
+          return e.pn.toLowerCase() === el.part;
+        })) {
+          axios.post('/api/parts', {
+            pn: el.part,
+            description: _this6.descriptions[i].description
+          }).then(function (res) {
+            UIkit.notification({
+              message: 'Новая позиции добавлены!',
+              status: 'success'
+            });
+            _this6.orders[i].part = res.data.id;
+          })["catch"](function (error) {
+            UIkit.notification({
+              message: error,
+              status: 'danger'
+            });
+            console.log(error);
+          });
+        } else {
+          _this6.orders[i].part = _this6.parts.find(function (el) {
+            return el.pn = _this6.orders[i].part;
+          }).id;
+        }
+      }); // update address3 if new posted
 
       if (this.newaddress != '') {
         console.log(this.newaddress);
@@ -728,8 +787,8 @@ __webpack_require__.r(__webpack_exports__);
             status: 'success'
           });
           console.log('address 3 updated');
-          _this5.clients[_this5.client].address3 = _this5.shipto;
-          _this5.address3 = _this5.shipto;
+          _this6.clients[_this6.client].address3 = _this6.shipto;
+          _this6.address3 = _this6.shipto;
         })["catch"](function (error) {
           UIkit.notification({
             message: error,
@@ -742,46 +801,46 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('file', this.file);
       axios.post('api/fileupload', formData, config).then(function (res) {
-        _this5.ipo = res.data.success; // create order
+        _this6.ipo = res.data.success; // create order
 
         axios.post('api/order', {
-          number: _this5.number,
-          datestart: _this5.timeStart,
-          dateend: _this5.timeStop,
-          ipo: _this5.ipo,
-          client: _this5.clients[_this5.client].id,
-          shipto: _this5.shipto,
+          number: _this6.number,
+          datestart: _this6.timeStart,
+          dateend: _this6.timeStop,
+          ipo: _this6.ipo,
+          client: _this6.clients[_this6.client].id,
+          shipto: _this6.shipto,
           manager: _store__WEBPACK_IMPORTED_MODULE_6__["default"].state.auth.user.id
         }).then(function (response) {
           // create order list
-          _this5.orders.forEach(function (el) {
+          _this6.orders.forEach(function (el) {
             el.order_number = response.data.id;
           });
 
-          axios.post('api/orderlist', _this5.$data.orders).then(function (response) {
+          axios.post('api/orderlist', _this6.$data.orders).then(function (response) {
             UIkit.notification({
               message: 'Заказ добавлен!',
               status: 'success'
             });
-            _this5.$data.number = '';
-            _this5.$data.ipo = '';
-            _this5.$data.timeStart = '';
-            _this5.$data.timeStop = '';
-            _this5.$data.filename = '';
-            _this5.$data.file = '';
-            _this5.$data.client = '';
-            _this5.$data.nameClient = '';
-            _this5.$data.address = '';
-            _this5.$data.address1 = '';
-            _this5.$data.address2 = '';
-            _this5.$data.address3 = '';
-            _this5.$data.email = '';
-            _this5.$data.fax = '';
-            _this5.$data.phone = '';
-            _this5.$data.contact = '';
-            _this5.$data.code = '';
-            _this5.$data.newaddress = '';
-            _this5.$data.orders = [{
+            _this6.$data.number = '';
+            _this6.$data.ipo = '';
+            _this6.$data.timeStart = '';
+            _this6.$data.timeStop = '';
+            _this6.$data.filename = '';
+            _this6.$data.file = '';
+            _this6.$data.client = '';
+            _this6.$data.nameClient = '';
+            _this6.$data.address = '';
+            _this6.$data.address1 = '';
+            _this6.$data.address2 = '';
+            _this6.$data.address3 = '';
+            _this6.$data.email = '';
+            _this6.$data.fax = '';
+            _this6.$data.phone = '';
+            _this6.$data.contact = '';
+            _this6.$data.code = '';
+            _this6.$data.newaddress = '';
+            _this6.$data.orders = [{
               part: '',
               provider: '',
               price: '',
@@ -812,19 +871,19 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.getClients();
     this.getParts();
     this.getProvider();
     _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newClient', function () {
-      _this6.getClients();
+      _this7.getClients();
     });
     _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newParts', function () {
-      _this6.getParts();
+      _this7.getParts();
     });
     _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newProvider', function () {
-      _this6.getProvider();
+      _this7.getProvider();
     });
   }
 });
@@ -3445,9 +3504,9 @@ var render = function () {
                         _vm._l(_vm.clients, function (cl, index) {
                           return _c("option", { domProps: { value: index } }, [
                             _vm._v(
-                              "\n                                    " +
+                              "\n                                " +
                                 _vm._s(cl.name) +
-                                "\n                                "
+                                "\n                            "
                             ),
                           ])
                         }),
@@ -3742,35 +3801,35 @@ var render = function () {
                         [
                           _c("option", { domProps: { value: _vm.address1 } }, [
                             _vm._v(
-                              "\n                                    " +
+                              "\n                                " +
                                 _vm._s(_vm.address1) +
-                                "\n                                "
+                                "\n                            "
                             ),
                           ]),
                           _vm._v(" "),
-                          _vm.address2 != ""
+                          _vm.address2 != null
                             ? _c(
                                 "option",
                                 { domProps: { value: _vm.address2 } },
                                 [
                                   _vm._v(
-                                    "\n                                    " +
+                                    "\n                                " +
                                       _vm._s(_vm.address2) +
-                                      "\n                                "
+                                      "\n                            "
                                   ),
                                 ]
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.address3 != ""
+                          _vm.address3 != null
                             ? _c(
                                 "option",
                                 { domProps: { value: _vm.address3 } },
                                 [
                                   _vm._v(
-                                    "\n                                    " +
+                                    "\n                                " +
                                       _vm._s(_vm.address3) +
-                                      "\n                                "
+                                      "\n                            "
                                   ),
                                 ]
                               )
@@ -3830,62 +3889,113 @@ var render = function () {
                           attrs: { "uk-grid": "" },
                         },
                         [
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("div", { staticClass: "uk-width-1-6@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
                               _vm._v("Позиция"),
                             ]),
                             _vm._v(" "),
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: order.part,
-                                    expression: "order.part",
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: order.part,
+                                  expression: "order.part",
+                                },
+                              ],
+                              staticClass: "uk-input",
+                              attrs: { placeholder: "" },
+                              domProps: { value: order.part },
+                              on: {
+                                input: [
+                                  function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(order, "part", $event.target.value)
+                                  },
+                                  function ($event) {
+                                    return _vm.search(order.part)
                                   },
                                 ],
-                                staticClass: "uk-select",
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      order,
-                                      "part",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                attrs: {
+                                  "uk-dropdown":
+                                    "pos: bottom-justify; boundary: .boundary-align; boundary-align: true; mode: click",
                                 },
                               },
-                              _vm._l(_vm.parts, function (p) {
-                                return _c(
-                                  "option",
-                                  { domProps: { value: p.id } },
-                                  [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(p.pn) +
-                                        "\n                                    "
-                                    ),
-                                  ]
-                                )
-                              }),
-                              0
+                              [
+                                _c(
+                                  "ul",
+                                  { staticClass: "uk-list" },
+                                  _vm._l(_vm.filter, function (p, ind) {
+                                    return _c(
+                                      "li",
+                                      {
+                                        staticStyle: { cursor: "pointer" },
+                                        attrs: { value: p.id },
+                                        on: {
+                                          click: function ($event) {
+                                            $event.preventDefault()
+                                            return _vm.selectPosition(
+                                              ind,
+                                              index
+                                            )
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(p.pn) +
+                                            "\n                                    "
+                                        ),
+                                      ]
+                                    )
+                                  }),
+                                  0
+                                ),
+                              ]
                             ),
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "uk-width-1-6@s" }, [
+                            _c("label", { staticClass: "uk-form-label" }, [
+                              _vm._v("Описание"),
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.descriptions[index].description,
+                                  expression: "descriptions[index].description",
+                                },
+                              ],
+                              staticClass: "uk-input",
+                              attrs: { placeholder: "" },
+                              domProps: {
+                                value: _vm.descriptions[index].description,
+                              },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.descriptions[index],
+                                    "description",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            }),
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "uk-width-1-4@s" }, [
@@ -3935,9 +4045,9 @@ var render = function () {
                                   { domProps: { value: pr.id } },
                                   [
                                     _vm._v(
-                                      "\n                                        " +
+                                      "\n                                    " +
                                         _vm._s(pr.name) +
-                                        "\n                                    "
+                                        "\n                                "
                                     ),
                                   ]
                                 )

@@ -2,7 +2,7 @@
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
         <div id="modal-newClient" class="uk-modal-container" uk-modal>
             <button class="uk-modal-close-default" type="button" uk-close></button>
-                <modalClients/>
+            <modalClients/>
         </div>
         <div id="modal-newParts" class="uk-modal-container" uk-modal>
             <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -13,154 +13,161 @@
             <modalProvider/>
         </div>
         <h1 class="uk-text-center">Новый заказ</h1>
-            <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
-                <div>
-                    <div class="uk-card-default uk-card-body">
-                        <h3 class="uk-card-title">Детали заказа</h3>
-                        <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Номер</label>
-                                <input class="uk-input" type="text" placeholder="" required v-model="number" >
-                            </div>
-                            <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Дата заказа</label>
-                                <date-picker style="display: block" class="uk-input" v-model="timeStart" valueType="format"></date-picker>
-                            </div>
-                            <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Дата исполнения</label>
-                                <date-picker style="display: block" class="uk-input" v-model="timeStop" valueType="format"></date-picker>
-                            </div>
-                            <div class="uk-width-expand">
-                                <label class="uk-form-label">IPO</label>
-                                <div style="display: block" class="js-upload" uk-form-custom>
-                                    <input v-on:change="onFileChange" type="file" single accept="application/pdf" >
-                                    <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
-                                    <p style="display: inline" class="uk-margin-small-left uk-text-primary uk-text-medium">{{filename}}</p>
-                                </div>
+        <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
+            <div>
+                <div class="uk-card-default uk-card-body">
+                    <h3 class="uk-card-title">Детали заказа</h3>
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Номер</label>
+                            <input class="uk-input" type="text" placeholder="" required v-model="number" >
+                        </div>
+                        <div class="uk-width-1-6@s">
+                            <label class="uk-form-label">Дата заказа</label>
+                            <date-picker style="display: block" class="uk-input" v-model="timeStart" valueType="format"></date-picker>
+                        </div>
+                        <div class="uk-width-1-6@s">
+                            <label class="uk-form-label">Дата исполнения</label>
+                            <date-picker style="display: block" class="uk-input" v-model="timeStop" valueType="format"></date-picker>
+                        </div>
+                        <div class="uk-width-expand">
+                            <label class="uk-form-label">IPO</label>
+                            <div style="display: block" class="js-upload" uk-form-custom>
+                                <input v-on:change="onFileChange" type="file" single accept="application/pdf" >
+                                <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
+                                <p style="display: inline" class="uk-margin-small-left uk-text-primary uk-text-medium">{{filename}}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="uk-card-default uk-card-body uk-margin-top">
-                        <div class="uk-width-1-1" uk-grid>
-                            <div>
-                                <h3 class="uk-card-title">Клиент</h3>
-                            </div>
-                            <div>
-                                <select class="uk-select" @change="selectClient" v-model="client" >
-                                    <option v-for="(cl, index) in clients" v-bind:value="index">
-                                        {{ cl.name }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div style="margin-left: auto">
-                                <a style="margin-top: 5px;" uk-tooltip="Новый клиент" uk-icon="icon: credit-card" href="#modal-newClient" uk-toggle ></a>
-                            </div>
-                        </div>
-                        <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-expand">
-                                <label class="uk-form-label">Customer Name</label>
-                                <input class="uk-input" type="text" required placeholder="" v-model="nameClient" disabled>
-                            </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Reference number</label>
-                                <input class="uk-input" type="text" required placeholder="" v-model="code" disabled>
-                            </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Primary Contact</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="contact" disabled>
-                            </div>
-                            <!--
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">IPO</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="ipo" >
-                            </div>
-                            -->
-                        </div>
-                        <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Bill to Address</label>
-                                <input class="uk-input" type="text" required placeholder="" v-model="address" disabled >
-                            </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">E-mail</label>
-                                <input class="uk-input" type="text" required placeholder="" required v-model="email" disabled>
-                            </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Phone</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="phone" disabled>
-                            </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Fax</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="fax" disabled >
-                            </div>
-                        </div>
-                        <div class="uk-grid-small" uk-grid v-show="client !== ''">
-                            <div class="uk-width-1-2@s">
-                                <label class="uk-form-label">Ship to</label>
-                                <select class="uk-select" @change="clearNewAddress" v-model="shipto" >
-                                    <option :value="address1">
-                                        {{address1}}
-                                    </option>
-                                    <option :value="address2" v-if="address2 != ''">
-                                        {{address2}}
-                                    </option>
-                                    <option :value="address3" v-if="address3 != ''">
-                                        {{address3}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="uk-width-1-2@s">
-                                <label class="uk-form-label">NEW SHIP ADDRESS</label>
-                                <input class="uk-input" @blur="clearAddress" type="text" placeholder="" v-model="newaddress"  >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="uk-card-default uk-card-body uk-margin-top">
-                        <div class="uk-width-1-1" uk-grid>
-                            <div>
-                                <h3 class="uk-card-title">Заказ</h3>
-                            </div>
-                            <div style="margin-left: auto">
-                                <a class="uk-margin-small-right"  uk-tooltip="Новая позиция" uk-icon="icon: cart" href="#modal-newParts" uk-toggle ></a>
-                                 <a uk-tooltip="Новый поставщик" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
-                            </div>
-                        </div>
-                        <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
-                            <div class="uk-grid-small" uk-grid>
-                                <div class="uk-width-1-4@s">
-                                    <label class="uk-form-label">Позиция</label>
-                                    <select class="uk-select"  v-model="order.part" >
-                                        <option v-for="p in parts" v-bind:value="p.id">
-                                            {{ p.pn }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="uk-width-1-4@s">
-                                    <label class="uk-form-label">Поставщик</label>
-                                    <select class="uk-select" v-model="order.provider" >
-                                        <option v-for="pr in providers" v-bind:value="pr.id">
-                                            {{ pr.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="uk-width-1-6@s">
-                                    <label class="uk-form-label">Количество</label>
-                                    <input class="uk-input" type="number" placeholder="" v-model="order.quantity" >
-                                </div>
-                                <div class="uk-width-1-6@s">
-                                    <label class="uk-form-label">Цена</label>
-                                    <input class="uk-input" type="number" placeholder="" v-model="order.price" >
-                                </div>
-                                <div style="margin-top: 1.8%">
-                                    <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
-                                </div>
-                            </div>
-                        </div>
-                        <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
-                    </div>
-                    <button @click="createOrder" class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
                 </div>
+                <div class="uk-card-default uk-card-body uk-margin-top">
+                    <div class="uk-width-1-1" uk-grid>
+                        <div>
+                            <h3 class="uk-card-title">Клиент</h3>
+                        </div>
+                        <div>
+                            <select class="uk-select" @change="selectClient" v-model="client" >
+                                <option v-for="(cl, index) in clients" v-bind:value="index">
+                                    {{ cl.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div style="margin-left: auto">
+                            <a style="margin-top: 5px;" uk-tooltip="Новый клиент" uk-icon="icon: credit-card" href="#modal-newClient" uk-toggle ></a>
+                        </div>
+                    </div>
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-expand">
+                            <label class="uk-form-label">Customer Name</label>
+                            <input class="uk-input" type="text" required placeholder="" v-model="nameClient" disabled>
+                        </div>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Reference number</label>
+                            <input class="uk-input" type="text" required placeholder="" v-model="code" disabled>
+                        </div>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Primary Contact</label>
+                            <input class="uk-input" type="text" placeholder="" v-model="contact" disabled>
+                        </div>
+                        <!--
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">IPO</label>
+                            <input class="uk-input" type="text" placeholder="" v-model="ipo" >
+                        </div>
+                        -->
+                    </div>
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Bill to Address</label>
+                            <input class="uk-input" type="text" required placeholder="" v-model="address" disabled >
+                        </div>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">E-mail</label>
+                            <input class="uk-input" type="text" required placeholder="" required v-model="email" disabled>
+                        </div>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Phone</label>
+                            <input class="uk-input" type="text" placeholder="" v-model="phone" disabled>
+                        </div>
+                        <div class="uk-width-1-4@s">
+                            <label class="uk-form-label">Fax</label>
+                            <input class="uk-input" type="text" placeholder="" v-model="fax" disabled >
+                        </div>
+                    </div>
+                    <div class="uk-grid-small" uk-grid v-show="client !== ''">
+                        <div class="uk-width-1-2@s">
+                            <label class="uk-form-label">Ship to</label>
+                            <select class="uk-select" @change="clearNewAddress" v-model="shipto" >
+                                <option :value="address1">
+                                    {{address1}}
+                                </option>
+                                <option :value="address2" v-if="address2 != null">
+                                    {{address2}}
+                                </option>
+                                <option :value="address3" v-if="address3 != null">
+                                    {{address3}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="uk-width-1-2@s">
+                            <label class="uk-form-label">NEW SHIP ADDRESS</label>
+                            <input class="uk-input" @blur="clearAddress" type="text" placeholder="" v-model="newaddress"  >
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-card-default uk-card-body uk-margin-top">
+                    <div class="uk-width-1-1" uk-grid>
+                        <div>
+                            <h3 class="uk-card-title">Заказ</h3>
+                        </div>
+                        <div style="margin-left: auto">
+                            <a class="uk-margin-small-right"  uk-tooltip="Новая позиция" uk-icon="icon: cart" href="#modal-newParts" uk-toggle ></a>
+                            <a uk-tooltip="Новый поставщик" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
+                        </div>
+                    </div>
+                    <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Позиция</label>
+                                <input class="uk-input"  placeholder="" v-model="order.part"  @input="search(order.part)">
+                                <div uk-dropdown="pos: bottom-justify; boundary: .boundary-align; boundary-align: true; mode: click">
+                                    <ul class="uk-list" >
+                                        <li style="cursor: pointer" v-for="(p, ind) in filter" v-bind:value="p.id" @click.prevent="selectPosition(ind, index)">
+                                            {{ p.pn }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Описание</label>
+                                <input class="uk-input"  placeholder="" v-model="descriptions[index].description" >
+                            </div>
+                            <div class="uk-width-1-4@s">
+                                <label class="uk-form-label">Поставщик</label>
+                                <select class="uk-select" v-model="order.provider" >
+                                    <option v-for="pr in providers" v-bind:value="pr.id">
+                                        {{ pr.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Количество</label>
+                                <input class="uk-input" type="number" placeholder="" v-model="order.quantity" >
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Цена</label>
+                                <input class="uk-input" type="number" placeholder="" v-model="order.price" >
+                            </div>
+                            <div style="margin-top: 1.8%">
+                                <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                            </div>
+                        </div>
+                    </div>
+                    <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
+                </div>
+                <button @click="createOrder" class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
             </div>
+        </div>
     </div>
 </template>
 
@@ -176,6 +183,8 @@ import store from '../../../store'
 export default {
     name: "NewOrder",
     data:() => ({
+        description:'',
+        filter: [],
         number: '',
         ipo: '',
         timeStart:'',
@@ -203,6 +212,9 @@ export default {
             quantity:'',
             order_number: ''
         }],
+        descriptions:[{
+            description:''
+        }],
         shipto:'',
         newaddress:''
     }),
@@ -210,8 +222,20 @@ export default {
         DatePicker, modalClients, modalParts, modalProvider
     },
     methods:{
+        search(val){
+            const filterValue = (part) => {
+                return this.$data.parts.filter(data => {
+                    return data.pn.toLowerCase().indexOf(part.toLowerCase()) > -1;
+                });
+            }
+            this.filter = filterValue(val).splice(0, 5)
+        },
+        selectPosition(ind, index){
+            this.orders[index].part = this.parts[ind].pn
+            this.descriptions[index].description = this.parts[ind].description
+        },
         clearAddress(){
-          this.shipto = this.newaddress
+            this.shipto = this.newaddress
         },
         clearNewAddress(){
             this.newaddress = ''
@@ -263,24 +287,47 @@ export default {
                 })
         },
         addOrder(){
+            this.filter = []
             this.orders.push(
                 {
                     part:'',
                     provider:'',
                     price: '',
-                    quantity:''
+                    quantity:'',
+                    order_number: ''
                 }
             )
-            console.log(this.orders)
+            this.descriptions.push({
+                description: ''
+            })
         },
         deleteOrder(index){
             this.orders.splice(index,1)
+            this.descriptions.splice(index,1)
         },
         createOrder(){
             // upload file
             const config = {
                 headers: { 'content-type': 'multipart/form-data' }
             }
+
+            // add new parts in db
+            this.orders.forEach((el, i) => {
+                if(!this.parts.find(e => e.pn.toLowerCase() === el.part)){
+                    axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
+                        .then(res =>{
+                            UIkit.notification({message: 'Новая позиции добавлены!', status:'success'})
+                            this.orders[i].part = res.data.id;
+                        })
+                        .catch(error => {
+                            UIkit.notification({message: error, status:'danger'})
+                            console.log(error);
+                        })
+                }
+                else{
+                    this.orders[i].part = this.parts.find(el => el.pn = this.orders[i].part).id
+                }
+            })
 
             // update address3 if new posted
             if(this.newaddress != ''){
@@ -293,9 +340,9 @@ export default {
                         this.address3 = this.shipto
                     })
                     .catch(function (error) {
-                    UIkit.notification({message: error, status:'danger'})
-                    console.log("error in update address")
-                });
+                        UIkit.notification({message: error, status:'danger'})
+                        console.log("error in update address")
+                    });
             }
 
             let formData = new FormData();
@@ -361,11 +408,9 @@ export default {
         eventBus.$on('newClient', () => {
             this.getClients()
         })
-
         eventBus.$on('newParts', () => {
             this.getParts()
         })
-
         eventBus.$on('newProvider', () => {
             this.getProvider()
         })
