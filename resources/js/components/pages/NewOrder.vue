@@ -150,20 +150,51 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="uk-width-1-6@s">
+                            <div class="uk-width-small@s">
                                 <label class="uk-form-label">Количество</label>
                                 <input class="uk-input" type="number" placeholder="" v-model="order.quantity" >
                             </div>
-                            <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Цена</label>
+                            <div class="uk-width-small@s">
+                                <label class="uk-form-label">Цена </label>
                                 <input class="uk-input" type="number" placeholder="" v-model="order.price" >
+                            </div>
+                            <div class="uk-width-small@s">
+                                <label class="uk-form-label">Цена для клиента</label>
+                                <input class="uk-input" type="number" placeholder="" v-model="order.priceClient" >
+                            </div>
+                            <div class="uk-width-auto@s">
+                                <label class="uk-form-label">Валюта</label>
+                                <select class="uk-select" v-model="order.currency" >
+                                    <option value="usd">USD</option>
+                                    <option value="usd">EUR</option>
+                                    <option value="usd">AED</option>
+                                </select>
                             </div>
                             <div style="margin-top: 1.8%">
                                 <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                             </div>
                         </div>
                     </div>
-                    <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
+
+                </div>
+                <div class="uk-card-default uk-card-body uk-margin-top">
+                    <div class="uk-width-1-1" uk-grid>
+                        <div>
+                            <h3 class="uk-card-title">Долнительные расходы</h3>
+                        </div>
+                    </div>
+                    <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Доставка</label>
+                                <input class="uk-input"  placeholder="" v-model="delivery">
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Комиссия банка</label>
+                                <input class="uk-input"  placeholder="" v-model="comission" >
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button @click="createOrder" class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
             </div>
@@ -210,13 +241,17 @@ export default {
             provider:'',
             price: '',
             quantity:'',
-            order_number: ''
+            order_number: '',
+            priceClient:'',
+            currency:''
         }],
         descriptions:[{
             description:''
         }],
         shipto:'',
-        newaddress:''
+        newaddress:'',
+        delivery:'',
+        comission:''
     }),
     components:{
         DatePicker, modalClients, modalParts, modalProvider

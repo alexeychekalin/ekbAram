@@ -258,7 +258,7 @@ __webpack_require__.r(__webpack_exports__);
         _this4.getClients();
       });
     },
-    deleteClients: function deleteClients(param) {
+    deleteClients: function deleteClients(param, cnt) {
       var _this5 = this;
 
       axios.post('/api/clients/delete', {
@@ -271,10 +271,14 @@ __webpack_require__.r(__webpack_exports__);
         UIkit.notification({
           message: 'Клиент удален'
         });
+
+        _this5.results.splice(cnt, 1);
+
+        _this5.allresults.splice(cnt, 1);
       })["catch"](function (_ref2) {
         var data = _ref2.response.data;
         UIkit.notification({
-          message: 'Ошибка удаления. Обратитесь к администратору'
+          message: 'Ошибка удаления. У клиента имеются заказы'
         });
       })["finally"](function () {
         UIkit.modal("#modal-change").hide();
@@ -972,7 +976,7 @@ var render = function () {
                                   on: {
                                     click: function ($event) {
                                       $event.preventDefault()
-                                      return _vm.deleteClients(result.id)
+                                      return _vm.deleteClients(result.id, cnt)
                                     },
                                   },
                                 }),

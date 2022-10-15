@@ -115,7 +115,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show(result)"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteClients(result.id)"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteClients(result.id, cnt)"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -226,12 +226,14 @@ export default {
                 this.getClients();
                 })
         },
-        deleteClients(param){
+        deleteClients(param, cnt){
             axios.post('/api/clients/delete', {id: param, name: 'null', address: 'null', email: 'null', code:'null'})
                 .then(res => {
                     UIkit.notification({message: 'Клиент удален'})
+                    this.results.splice(cnt,1)
+                    this.allresults.splice(cnt,1)
                 }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                UIkit.notification({message: 'Ошибка удаления. У клиента имеются заказы'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
                 this.getClients();

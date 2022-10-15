@@ -170,15 +170,19 @@ __webpack_require__.r(__webpack_exports__);
         UIkit.notification({
           message: 'Позиция удалена'
         });
+
+        _this4.results.splice(param[1], 1);
+
+        _this4.allresults.splice(param[1], 1);
       })["catch"](function (_ref2) {
         var data = _ref2.response.data;
         UIkit.notification({
-          message: 'Ошибка удаления. Обратитесь к администратору'
+          message: 'Ошибка удаления. Данная позиция добавлена в заказ!'
         });
       })["finally"](function () {
         UIkit.modal("#modal-change").hide();
 
-        _this4.getUsers();
+        _this4.getParts();
       });
     }
   },
@@ -532,11 +536,7 @@ var render = function () {
                                   on: {
                                     click: function ($event) {
                                       $event.preventDefault()
-                                      return _vm.deleteParts([
-                                        result.id,
-                                        result.ph,
-                                        result.description,
-                                      ])
+                                      return _vm.deleteParts([result.id, cnt])
                                     },
                                   },
                                 }),

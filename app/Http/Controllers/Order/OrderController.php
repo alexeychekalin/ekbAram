@@ -41,9 +41,9 @@ class OrderController extends Controller
         Clients::where('id', $request['id'])->update($data);
         return $request['id'];
     }
-    public function delete(ClientsRequest $request){
-        Clients::where('id',$request['id'])->delete();
-    }
     */
+    public function delete(OrderRequest $request){
+        Order::where('id',$request['id'])->delete();
+    }
 
 }

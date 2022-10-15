@@ -99,7 +99,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.fax, result.contact, result.tradename])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteProvider([result.id, result.name, result.address, result.email])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteProvider([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -195,8 +195,10 @@ export default {
             axios.post('/api/provider/delete', {id: param[0], name: 'null', address: 'null', email: 'null'})
                 .then(res => {
                     UIkit.notification({message: 'Поставщик удален'})
+                    this.results.splice(param[1],1)
+                    this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                UIkit.notification({message: 'Ошибка удаления. Поставщик указан в заказах'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
                 this.getProvider();

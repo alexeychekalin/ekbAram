@@ -70,6 +70,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AllClients",
@@ -108,6 +113,34 @@ __webpack_require__.r(__webpack_exports__);
     },
     show: function show(param) {
       UIkit.modal("#modal-change").show();
+    },
+    deleteOrder: function deleteOrder(param, cnt) {
+      var _this3 = this;
+
+      axios.post('/api/orders/delete', {
+        id: param,
+        name: 'null',
+        address: 'null',
+        email: 'null',
+        code: 'null'
+      }).then(function (res) {
+        UIkit.notification({
+          message: 'Клиент удален'
+        });
+
+        _this3.results.splice(cnt, 1);
+
+        _this3.allresults.splice(cnt, 1);
+      })["catch"](function (_ref) {
+        var data = _ref.response.data;
+        UIkit.notification({
+          message: 'Ошибка удаления. У клиента имеются заказы'
+        });
+      })["finally"](function () {
+        UIkit.modal("#modal-change").hide();
+
+        _this3.getClients();
+      });
     }
   },
   mounted: function mounted() {
@@ -290,39 +323,9 @@ var render = function () {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.manager || "-"))]),
                           _vm._v(" "),
-                          _c("td", [
-                            _c("ul", { staticClass: "uk-iconnav" }, [
-                              _c("li", [
-                                _c("a", {
-                                  attrs: {
-                                    "uk-icon": "icon: file-edit",
-                                    "uk-tooltip": "Редактировать",
-                                  },
-                                  on: {
-                                    click: function ($event) {
-                                      $event.preventDefault()
-                                      return _vm.show(result)
-                                    },
-                                  },
-                                }),
-                              ]),
-                              _vm._v(" "),
-                              _c("li", [
-                                _c("a", {
-                                  attrs: {
-                                    "uk-icon": "icon: trash",
-                                    "uk-tooltip": "title: Удалить; pos: bottom",
-                                  },
-                                  on: {
-                                    click: function ($event) {
-                                      $event.preventDefault()
-                                      return _vm.deleteClients(result.id)
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
+                          _c("td", [_vm._v("300 $")]),
+                          _vm._v(" "),
+                          _vm._m(1, true),
                           _vm._v(" "),
                           _c("td", [
                             _c("ul", { staticClass: "uk-iconnav" }, [
@@ -350,7 +353,7 @@ var render = function () {
                                   on: {
                                     click: function ($event) {
                                       $event.preventDefault()
-                                      return _vm.deleteClients(result.id)
+                                      return _vm.deleteOrder(result.id, cnt)
                                     },
                                   },
                                 }),
@@ -390,9 +393,53 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("Менеджер")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Документы")]),
+        _c("th", {}, [_vm._v("Маржа")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Действия")]),
+        _c("th", { staticClass: "uk-table-shrink uk-text-nowrap" }, [
+          _vm._v("Документы"),
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "uk-table-shrink uk-text-nowrap" }, [
+          _vm._v("Действия"),
+        ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "uk-width-1-6" }, [
+      _c("ul", { staticClass: "uk-iconnav" }, [
+        _c("li", [
+          _c("button", { staticClass: "uk-button uk-button-link" }, [
+            _vm._v("IPO"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("button", { staticClass: "uk-button uk-button-link" }, [
+            _vm._v("OPF"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("button", { staticClass: "uk-button uk-button-link" }, [
+            _vm._v("OP0"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("button", { staticClass: "uk-button uk-button-link" }, [
+            _vm._v("OPL"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("button", { staticClass: "uk-button uk-button-link" }, [
+            _vm._v("OSI"),
+          ]),
+        ]),
       ]),
     ])
   },

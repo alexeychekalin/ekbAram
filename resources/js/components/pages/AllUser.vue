@@ -78,7 +78,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.name, result.phone, result.prefix, result.role, result.id])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteUser([result.name, result.phone, result.prefix, result.role, result.id])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteUser([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -170,10 +170,11 @@ export default {
                 })
         },
         deleteUser(param){
-            axios.post('/api/users/delete', {id: param[4], name: 'null', password: 'null', phone: 'null', prefix: 'null', role: 0})
+            axios.post('/api/users/delete', {id: param[0], name: 'null', password: 'null', phone: 'null', prefix: 'null', role: 0})
                 .then(res => {
-                    console.log(res.data)
                     UIkit.notification({message: 'Пользователь удален'})
+                    this.results.splice(param[1],1)
+                    this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
                 UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
             }).finally(()=>{

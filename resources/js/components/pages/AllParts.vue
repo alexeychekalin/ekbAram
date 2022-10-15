@@ -59,7 +59,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.pn, result.description])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteParts([result.id, result.ph, result.description])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteParts([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -131,11 +131,13 @@ export default {
             axios.post('/api/parts/delete', {id: param[0], pn: 'null', description: 'null'})
                 .then(res => {
                     UIkit.notification({message: 'Позиция удалена'})
+                    this.results.splice(param[1],1)
+                    this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                UIkit.notification({message: 'Ошибка удаления. Данная позиция добавлена в заказ!'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
-                this.getUsers();
+                this.getParts();
             })
         }
     },

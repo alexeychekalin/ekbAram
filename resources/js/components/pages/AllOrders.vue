@@ -23,8 +23,9 @@
                             <th class="">Дата исполнения</th>
                             <th class="">Клиент</th>
                             <th class="">Менеджер</th>
-                            <th class="">Документы</th>
-                            <th class="">Действия</th>
+                            <th class="">Маржа</th>
+                            <th class="uk-table-shrink uk-text-nowrap">Документы</th>
+                            <th class="uk-table-shrink uk-text-nowrap">Действия</th>
                         </tr>
                         </thead>
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
@@ -35,16 +36,20 @@
                             <td class="uk-text-truncate">{{result.dateend || '-'}}</td>
                             <td>{{result.client || '-'}}</td>
                             <td>{{result.manager || '-'}}</td>
-                            <td>
+                            <td>300 $</td>
+                            <td class="uk-width-1-6">
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show(result)"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteClients(result.id)"></a></li>
+                                    <li> <button class="uk-button uk-button-link">IPO</button></li>
+                                    <li> <button class="uk-button uk-button-link">OPF</button></li>
+                                    <li> <button class="uk-button uk-button-link">OP0</button></li>
+                                    <li> <button class="uk-button uk-button-link">OPL</button></li>
+                                    <li> <button class="uk-button uk-button-link">OSI</button></li>
                                 </ul>
                             </td>
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show(result)"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteClients(result.id)"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteOrder(result.id, cnt)"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -89,7 +94,19 @@ export default {
         },
         show(param){
             UIkit.modal("#modal-change").show()
-
+        },
+        deleteOrder(param, cnt){
+            axios.post('/api/orders/delete', {id: param, name: 'null', address: 'null', email: 'null', code:'null'})
+                .then(res => {
+                    UIkit.notification({message: 'Клиент удален'})
+                    this.results.splice(cnt,1)
+                    this.allresults.splice(cnt,1)
+                }).catch(({response:{data}})=>{
+                UIkit.notification({message: 'Ошибка удаления. У клиента имеются заказы'})
+            }).finally(()=>{
+                UIkit.modal("#modal-change").hide()
+                this.getClients();
+            })
         }
     },
     mounted() {

@@ -229,10 +229,14 @@ __webpack_require__.r(__webpack_exports__);
         UIkit.notification({
           message: 'Поставщик удален'
         });
+
+        _this4.results.splice(param[1], 1);
+
+        _this4.allresults.splice(param[1], 1);
       })["catch"](function (_ref2) {
         var data = _ref2.response.data;
         UIkit.notification({
-          message: 'Ошибка удаления. Обратитесь к администратору'
+          message: 'Ошибка удаления. Поставщик указан в заказах'
         });
       })["finally"](function () {
         UIkit.modal("#modal-change").hide();
@@ -858,9 +862,7 @@ var render = function () {
                                       $event.preventDefault()
                                       return _vm.deleteProvider([
                                         result.id,
-                                        result.name,
-                                        result.address,
-                                        result.email,
+                                        cnt,
                                       ])
                                     },
                                   },

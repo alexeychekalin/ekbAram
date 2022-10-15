@@ -213,17 +213,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       axios.post('/api/users/delete', {
-        id: param[4],
+        id: param[0],
         name: 'null',
         password: 'null',
         phone: 'null',
         prefix: 'null',
         role: 0
       }).then(function (res) {
-        console.log(res.data);
         UIkit.notification({
           message: 'Пользователь удален'
         });
+
+        _this5.results.splice(param[1], 1);
+
+        _this5.allresults.splice(param[1], 1);
       })["catch"](function (_ref2) {
         var data = _ref2.response.data;
         UIkit.notification({
@@ -736,13 +739,7 @@ var render = function () {
                                   on: {
                                     click: function ($event) {
                                       $event.preventDefault()
-                                      return _vm.deleteUser([
-                                        result.name,
-                                        result.phone,
-                                        result.prefix,
-                                        result.role,
-                                        result.id,
-                                      ])
+                                      return _vm.deleteUser([result.id, cnt])
                                     },
                                   },
                                 }),
