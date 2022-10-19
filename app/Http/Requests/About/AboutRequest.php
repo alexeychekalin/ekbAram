@@ -28,7 +28,6 @@ class AboutRequest extends FormRequest
             'address' => '',
             'email' => '',
             'phone' => '',
-            'fax' => '',
             'licence' => '',
             'inn' => '',
             'code' => '',

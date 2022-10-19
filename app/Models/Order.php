@@ -26,7 +26,10 @@ class Order extends Model
         'ipo',
         'client',
         'shipto',
-        'manager'
+        'manager',
+        'delivery',
+        'comission',
+        'currency'
     ];
 
     /**

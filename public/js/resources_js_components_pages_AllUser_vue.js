@@ -487,6 +487,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.password },

@@ -62,6 +62,9 @@ Route::group(['namespace' => 'FileUpload', 'prefix' => 'fileupload', 'middleware
 Route::group(['namespace' => 'Order', 'prefix' => 'order', 'middleware' => 'auth:sanctum'], function (){
     Route::post('/', [App\Http\Controllers\Order\OrderController::class, 'index']);
     Route::get('/{id}/{role}', [App\Http\Controllers\Order\OrderController::class, 'get'])->name('order.get');
+    Route::get('/{id}', [App\Http\Controllers\Order\OrderController::class, 'change'])->name('order.change');
+    Route::post('/update', [App\Http\Controllers\Order\OrderController::class, 'update'])->name('order.update');
+    Route::post('/delete/{id}', [App\Http\Controllers\Order\OrderController::class, 'delete'])->name('order.delete');
 });
 Route::group(['namespace' => 'OrderList', 'prefix' => 'orderlist', 'middleware' => 'auth:sanctum'], function (){
     Route::post('/', [App\Http\Controllers\Order\OrderListController::class, 'index']);

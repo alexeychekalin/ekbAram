@@ -19,7 +19,6 @@ class CreateProviderTable extends Migration
             $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('fax')->nullable();
             $table->string('licence')->nullable();
             $table->string('inn')->nullable();
             $table->string('code')->nullable();

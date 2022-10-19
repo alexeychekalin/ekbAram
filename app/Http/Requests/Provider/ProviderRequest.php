@@ -28,7 +28,7 @@ class ProviderRequest extends FormRequest
             'address' => 'required|string',
             'email' => 'required|string',
             'phone' => '',
-            'fax' => '',
+            'country' => '',
             'contact' => '',
             'address1' => '',
             'address2' => '',

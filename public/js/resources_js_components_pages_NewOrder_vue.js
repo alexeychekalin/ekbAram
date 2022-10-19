@@ -610,10 +610,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -641,20 +637,20 @@ __webpack_require__.r(__webpack_exports__);
       address2: '',
       address3: '',
       email: '',
-      fax: '',
+      country: '',
       phone: '',
       contact: '',
       code: '',
       parts: [],
       providers: [],
+      currency: '',
       orders: [{
         part: '',
         provider: '',
         price: '',
         quantity: '',
         order_number: '',
-        priceClient: '',
-        currency: ''
+        priceClient: ''
       }],
       descriptions: [{
         description: ''
@@ -672,8 +668,16 @@ __webpack_require__.r(__webpack_exports__);
     modalProvider: _modals_ModalProvider__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   methods: {
-    search: function search(val) {
+    changeDate: function changeDate() {
+      this.timeStop = this.timeStart;
+    },
+    search: function search(val, index) {
       var _this = this;
+
+      if (!/^[A-Za-z0-9 -]*$/.test(val)) {
+        this.orders[index].part = '';
+        return;
+      }
 
       var filterValue = function filterValue(part) {
         return _this.$data.parts.filter(function (data) {
@@ -684,8 +688,11 @@ __webpack_require__.r(__webpack_exports__);
       this.filter = filterValue(val).splice(0, 5);
     },
     selectPosition: function selectPosition(ind, index) {
-      this.orders[index].part = this.parts[ind].pn;
-      this.descriptions[index].description = this.parts[ind].description;
+      var i = this.parts.findIndex(function (x) {
+        return x.id === ind;
+      });
+      this.orders[index].part = this.parts[i].pn;
+      this.descriptions[index].description = this.parts[i].description;
     },
     clearAddress: function clearAddress() {
       this.shipto = this.newaddress;
@@ -743,7 +750,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/parts', {
         withCredentials: true
       }).then(function (res) {
-        _this4.$data.parts = res.data;
+        _this4.parts = res.data;
       });
     },
     getProvider: function getProvider() {
@@ -760,7 +767,8 @@ __webpack_require__.r(__webpack_exports__);
         provider: '',
         price: '',
         quantity: '',
-        order_number: ''
+        order_number: '',
+        priceClient: ''
       });
       this.descriptions.push({
         description: ''
@@ -773,7 +781,18 @@ __webpack_require__.r(__webpack_exports__);
     createOrder: function createOrder() {
       var _this6 = this;
 
-      // upload file
+      console.log(this.parts);
+      console.log(this.orders);
+
+      if (this.shipto === '') {
+        UIkit.notification({
+          message: 'Не установлен адрес доставки',
+          status: 'danger'
+        });
+        return;
+      } // upload file
+
+
       var config = {
         headers: {
           'content-type': 'multipart/form-data'
@@ -802,7 +821,7 @@ __webpack_require__.r(__webpack_exports__);
           });
         } else {
           _this6.orders[i].part = _this6.parts.find(function (el) {
-            return el.pn = _this6.orders[i].part;
+            return el.pn === _this6.orders[i].part;
           }).id;
         }
       }); // update address3 if new posted
@@ -818,7 +837,7 @@ __webpack_require__.r(__webpack_exports__);
           newaddress: this.shipto
         }).then(function (res) {
           UIkit.notification({
-            message: 'Адрес клиета добавлн',
+            message: 'Адрес клиета добавлен',
             status: 'success'
           });
           console.log('address 3 updated');
@@ -845,14 +864,18 @@ __webpack_require__.r(__webpack_exports__);
           ipo: _this6.ipo,
           client: _this6.clients[_this6.client].id,
           shipto: _this6.shipto,
-          manager: _store__WEBPACK_IMPORTED_MODULE_6__["default"].state.auth.user.id
+          manager: _store__WEBPACK_IMPORTED_MODULE_6__["default"].state.auth.user.id,
+          delivery: _this6.delivery,
+          comission: _this6.comission,
+          currency: _this6.currency
         }).then(function (response) {
           // create order list
           _this6.orders.forEach(function (el) {
             el.order_number = response.data.id;
           });
 
-          axios.post('api/orderlist', _this6.$data.orders).then(function (response) {
+          console.log(_this6.orders);
+          axios.post('api/orderlist', _this6.orders).then(function (response) {
             UIkit.notification({
               message: 'Заказ добавлен!',
               status: 'success'
@@ -870,7 +893,7 @@ __webpack_require__.r(__webpack_exports__);
             _this6.$data.address2 = '';
             _this6.$data.address3 = '';
             _this6.$data.email = '';
-            _this6.$data.fax = '';
+            _this6.$data.delivery = '';
             _this6.$data.phone = '';
             _this6.$data.contact = '';
             _this6.$data.code = '';
@@ -880,7 +903,8 @@ __webpack_require__.r(__webpack_exports__);
               provider: '',
               price: '',
               quantity: '',
-              order_number: ''
+              order_number: '',
+              priceClient: ''
             }];
           })["catch"](function (error) {
             UIkit.notification({
@@ -911,7 +935,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getClients();
     this.getParts();
     this.getProvider();
-    _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newClient', function () {
+    this.timeStop = _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newClient', function () {
       _this7.getClients();
     });
     _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newParts', function () {
@@ -3352,642 +3376,817 @@ var render = function () {
         1
       ),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Новый заказ")]),
-      _vm._v(" "),
       _c(
-        "div",
+        "form",
         {
-          staticClass: "uk-grid-match uk-child-width-1-1@s",
-          attrs: { "uk-grid": "" },
+          staticClass: "uk-width-1-1",
+          on: {
+            submit: function ($event) {
+              $event.preventDefault()
+              return _vm.createOrder.apply(null, arguments)
+            },
+          },
         },
         [
-          _c("div", [
-            _c("div", { staticClass: "uk-card-default uk-card-body" }, [
-              _c("h3", { staticClass: "uk-card-title" }, [
-                _vm._v("Детали заказа"),
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
-                [
-                  _c("div", { staticClass: "uk-width-1-4@s" }, [
-                    _c("label", { staticClass: "uk-form-label" }, [
-                      _vm._v("Номер"),
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.number,
-                          expression: "number",
-                        },
-                      ],
-                      staticClass: "uk-input",
-                      attrs: { type: "text", placeholder: "", required: "" },
-                      domProps: { value: _vm.number },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.number = $event.target.value
-                        },
-                      },
-                    }),
+          _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Новый заказ")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "uk-grid-match uk-child-width-1-1@s",
+              attrs: { "uk-grid": "" },
+            },
+            [
+              _c("div", [
+                _c("div", { staticClass: "uk-card-default uk-card-body" }, [
+                  _c("h3", { staticClass: "uk-card-title" }, [
+                    _vm._v("Детали заказа"),
                   ]),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "uk-width-1-6@s" },
+                    { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
                     [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Дата заказа"),
-                      ]),
-                      _vm._v(" "),
-                      _c("date-picker", {
-                        staticClass: "uk-input",
-                        staticStyle: { display: "block" },
-                        attrs: { valueType: "format" },
-                        model: {
-                          value: _vm.timeStart,
-                          callback: function ($$v) {
-                            _vm.timeStart = $$v
-                          },
-                          expression: "timeStart",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "uk-width-1-6@s" },
-                    [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Дата исполнения"),
-                      ]),
-                      _vm._v(" "),
-                      _c("date-picker", {
-                        staticClass: "uk-input",
-                        staticStyle: { display: "block" },
-                        attrs: { valueType: "format" },
-                        model: {
-                          value: _vm.timeStop,
-                          callback: function ($$v) {
-                            _vm.timeStop = $$v
-                          },
-                          expression: "timeStop",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-width-expand" }, [
-                    _c("label", { staticClass: "uk-form-label" }, [
-                      _vm._v("IPO"),
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "js-upload",
-                        staticStyle: { display: "block" },
-                        attrs: { "uk-form-custom": "" },
-                      },
-                      [
+                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                        _c("label", { staticClass: "uk-form-label" }, [
+                          _vm._v("Номер"),
+                        ]),
+                        _vm._v(" "),
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.number,
+                              expression: "number",
+                            },
+                          ],
+                          staticClass: "uk-input",
                           attrs: {
-                            type: "file",
-                            single: "",
-                            accept: "application/pdf",
+                            type: "text",
+                            placeholder: "",
+                            required: "",
                           },
-                          on: { change: _vm.onFileChange },
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "uk-button uk-button-default",
-                            attrs: { type: "button", tabindex: "-1" },
-                          },
-                          [_vm._v("Выбрать файл")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "p",
-                          {
-                            staticClass:
-                              "uk-margin-small-left uk-text-primary uk-text-medium",
-                            staticStyle: { display: "inline" },
-                          },
-                          [_vm._v(_vm._s(_vm.filename))]
-                        ),
-                      ]
-                    ),
-                  ]),
-                ]
-              ),
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "uk-card-default uk-card-body uk-margin-top" },
-              [
-                _c(
-                  "div",
-                  { staticClass: "uk-width-1-1", attrs: { "uk-grid": "" } },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.client,
-                              expression: "client",
-                            },
-                          ],
-                          staticClass: "uk-select",
+                          domProps: { value: _vm.number },
                           on: {
-                            change: [
-                              function ($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function (o) {
-                                    return o.selected
-                                  })
-                                  .map(function (o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.client = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                              _vm.selectClient,
-                            ],
-                          },
-                        },
-                        _vm._l(_vm.clients, function (cl, index) {
-                          return _c("option", { domProps: { value: index } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(cl.name) +
-                                "\n                            "
-                            ),
-                          ])
-                        }),
-                        0
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(1),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
-                  [
-                    _c("div", { staticClass: "uk-width-expand" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Customer Name"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.nameClient,
-                            expression: "nameClient",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: {
-                          type: "text",
-                          required: "",
-                          placeholder: "",
-                          disabled: "",
-                        },
-                        domProps: { value: _vm.nameClient },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.nameClient = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Reference number"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.code,
-                            expression: "code",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: {
-                          type: "text",
-                          required: "",
-                          placeholder: "",
-                          disabled: "",
-                        },
-                        domProps: { value: _vm.code },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.code = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Primary Contact"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.contact,
-                            expression: "contact",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: { type: "text", placeholder: "", disabled: "" },
-                        domProps: { value: _vm.contact },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.contact = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
-                  [
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Bill to Address"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.address,
-                            expression: "address",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: {
-                          type: "text",
-                          required: "",
-                          placeholder: "",
-                          disabled: "",
-                        },
-                        domProps: { value: _vm.address },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.address = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("E-mail"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.email,
-                            expression: "email",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: {
-                          type: "text",
-                          required: "",
-                          placeholder: "",
-                          required: "",
-                          disabled: "",
-                        },
-                        domProps: { value: _vm.email },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.email = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Phone"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.phone,
-                            expression: "phone",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: { type: "text", placeholder: "", disabled: "" },
-                        domProps: { value: _vm.phone },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.phone = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-4@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Fax"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.fax,
-                            expression: "fax",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: { type: "text", placeholder: "", disabled: "" },
-                        domProps: { value: _vm.fax },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.fax = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.client !== "",
-                        expression: "client !== ''",
-                      },
-                    ],
-                    staticClass: "uk-grid-small",
-                    attrs: { "uk-grid": "" },
-                  },
-                  [
-                    _c("div", { staticClass: "uk-width-1-2@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("Ship to"),
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.shipto,
-                              expression: "shipto",
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.number = $event.target.value
                             },
-                          ],
-                          staticClass: "uk-select",
-                          on: {
-                            change: [
-                              function ($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function (o) {
-                                    return o.selected
-                                  })
-                                  .map(function (o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.shipto = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                              _vm.clearNewAddress,
-                            ],
                           },
-                        },
-                        [
-                          _c("option", { domProps: { value: _vm.address1 } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(_vm.address1) +
-                                "\n                            "
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _vm.address2 != null
-                            ? _c(
-                                "option",
-                                { domProps: { value: _vm.address2 } },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(_vm.address2) +
-                                      "\n                            "
-                                  ),
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.address3 != null
-                            ? _c(
-                                "option",
-                                { domProps: { value: _vm.address3 } },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(_vm.address3) +
-                                      "\n                            "
-                                  ),
-                                ]
-                              )
-                            : _vm._e(),
-                        ]
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-width-1-2@s" }, [
-                      _c("label", { staticClass: "uk-form-label" }, [
-                        _vm._v("NEW SHIP ADDRESS"),
+                        }),
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.newaddress,
-                            expression: "newaddress",
-                          },
-                        ],
-                        staticClass: "uk-input",
-                        attrs: { type: "text", placeholder: "" },
-                        domProps: { value: _vm.newaddress },
-                        on: {
-                          blur: _vm.clearAddress,
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.newaddress = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                  ]
-                ),
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "uk-card-default uk-card-body uk-margin-top" },
-              [
-                _vm._m(2),
-                _vm._v(" "),
-                _vm._l(_vm.orders, function (order, index) {
-                  return _c(
-                    "div",
-                    { key: index, staticClass: "uk-margin-top" },
-                    [
                       _c(
                         "div",
-                        {
-                          staticClass: "uk-grid-small",
-                          attrs: { "uk-grid": "" },
-                        },
+                        { staticClass: "uk-width-1-6@s" },
                         [
-                          _c("div", { staticClass: "uk-width-1-6@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Позиция"),
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Дата заказа"),
+                          ]),
+                          _vm._v(" "),
+                          _c("date-picker", {
+                            staticClass: "uk-input",
+                            staticStyle: { display: "block" },
+                            attrs: { required: "", valueType: "format" },
+                            on: { change: _vm.changeDate },
+                            model: {
+                              value: _vm.timeStart,
+                              callback: function ($$v) {
+                                _vm.timeStart = $$v
+                              },
+                              expression: "timeStart",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "uk-width-1-6@s" },
+                        [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Дата исполнения"),
+                          ]),
+                          _vm._v(" "),
+                          _c("date-picker", {
+                            staticClass: "uk-input",
+                            staticStyle: { display: "block" },
+                            attrs: { required: "", valueType: "format" },
+                            model: {
+                              value: _vm.timeStop,
+                              callback: function ($$v) {
+                                _vm.timeStop = $$v
+                              },
+                              expression: "timeStop",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "uk-width-auto@s" }, [
+                        _c("label", { staticClass: "uk-form-label" }, [
+                          _vm._v("Валюта"),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.currency,
+                                expression: "currency",
+                              },
+                            ],
+                            staticClass: "uk-select",
+                            attrs: { required: "" },
+                            on: {
+                              change: function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.currency = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                            },
+                          },
+                          [
+                            _c("option", { attrs: { value: "USD" } }, [
+                              _vm._v("USD"),
                             ]),
                             _vm._v(" "),
+                            _c("option", { attrs: { value: "EUR" } }, [
+                              _vm._v("EUR"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "AED" } }, [
+                              _vm._v("AED"),
+                            ]),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "uk-width-expand" }, [
+                        _c("label", { staticClass: "uk-form-label" }, [
+                          _vm._v("IPO"),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "js-upload",
+                            staticStyle: { display: "block" },
+                            attrs: { "uk-form-custom": "" },
+                          },
+                          [
                             _c("input", {
+                              attrs: {
+                                required: "",
+                                type: "file",
+                                single: "",
+                                accept: "application/pdf",
+                              },
+                              on: { change: _vm.onFileChange },
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "uk-button uk-button-default",
+                                attrs: { type: "button", tabindex: "-1" },
+                              },
+                              [_vm._v("Выбрать файл")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "p",
+                              {
+                                staticClass:
+                                  "uk-margin-small-left uk-text-primary uk-text-medium",
+                                staticStyle: { display: "inline" },
+                              },
+                              [_vm._v(_vm._s(_vm.filename))]
+                            ),
+                          ]
+                        ),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-card-default uk-card-body uk-margin-top" },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "uk-width-1-1", attrs: { "uk-grid": "" } },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c(
+                            "select",
+                            {
                               directives: [
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: order.part,
-                                  expression: "order.part",
+                                  value: _vm.client,
+                                  expression: "client",
                                 },
                               ],
-                              staticClass: "uk-input",
-                              attrs: { placeholder: "" },
-                              domProps: { value: order.part },
+                              staticClass: "uk-select",
+                              attrs: { required: "" },
                               on: {
-                                input: [
+                                change: [
                                   function ($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(order, "part", $event.target.value)
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.client = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
                                   },
-                                  function ($event) {
-                                    return _vm.search(order.part)
-                                  },
+                                  _vm.selectClient,
                                 ],
                               },
+                            },
+                            _vm._l(_vm.clients, function (cl, index) {
+                              return _c(
+                                "option",
+                                { domProps: { value: index } },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(cl.name) +
+                                      "\n                                "
+                                  ),
+                                ]
+                              )
                             }),
-                            _vm._v(" "),
-                            _c(
-                              "div",
+                            0
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(1),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "uk-grid-small",
+                        attrs: { "uk-grid": "" },
+                      },
+                      [
+                        _c("div", { staticClass: "uk-width-expand" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Customer Name"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
                               {
-                                attrs: {
-                                  "uk-dropdown":
-                                    "pos: bottom-justify; boundary: .boundary-align; boundary-align: true; mode: click",
-                                },
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.nameClient,
+                                expression: "nameClient",
                               },
-                              [
-                                _c(
-                                  "ul",
-                                  { staticClass: "uk-list" },
-                                  _vm._l(_vm.filter, function (p, ind) {
-                                    return _c(
-                                      "li",
-                                      {
-                                        staticStyle: { cursor: "pointer" },
-                                        attrs: { value: p.id },
-                                        on: {
-                                          click: function ($event) {
-                                            $event.preventDefault()
-                                            return _vm.selectPosition(
-                                              ind,
-                                              index
-                                            )
-                                          },
-                                        },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              required: "",
+                              placeholder: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.nameClient },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.nameClient = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Reference number"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.code,
+                                expression: "code",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              required: "",
+                              placeholder: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.code },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.code = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Primary Contact"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.contact,
+                                expression: "contact",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              placeholder: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.contact },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.contact = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "uk-grid-small",
+                        attrs: { "uk-grid": "" },
+                      },
+                      [
+                        _c("div", { staticClass: "uk-width-1-3@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Bill to Address"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.address,
+                                expression: "address",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              required: "",
+                              placeholder: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.address },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.address = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-3@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("E-mail"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.email,
+                                expression: "email",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              required: "",
+                              placeholder: "",
+                              required: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.email },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.email = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-3@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Phone"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.phone,
+                                expression: "phone",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: {
+                              type: "text",
+                              placeholder: "",
+                              disabled: "",
+                            },
+                            domProps: { value: _vm.phone },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.phone = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.client !== "",
+                            expression: "client !== ''",
+                          },
+                        ],
+                        staticClass: "uk-grid-small",
+                        attrs: { "uk-grid": "" },
+                      },
+                      [
+                        _c("div", { staticClass: "uk-width-1-2@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Ship to"),
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.shipto,
+                                  expression: "shipto",
+                                },
+                              ],
+                              staticClass: "uk-select",
+                              on: {
+                                change: [
+                                  function ($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.shipto = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                  _vm.clearNewAddress,
+                                ],
+                              },
+                            },
+                            [
+                              _c(
+                                "option",
+                                { domProps: { value: _vm.address1 } },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.address1) +
+                                      "\n                                "
+                                  ),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _vm.address2 != null
+                                ? _c(
+                                    "option",
+                                    { domProps: { value: _vm.address2 } },
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(_vm.address2) +
+                                          "\n                                "
+                                      ),
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.address3 != null
+                                ? _c(
+                                    "option",
+                                    { domProps: { value: _vm.address3 } },
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(_vm.address3) +
+                                          "\n                                "
+                                      ),
+                                    ]
+                                  )
+                                : _vm._e(),
+                            ]
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-2@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("NEW SHIP ADDRESS"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.newaddress,
+                                expression: "newaddress",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: { type: "text", placeholder: "" },
+                            domProps: { value: _vm.newaddress },
+                            on: {
+                              blur: _vm.clearAddress,
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.newaddress = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-card-default uk-card-body uk-margin-top" },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _vm._l(_vm.orders, function (order, index) {
+                      return _c(
+                        "div",
+                        { key: index, staticClass: "uk-margin-top" },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "uk-grid-small",
+                              attrs: { "uk-grid": "" },
+                            },
+                            [
+                              _c("div", { staticClass: "uk-width-1-6@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Позиция"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.part,
+                                      expression: "order.part",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.part },
+                                  on: {
+                                    input: [
+                                      function ($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          order,
+                                          "part",
+                                          $event.target.value
+                                        )
                                       },
+                                      function ($event) {
+                                        return _vm.search(order.part, index)
+                                      },
+                                    ],
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    attrs: {
+                                      "uk-dropdown":
+                                        "pos: bottom-justify; boundary: .boundary-align; boundary-align: true; mode: click",
+                                    },
+                                  },
+                                  [
+                                    _c(
+                                      "ul",
+                                      { staticClass: "uk-list" },
+                                      _vm._l(_vm.filter, function (p, ind) {
+                                        return _c(
+                                          "li",
+                                          {
+                                            staticStyle: { cursor: "pointer" },
+                                            attrs: { value: p.id },
+                                            on: {
+                                              click: function ($event) {
+                                                $event.preventDefault()
+                                                return _vm.selectPosition(
+                                                  p.id,
+                                                  index
+                                                )
+                                              },
+                                            },
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                            " +
+                                                _vm._s(p.pn) +
+                                                "\n                                        "
+                                            ),
+                                          ]
+                                        )
+                                      }),
+                                      0
+                                    ),
+                                  ]
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-6@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Описание"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value:
+                                        _vm.descriptions[index].description,
+                                      expression:
+                                        "descriptions[index].description",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: {
+                                    value: _vm.descriptions[index].description,
+                                  },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.descriptions[index],
+                                        "description",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-4@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Поставщик"),
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: order.provider,
+                                        expression: "order.provider",
+                                      },
+                                    ],
+                                    staticClass: "uk-select",
+                                    attrs: { required: "" },
+                                    on: {
+                                      change: function ($event) {
+                                        var $$selectedVal =
+                                          Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function (o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function (o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                        _vm.$set(
+                                          order,
+                                          "provider",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      },
+                                    },
+                                  },
+                                  _vm._l(_vm.providers, function (pr) {
+                                    return _c(
+                                      "option",
+                                      { domProps: { value: pr.id } },
                                       [
                                         _vm._v(
                                           "\n                                        " +
-                                            _vm._s(p.pn) +
+                                            _vm._s(pr.name) +
                                             "\n                                    "
                                         ),
                                       ]
@@ -3995,374 +4194,250 @@ var render = function () {
                                   }),
                                   0
                                 ),
-                              ]
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-6@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Описание"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.descriptions[index].description,
-                                  expression: "descriptions[index].description",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { placeholder: "" },
-                              domProps: {
-                                value: _vm.descriptions[index].description,
-                              },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.descriptions[index],
-                                    "description",
-                                    $event.target.value
-                                  )
-                                },
-                              },
-                            }),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Поставщик"),
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: order.provider,
-                                    expression: "order.provider",
-                                  },
-                                ],
-                                staticClass: "uk-select",
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      order,
-                                      "provider",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
-                                },
-                              },
-                              _vm._l(_vm.providers, function (pr) {
-                                return _c(
-                                  "option",
-                                  { domProps: { value: pr.id } },
-                                  [
-                                    _vm._v(
-                                      "\n                                    " +
-                                        _vm._s(pr.name) +
-                                        "\n                                "
-                                    ),
-                                  ]
-                                )
-                              }),
-                              0
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-small@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Количество"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: order.quantity,
-                                  expression: "order.quantity",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { type: "number", placeholder: "" },
-                              domProps: { value: order.quantity },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    order,
-                                    "quantity",
-                                    $event.target.value
-                                  )
-                                },
-                              },
-                            }),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-small@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Цена "),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: order.price,
-                                  expression: "order.price",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { type: "number", placeholder: "" },
-                              domProps: { value: order.price },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(order, "price", $event.target.value)
-                                },
-                              },
-                            }),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-small@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Цена для клиента"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: order.priceClient,
-                                  expression: "order.priceClient",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { type: "number", placeholder: "" },
-                              domProps: { value: order.priceClient },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    order,
-                                    "priceClient",
-                                    $event.target.value
-                                  )
-                                },
-                              },
-                            }),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-auto@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Валюта"),
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: order.currency,
-                                    expression: "order.currency",
-                                  },
-                                ],
-                                staticClass: "uk-select",
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      order,
-                                      "currency",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
-                                },
-                              },
-                              [
-                                _c("option", { attrs: { value: "usd" } }, [
-                                  _vm._v("USD"),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-small@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Количество"),
                                 ]),
                                 _vm._v(" "),
-                                _c("option", { attrs: { value: "usd" } }, [
-                                  _vm._v("EUR"),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.quantity,
+                                      expression: "order.quantity",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: {
+                                    required: "",
+                                    type: "number",
+                                    placeholder: "",
+                                  },
+                                  domProps: { value: order.quantity },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "quantity",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-small@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Цена "),
                                 ]),
                                 _vm._v(" "),
-                                _c("option", { attrs: { value: "usd" } }, [
-                                  _vm._v("AED"),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.price,
+                                      expression: "order.price",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: {
+                                    required: "",
+                                    type: "number",
+                                    placeholder: "",
+                                  },
+                                  domProps: { value: order.price },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "price",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-small@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Цена для клиента"),
                                 ]),
-                              ]
-                            ),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticStyle: { "margin-top": "1.8%" } }, [
-                            _c("a", {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: index != 0,
-                                  expression: "index != 0",
-                                },
-                              ],
-                              attrs: {
-                                "uk-tooltip": "Удалить",
-                                "uk-icon": "icon: trash",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  $event.preventDefault()
-                                  return _vm.deleteOrder(index)
-                                },
-                              },
-                            }),
-                          ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.priceClient,
+                                      expression: "order.priceClient",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: {
+                                    required: "",
+                                    type: "number",
+                                    placeholder: "",
+                                  },
+                                  domProps: { value: order.priceClient },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "priceClient",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticStyle: { "margin-top": "1.8%" } },
+                                [
+                                  _c("a", {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: index != 0,
+                                        expression: "index != 0",
+                                      },
+                                    ],
+                                    attrs: {
+                                      "uk-tooltip": "Удалить",
+                                      "uk-icon": "icon: trash",
+                                    },
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.deleteOrder(index)
+                                      },
+                                    },
+                                  }),
+                                ]
+                              ),
+                            ]
+                          ),
                         ]
-                      ),
-                    ]
-                  )
-                }),
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "uk-card-default uk-card-body uk-margin-top" },
-              [
-                _vm._m(3),
-                _vm._v(" "),
-                _vm._l(_vm.orders, function (order, index) {
-                  return _c(
-                    "div",
-                    { key: index, staticClass: "uk-margin-top" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "uk-grid-small",
-                          attrs: { "uk-grid": "" },
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom",
+                        on: {
+                          click: function ($event) {
+                            $event.preventDefault()
+                            return _vm.addOrder.apply(null, arguments)
+                          },
                         },
-                        [
-                          _c("div", { staticClass: "uk-width-1-6@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Доставка"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.delivery,
-                                  expression: "delivery",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { placeholder: "" },
-                              domProps: { value: _vm.delivery },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.delivery = $event.target.value
-                                },
-                              },
-                            }),
+                      },
+                      [_vm._v(" еще ")]
+                    ),
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-card-default uk-card-body uk-margin-top" },
+                  [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "uk-grid-small",
+                        attrs: { "uk-grid": "" },
+                      },
+                      [
+                        _c("div", { staticClass: "uk-width-1-6@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Доставка"),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-6@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Комиссия банка"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.comission,
-                                  expression: "comission",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { placeholder: "" },
-                              domProps: { value: _vm.comission },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.comission = $event.target.value
-                                },
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.delivery,
+                                expression: "delivery",
                               },
-                            }),
+                            ],
+                            staticClass: "uk-input",
+                            attrs: { placeholder: "" },
+                            domProps: { value: _vm.delivery },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.delivery = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-6@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("Комиссия банка"),
                           ]),
-                        ]
-                      ),
-                    ]
-                  )
-                }),
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
-                on: { click: _vm.createOrder },
-              },
-              [_vm._v(" Сохранить ")]
-            ),
-          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.comission,
+                                expression: "comission",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: { placeholder: "" },
+                            domProps: { value: _vm.comission },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.comission = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
+                  },
+                  [_vm._v(" Сохранить ")]
+                ),
+              ]),
+            ]
+          ),
         ]
       ),
     ]

@@ -20,7 +20,7 @@ class CreateProviderTable extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('tradename')->nullable();
-            $table->string('fax')->nullable();
+            $table->string('country')->nullable();
             $table->string('contact')->nullable();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();

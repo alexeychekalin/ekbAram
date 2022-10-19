@@ -134,12 +134,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AllClients",
   data: function data() {
@@ -150,7 +144,6 @@ __webpack_require__.r(__webpack_exports__);
       address2: '',
       address3: '',
       email: '',
-      fax: '',
       phone: '',
       contact: '',
       code: '',
@@ -219,7 +212,6 @@ __webpack_require__.r(__webpack_exports__);
       this.address1 = param.address1;
       this.address2 = param.address2;
       this.email = param.email;
-      this.fax = param.fax;
       this.phone = param.phone;
       this.contact = param.contact;
       this.id = param.id;
@@ -236,7 +228,6 @@ __webpack_require__.r(__webpack_exports__);
         address1: this.address1,
         address2: this.address2,
         email: this.email,
-        fax: this.fax,
         phone: this.phone,
         contact: this.contact,
         address3: this.address3,
@@ -581,8 +572,8 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
-                                            placeholder: "",
                                             required: "",
+                                            placeholder: "",
                                           },
                                           domProps: { value: _vm.address1 },
                                           on: {
@@ -608,7 +599,7 @@ var render = function () {
                                   [
                                     _c(
                                       "div",
-                                      { staticClass: "uk-width-1-4@s" },
+                                      { staticClass: "uk-width-1-3@s" },
                                       [
                                         _c(
                                           "label",
@@ -630,7 +621,6 @@ var render = function () {
                                             type: "text",
                                             required: "",
                                             placeholder: "",
-                                            required: "",
                                           },
                                           domProps: { value: _vm.email },
                                           on: {
@@ -647,7 +637,7 @@ var render = function () {
                                     _vm._v(" "),
                                     _c(
                                       "div",
-                                      { staticClass: "uk-width-1-4@s" },
+                                      { staticClass: "uk-width-1-3@s" },
                                       [
                                         _c(
                                           "label",
@@ -667,6 +657,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.phone },
@@ -684,44 +675,7 @@ var render = function () {
                                     _vm._v(" "),
                                     _c(
                                       "div",
-                                      { staticClass: "uk-width-1-4@s" },
-                                      [
-                                        _c(
-                                          "label",
-                                          { staticClass: "uk-form-label" },
-                                          [_vm._v("Fax")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.fax,
-                                              expression: "fax",
-                                            },
-                                          ],
-                                          staticClass: "uk-input",
-                                          attrs: {
-                                            type: "text",
-                                            placeholder: "",
-                                          },
-                                          domProps: { value: _vm.fax },
-                                          on: {
-                                            input: function ($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.fax = $event.target.value
-                                            },
-                                          },
-                                        }),
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "uk-width-1-4@s" },
+                                      { staticClass: "uk-width-1-3@s" },
                                       [
                                         _c(
                                           "label",
@@ -741,6 +695,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.contact },
@@ -944,8 +899,6 @@ var render = function () {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.phone || "-"))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(result.fax || "-"))]),
-                          _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.code || "-"))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.contact || "-"))]),
@@ -1015,8 +968,6 @@ var staticRenderFns = [
         _c("th", {}, [_vm._v("E-mail")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Phone")]),
-        _vm._v(" "),
-        _c("th", {}, [_vm._v("Fax")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Reference number")]),
         _vm._v(" "),

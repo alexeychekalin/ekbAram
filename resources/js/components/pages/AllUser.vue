@@ -21,7 +21,7 @@
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Пароль</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="password" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="password" >
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Префикс</label>

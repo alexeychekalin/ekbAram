@@ -35,8 +35,8 @@
                                 <input class="uk-input" type="text" placeholder="" v-model="phone" >
                             </div>
                             <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Fax</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="fax" >
+                                <label class="uk-form-label">Country</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="country" >
                             </div>
                             <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Primary Contact</label>
@@ -58,7 +58,7 @@
                 <th class="">Ship from Address</th>
                 <th class="">Email</th>
                 <th class="">Phone</th>
-                <th class="">Fax</th>
+                <th class="">Country</th>
                 <th class="">Primary Contact</th>
             </tr>
             </thead>
@@ -71,7 +71,7 @@
                 <td class="uk-text-truncate">{{result.address1 || '-'}}</td>
                 <td>{{result.email || '-'}}</td>
                 <td>{{result.phone || '-'}}</td>
-                <td>{{result.fax || '-'}}</td>
+                <td>{{result.country || '-'}}</td>
                 <td>{{result.contact || '-'}}</td>
             </tr>
             </tbody>
@@ -88,7 +88,7 @@ export default {
         address1:'',
         tradename:'',
         email:'',
-        fax:'',
+        country:'',
         phone:'',
         contact:'',
         result:'',
@@ -102,7 +102,7 @@ export default {
                                                     address1: this.address1,
                                                     tradename: this.tradename,
                                                     email: this.email,
-                                                    fax: this.fax,
+                                                    country: this.country,
                                                     phone: this.phone,
                                                     contact: this.contact,})
                 .then(res =>{
@@ -114,7 +114,7 @@ export default {
                             address1: this.address1,
                             tradename: this.tradename,
                             email: this.email,
-                            fax: this.fax,
+                            country: this.country,
                             phone: this.phone,
                             contact: this.contact
                         }
@@ -124,7 +124,7 @@ export default {
                     this.address1 = ''
                     this.tradename = ''
                     this.email = ''
-                    this.fax = ''
+                    this.country = ''
                     this.phone = ''
                     this.contact = ''
                 })

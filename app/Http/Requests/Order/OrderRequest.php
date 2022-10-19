@@ -30,7 +30,10 @@ class OrderRequest extends FormRequest
             'ipo' => 'required|string',
             'client' => 'required',
             'shipto' => 'required',
-            'manager' => 'required'
+            'manager' => 'required',
+            'delivery' => '',
+            'comission' => '',
+            'currency' => ''
         ];
     }
 }

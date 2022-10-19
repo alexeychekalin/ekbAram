@@ -2842,6 +2842,17 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
       middleware: "auth",
       admin: false
     }
+  }, {
+    path: '/edit',
+    name: 'edit',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ "resources_js_components_pages_EditOrder_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../../resources/js/components/pages/EditOrder */ "./resources/js/components/pages/EditOrder.vue"));
+    },
+    meta: {
+      layout: 'main',
+      middleware: "auth",
+      admin: false
+    }
   }]
 }));
 
@@ -52218,7 +52229,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_Login_vue":1,"resources_js_components_pages_AllOrders_vue":1,"resources_js_components_pages_NewUser_vue":1,"resources_js_components_pages_AllUser_vue":1,"resources_js_components_pages_NewParts_vue":1,"resources_js_components_pages_AllParts_vue":1,"resources_js_components_pages_NewProvider_vue":1,"resources_js_components_pages_AllProvider_vue":1,"resources_js_components_pages_NewClients_vue":1,"resources_js_components_pages_AllClients_vue":1,"resources_js_components_pages_About_vue":1,"resources_js_components_pages_NewOrder_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_Login_vue":1,"resources_js_components_pages_AllOrders_vue":1,"resources_js_components_pages_NewUser_vue":1,"resources_js_components_pages_AllUser_vue":1,"resources_js_components_pages_NewParts_vue":1,"resources_js_components_pages_AllParts_vue":1,"resources_js_components_pages_NewProvider_vue":1,"resources_js_components_pages_AllProvider_vue":1,"resources_js_components_pages_NewClients_vue":1,"resources_js_components_pages_AllClients_vue":1,"resources_js_components_pages_About_vue":1,"resources_js_components_pages_NewOrder_vue":1,"resources_js_components_pages_EditOrder_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

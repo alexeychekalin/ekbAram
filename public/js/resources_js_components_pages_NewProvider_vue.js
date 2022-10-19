@@ -101,7 +101,7 @@ __webpack_require__.r(__webpack_exports__);
       address1: '',
       tradename: '',
       email: '',
-      fax: '',
+      country: '',
       phone: '',
       contact: '',
       result: '',
@@ -118,7 +118,7 @@ __webpack_require__.r(__webpack_exports__);
         address1: this.address1,
         tradename: this.tradename,
         email: this.email,
-        fax: this.fax,
+        country: this.country,
         phone: this.phone,
         contact: this.contact
       }).then(function (res) {
@@ -133,7 +133,7 @@ __webpack_require__.r(__webpack_exports__);
           address1: _this.address1,
           tradename: _this.tradename,
           email: _this.email,
-          fax: _this.fax,
+          country: _this.country,
           phone: _this.phone,
           contact: _this.contact
         });
@@ -143,7 +143,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.address1 = '';
         _this.tradename = '';
         _this.email = '';
-        _this.fax = '';
+        _this.country = '';
         _this.phone = '';
         _this.contact = '';
       })["catch"](function (error) {
@@ -892,7 +892,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Fax"),
+                          _vm._v("Country"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -900,19 +900,19 @@ var render = function () {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.fax,
-                              expression: "fax",
+                              value: _vm.country,
+                              expression: "country",
                             },
                           ],
                           staticClass: "uk-input",
                           attrs: { type: "text", placeholder: "" },
-                          domProps: { value: _vm.fax },
+                          domProps: { value: _vm.country },
                           on: {
                             input: function ($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.fax = $event.target.value
+                              _vm.country = $event.target.value
                             },
                           },
                         }),
@@ -995,7 +995,7 @@ var render = function () {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(result.phone || "-"))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(result.fax || "-"))]),
+                    _c("td", [_vm._v(_vm._s(result.country || "-"))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(result.contact || "-"))]),
                   ]),
@@ -1029,7 +1029,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("Phone")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Fax")]),
+        _c("th", {}, [_vm._v("Country")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Primary Contact")]),
       ]),

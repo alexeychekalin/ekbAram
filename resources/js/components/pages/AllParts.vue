@@ -13,11 +13,11 @@
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-width-1-4@s">
                                                 <label class="uk-form-label">P/N</label>
-                                                <input class="uk-input" type="text" placeholder="" required v-model="pn" >
+                                                <input class="uk-input" type="text" required placeholder="" required v-model="pn" >
                                             </div>
                                             <div class="uk-width-3-4@s">
                                                 <label class="uk-form-label">Описание</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="description" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="description" >
                                             </div>
                                         </div>
                                     </div>

@@ -28,7 +28,6 @@ class ClientsRequest extends FormRequest
             'address' => 'required|string',
             'email' => 'required|string',
             'phone' => '',
-            'fax' => '',
             'contact' => '',
             'address1' => '',
             'address2' => '',

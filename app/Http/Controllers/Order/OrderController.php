@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderRequest;
 use App\Models\Order;
+use App\Models\OrderList;
 use Illuminate\Support\Facades\DB;
 
 
@@ -19,31 +20,90 @@ class OrderController extends Controller
     public function get($id, $role)
     {
         if($role == 1){
-            $clients = DB::table('orders')
+            $orders = DB::table('orders')
                 ->join('clients', 'orders.client', '=', 'clients.id')
                 ->join('users', 'orders.manager', '=', 'users.id')
-                ->select('orders.number', 'orders.datestart', 'orders.dateend', 'clients.name as client', 'users.name as manager')
+                ->join('order_lists', 'orders.id', '=', 'order_lists.order_number')
+                ->select(
+                    'orders.number',
+                    'orders.datestart',
+                    'orders.id',
+                    'orders.dateend',
+                    'orders.delivery',
+                    'orders.comission',
+                    'clients.name as client',
+                    'users.name as manager',
+                    DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
+                    DB::raw('SUM(order_lists.quantity*order_lists.priceClient) as revenue'),
+                    'orders.currency'
+                )
+                ->groupBy('orders.id')
                 ->get();
         }
         else{
-            $clients = DB::table('orders')
+            $orders = DB::table('orders')
                 ->join('clients', 'orders.client', '=', 'clients.id')
                 ->join('users', 'orders.manager', '=', 'users.id')
+                ->join('order_lists', 'orders.id', '=', 'order_lists.order_number')
+                ->select(
+                    'orders.number',
+                    'orders.datestart',
+                    'orders.id',
+                    'orders.dateend',
+                    'orders.delivery',
+                    'orders.comission',
+                    'clients.name as client',
+                    'users.name as manager',
+                    DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
+                    DB::raw('SUM(order_lists.quantity*order_lists.priceClient) as revenue'),
+                    'orders.currency'
+                )
                 ->where('users.id', '=', $id)
+                ->groupBy('orders.id')
                 ->get();
         }
 
-        return json_decode(json_encode($clients), true);
+        return json_decode(json_encode($orders), true);
     }
-    /*
-    public function update(ClientsRequest $request){
+
+    public function change($id){
+        $order = DB::table('orders')
+            ->where('orders.id', '=', $id)
+            ->get();
+
+        $order_list = DB::table('order_lists')
+            ->join('parts','parts.id', '=', 'order_lists.part')
+            ->join('providers','providers.id', '=', 'order_lists.provider')
+            ->select(
+                'parts.id as pid',
+                'parts.pn',
+                'parts.description',
+                'order_lists.id',
+                'order_lists.quantity',
+                'order_lists.price',
+                'order_lists.priceClient',
+                'providers.id as prid',
+                'providers.name',
+                'order_lists.order_number'
+            )
+            ->where('order_lists.order_number', '=', $id)
+            ->get();
+
+        return json_decode(json_encode([$order, $order_list]), true);
+    }
+
+    public function update(OrderRequest $request){
+        $id = $request['id'];
+        unset($request['id']);
         $data = $request->validated();
-        Clients::where('id', $request['id'])->update($data);
-        return $request['id'];
+        Order::where('id', $id)->update($data);
+        OrderList::where('order_number', $id)->delete();
+        return $id;
     }
-    */
-    public function delete(OrderRequest $request){
-        Order::where('id',$request['id'])->delete();
+
+    public function delete($id){
+        Order::where('id',$id)->delete();
+        OrderList::where('order_number',$id)->delete();
     }
 
 }

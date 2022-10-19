@@ -102,12 +102,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "NewClients",
   data: function data() {
@@ -118,7 +112,6 @@ __webpack_require__.r(__webpack_exports__);
       address2: '',
       address3: '',
       email: '',
-      fax: '',
       phone: '',
       contact: '',
       code: '',
@@ -163,7 +156,6 @@ __webpack_require__.r(__webpack_exports__);
           address1: _this.address1,
           address2: _this.address2,
           email: _this.email,
-          fax: _this.fax,
           phone: _this.phone,
           contact: _this.contact,
           address3: _this.address3,
@@ -179,7 +171,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.code = '';
         _this.ipo = '';
         _this.email = '';
-        _this.fax = '';
         _this.phone = '';
         _this.contact = '';
       })["catch"](function (error) {
@@ -479,7 +470,7 @@ var render = function () {
                     "div",
                     { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
                     [
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("E-mail"),
                         ]),
@@ -498,7 +489,6 @@ var render = function () {
                             type: "text",
                             required: "",
                             placeholder: "",
-                            required: "",
                           },
                           domProps: { value: _vm.email },
                           on: {
@@ -512,7 +502,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Phone"),
                         ]),
@@ -527,7 +517,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            required: "",
+                            placeholder: "",
+                          },
                           domProps: { value: _vm.phone },
                           on: {
                             input: function ($event) {
@@ -540,35 +534,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
-                        _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Fax"),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fax,
-                              expression: "fax",
-                            },
-                          ],
-                          staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
-                          domProps: { value: _vm.fax },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.fax = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Primary Contact"),
                         ]),
@@ -583,7 +549,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            required: "",
+                            placeholder: "",
+                          },
                           domProps: { value: _vm.contact },
                           on: {
                             input: function ($event) {
@@ -705,8 +675,6 @@ var render = function () {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(result.phone || "-"))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(result.fax || "-"))]),
-                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(result.code || "-"))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(result.contact || "-"))]),
@@ -738,8 +706,6 @@ var staticRenderFns = [
         _c("th", {}, [_vm._v("E-mail")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Phone")]),
-        _vm._v(" "),
-        _c("th", {}, [_vm._v("Fax")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Reference number")]),
         _vm._v(" "),

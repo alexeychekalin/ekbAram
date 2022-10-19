@@ -32,21 +32,17 @@
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">E-mail</label>
-                                <input class="uk-input" type="text" required placeholder="" required v-model="email" >
+                                <input class="uk-input" type="text" required placeholder=""  v-model="email" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Phone</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="phone" >
+                                <input class="uk-input" type="text" required placeholder="" v-model="phone" >
                             </div>
-                            <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Fax</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="fax" >
-                            </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Primary Contact</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                                <input class="uk-input" type="text" required placeholder="" v-model="contact" >
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
@@ -73,7 +69,6 @@
                 <th class="">Ship to Address</th>
                 <th class="">E-mail</th>
                 <th class="">Phone</th>
-                <th class="">Fax</th>
                 <th class="">Reference number</th>
                 <th class="">Primary contact</th>
             </tr>
@@ -86,7 +81,6 @@
                 <td class="uk-text-truncate">{{result.address1 || '-'}}</td>
                 <td>{{result.email || '-'}}</td>
                 <td>{{result.phone || '-'}}</td>
-                <td>{{result.fax || '-'}}</td>
                 <td>{{result.code || '-'}}</td>
                 <td>{{result.contact || '-'}}</td>
             </tr>
@@ -105,7 +99,6 @@ export default {
         address2:'',
         address3:'',
         email:'',
-        fax:'',
         phone:'',
         contact:'',
         code:'',
@@ -141,7 +134,6 @@ export default {
                             address1: this.address1,
                             address2: this.address2,
                             email: this.email,
-                            fax: this.fax,
                             phone: this.phone,
                             contact: this.contact,
                             address3: this.address3,
@@ -157,7 +149,6 @@ export default {
                     this.code = ''
                     this.ipo = ''
                     this.email = ''
-                    this.fax = ''
                     this.phone = ''
                     this.contact = ''
                 })

@@ -24,7 +24,7 @@ class Provider extends Model
         'address',
         'email',
         'phone',
-        'fax',
+        'country',
         'contact',
         'address1',
         'address2',

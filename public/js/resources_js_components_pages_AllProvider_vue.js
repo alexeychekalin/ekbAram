@@ -134,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
       address2: '',
       tradename: '',
       email: '',
-      fax: '',
+      country: '',
       phone: '',
       contact: '',
       results: [],
@@ -181,7 +181,7 @@ __webpack_require__.r(__webpack_exports__);
       this.address1 = param[3];
       this.address2 = param[4];
       this.email = param[5];
-      this.fax = param[6];
+      this.country = param[6];
       this.phone = param[7];
       this.contact = param[8];
       this.id = param[0];
@@ -197,7 +197,7 @@ __webpack_require__.r(__webpack_exports__);
         address1: this.address1,
         address2: this.address2,
         email: this.email,
-        fax: this.fax,
+        country: this.country,
         phone: this.phone,
         contact: this.contact,
         tradename: this.tradename
@@ -416,7 +416,6 @@ var render = function () {
                                             type: "text",
                                             required: "",
                                             placeholder: "",
-                                            required: "",
                                           },
                                           domProps: { value: _vm.name },
                                           on: {
@@ -538,6 +537,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.address1 },
@@ -586,7 +586,6 @@ var render = function () {
                                             type: "text",
                                             required: "",
                                             placeholder: "",
-                                            required: "",
                                           },
                                           domProps: { value: _vm.email },
                                           on: {
@@ -623,6 +622,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.phone },
@@ -645,7 +645,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Fax")]
+                                          [_vm._v("Country")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -653,22 +653,23 @@ var render = function () {
                                             {
                                               name: "model",
                                               rawName: "v-model",
-                                              value: _vm.fax,
-                                              expression: "fax",
+                                              value: _vm.country,
+                                              expression: "country",
                                             },
                                           ],
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
-                                          domProps: { value: _vm.fax },
+                                          domProps: { value: _vm.country },
                                           on: {
                                             input: function ($event) {
                                               if ($event.target.composing) {
                                                 return
                                               }
-                                              _vm.fax = $event.target.value
+                                              _vm.country = $event.target.value
                                             },
                                           },
                                         }),
@@ -697,6 +698,7 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
+                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.contact },
@@ -819,7 +821,7 @@ var render = function () {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.phone || "-"))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(result.fax || "-"))]),
+                          _c("td", [_vm._v(_vm._s(result.country || "-"))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(result.contact || "-"))]),
                           _vm._v(" "),
@@ -842,7 +844,7 @@ var render = function () {
                                         result.address2,
                                         result.email,
                                         result.phone,
-                                        result.fax,
+                                        result.country,
                                         result.contact,
                                         result.tradename,
                                       ])
@@ -905,7 +907,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("Phone")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Fax")]),
+        _c("th", {}, [_vm._v("country")]),
         _vm._v(" "),
         _c("th", {}, [_vm._v("Primary Contact")]),
         _vm._v(" "),

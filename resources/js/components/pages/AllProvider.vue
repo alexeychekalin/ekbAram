@@ -13,7 +13,7 @@
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-width-1-2@s">
                                                 <label class="uk-form-label">Legal Name</label>
-                                                <input class="uk-input" type="text" required placeholder="" required v-model="name" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="name" >
                                             </div>
                                             <div class="uk-width-1-2@s">
                                                 <label class="uk-form-label">Trade Name</label>
@@ -27,25 +27,25 @@
                                             </div>
                                             <div class="uk-width-1-2@s">
                                                 <label class="uk-form-label">Ship from Address</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="address1" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="address1" >
                                             </div>
                                         </div>
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-width-1-4@s">
                                                 <label class="uk-form-label">E-mail</label>
-                                                <input class="uk-input" type="text" required placeholder="" required v-model="email" >
+                                                <input class="uk-input" type="text" required placeholder=""  v-model="email" >
                                             </div>
                                             <div class="uk-width-1-4@s">
                                                 <label class="uk-form-label">Phone</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="phone" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="phone" >
                                             </div>
                                             <div class="uk-width-1-4@s">
-                                                <label class="uk-form-label">Fax</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="fax" >
+                                                <label class="uk-form-label">Country</label>
+                                                <input class="uk-input" type="text" required placeholder="" v-model="country" >
                                             </div>
                                             <div class="uk-width-1-4@s">
                                                 <label class="uk-form-label">Primary Contact</label>
-                                                <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                                                <input class="uk-input" type="text" required placeholder="" v-model="contact" >
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                             <th class="">Ship from Address</th>
                             <th class="">Email</th>
                             <th class="">Phone</th>
-                            <th class="">Fax</th>
+                            <th class="">country</th>
                             <th class="">Primary Contact</th>
                             <th> Действия </th>
                         </tr>
@@ -94,11 +94,11 @@
                             <td class="uk-text-truncate">{{result.address1 || '-'}}</td>
                             <td>{{result.email || '-'}}</td>
                             <td>{{result.phone || '-'}}</td>
-                            <td>{{result.fax || '-'}}</td>
+                            <td>{{result.country || '-'}}</td>
                             <td>{{result.contact || '-'}}</td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.fax, result.contact, result.tradename])"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.country, result.contact, result.tradename])"></a></li>
                                     <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteProvider([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
@@ -121,7 +121,7 @@ export default {
         address2:'',
         tradename:'',
         email:'',
-        fax:'',
+        country:'',
         phone:'',
         contact:'',
         results: [],
@@ -162,7 +162,7 @@ export default {
             this.address1 = param[3]
             this.address2 = param[4]
             this.email = param[5]
-            this.fax = param[6]
+            this.country = param[6]
             this.phone = param[7]
             this.contact = param[8]
             this.id = param[0]
@@ -176,7 +176,7 @@ export default {
                                                         address1: this.address1,
                                                         address2: this.address2,
                                                         email: this.email,
-                                                        fax: this.fax,
+                                                        country: this.country,
                                                         phone: this.phone,
                                                         contact: this.contact,
                                                         tradename: this.tradename

@@ -13,7 +13,7 @@
             <modalProvider/>
         </div>
         <form @submit.prevent="createOrder" class="uk-width-1-1">
-            <h1 class="uk-text-center">Новый заказ</h1>
+            <h1 class="uk-text-center">Изменение заказа</h1>
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
                 <div>
                     <div class="uk-card-default uk-card-body">
@@ -42,7 +42,7 @@
                             <div class="uk-width-expand">
                                 <label class="uk-form-label">IPO</label>
                                 <div style="display: block" class="js-upload" uk-form-custom>
-                                    <input v-on:change="onFileChange" required type="file" single accept="application/pdf" >
+                                    <input v-on:change="onFileChange" type="file" single accept="application/pdf" >
                                     <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
                                     <p style="display: inline" class="uk-margin-small-left uk-text-primary uk-text-medium">{{filename}}</p>
                                 </div>
@@ -233,21 +233,13 @@ export default {
         parts:[],
         providers:[],
         currency:'',
-        orders:[{
-            part:'',
-            provider:'',
-            price: '',
-            quantity:'',
-            order_number: '',
-            priceClient:''
-        }],
-        descriptions:[{
-            description:''
-        }],
+        orders:[],
+        descriptions:[],
         shipto:'',
         newaddress:'',
         delivery:'',
-        comission:''
+        comission:'',
+        fileChanged: false
     }),
     components:{
         DatePicker, modalClients, modalParts, modalProvider
@@ -294,6 +286,7 @@ export default {
         onFileChange(e){
             this.filename = e.target.files[0].name
             this.file = e.target.files[0]
+            this.fileChanged = true;
         },
         getClients (){
             axios.get('/api/clients')
@@ -316,7 +309,7 @@ export default {
         getParts(){
             axios.get('/api/parts',{withCredentials: true} )
                 .then(res => {
-                    this.parts = res.data;
+                    this.$data.parts = res.data;
                 })
         },
         getProvider(){
@@ -329,8 +322,8 @@ export default {
             this.filter = []
             this.orders.push(
                 {
-                    part:'',
-                    provider:'',
+                    part: '',
+                    provider: '',
                     price: '',
                     quantity:'',
                     order_number: '',
@@ -346,22 +339,22 @@ export default {
             this.descriptions.splice(index,1)
         },
         createOrder(){
-            console.log(this.parts)
-            console.log(this.orders)
             if(this.shipto === ''){
                 UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
                 return;
             }
+
             // upload file
             const config = {
                 headers: { 'content-type': 'multipart/form-data' }
             }
+
             // add new parts in db
             this.orders.forEach((el, i) => {
                 if(!this.parts.find(e => e.pn.toLowerCase() === el.part)){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
                         .then(res =>{
-                            UIkit.notification({message: 'Новая позиции добавлены!', status:'success'})
+                            UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
                             this.orders[i].part = res.data.id;
                         })
                         .catch(error => {
@@ -373,6 +366,7 @@ export default {
                     this.orders[i].part = this.parts.find(el => el.pn === this.orders[i].part).id
                 }
             })
+
             // update address3 if new posted
             if(this.newaddress != ''){
                 console.log(this.newaddress)
@@ -388,81 +382,116 @@ export default {
                         console.log("error in update address")
                     });
             }
-
-            let formData = new FormData();
-            formData.append('file', this.file);
-            axios.post('api/fileupload', formData, config)
-                .then(res =>{
-                    this.ipo = res.data.success
-                    // create order
-                    axios.post('api/order', {
-                        number: this.number,
-                        datestart: this.timeStart,
-                        dateend: this.timeStop,
-                        ipo: this.ipo,
-                        client:this.clients[this.client].id,
-                        shipto:this.shipto,
-                        manager:store.state.auth.user.id,
-                        delivery: this.delivery,
-                        comission: this.comission,
-                        currency: this.currency
-                    })
-                        .then(response => {
-                            // create order list
-                            this.orders.forEach(el => {el.order_number = response.data.id})
-                            console.log(this.orders)
-                            axios.post('api/orderlist', this.orders)
-                                .then(response => {
-                                    UIkit.notification({message: 'Заказ добавлен!', status:'success'})
-                                    this.$data.number = ''
-                                    this.$data.ipo = ''
-                                    this.$data.timeStart =''
-                                    this.$data.timeStop = ''
-                                    this.$data.filename =''
-                                    this.$data.file =''
-                                    this.$data.client =''
-                                    this.$data.nameClient = ''
-                                    this.$data.address =''
-                                    this.$data.address1 = ''
-                                    this.$data.address2 = ''
-                                    this.$data.address3 = ''
-                                    this.$data.email = ''
-                                    this.$data.delivery = ''
-                                    this.$data.phone =''
-                                    this.$data.contact =''
-                                    this.$data.code =''
-                                    this.$data.newaddress =''
-                                    this.$data.orders = [{
-                                        part:'',
-                                        provider:'',
-                                        price: '',
-                                        quantity:'',
-                                        order_number: '',
-                                        priceClient:''
-
-                                    }]
-                                })
-                                .catch(function (error) {
-                                    UIkit.notification({message: error, status:'danger'})
-                                    console.log("error in create order list")
-                                });
+            if(this.fileChanged){
+                let formData = new FormData();
+                formData.append('file', this.file);
+                axios.post('api/fileupload', formData, config)
+                    .then(res =>{
+                        this.ipo = res.data.success
+                        // create order
+                        axios.post('api/order/update', {
+                            number: this.number,
+                            datestart: this.timeStart,
+                            dateend: this.timeStop,
+                            ipo: this.ipo,
+                            client:this.clients[this.client].id,
+                            shipto:this.shipto,
+                            manager:store.state.auth.user.id,
+                            delivery: this.delivery,
+                            comission: this.comission,
+                            currency: this.currency
                         })
-                        .catch(function (error) {
-                            UIkit.notification({message: error, status:'danger'})
-                            console.log("error in create order")
-                        });
+                            .then(response => {
+                                // create order list
+                                this.orders.forEach(el => {el.order_number = this.$route.params.id})
+                                axios.post('api/orderlist', this.$data.orders)
+                                    .then(response => {
+                                        UIkit.notification({message: 'Заказ обновлен!', status:'success'})
+                                        this.$router.push({name: 'dashboard'})
+                                    })
+                                    .catch(function (error) {
+                                        UIkit.notification({message: error, status:'danger'})
+                                        console.log("error in update order list")
+                                    });
+                            })
+                            .catch(function (error) {
+                                UIkit.notification({message: error, status:'danger'})
+                                console.log("error in update order")
+                            });
+                    })
+                    .catch(function (error) {
+                        UIkit.notification({message: error, status:'danger'})
+                        console.log("error in file upload")
+                    });
+            }
+            else{
+                // create order
+                axios.post('api/order/update/', {
+                    number: this.number,
+                    datestart: this.timeStart,
+                    dateend: this.timeStop,
+                    ipo: this.ipo,
+                    client:this.clients[this.client].id,
+                    shipto:this.shipto,
+                    manager:store.state.auth.user.id,
+                    delivery: this.delivery,
+                    comission: this.comission,
+                    currency: this.currency,
+                    id: this.$route.params.id
                 })
-                .catch(function (error) {
-                    UIkit.notification({message: error, status:'danger'})
-                    console.log("error in file upload")
-                });
+                    .then(response => {
+                        // create order list
+                        this.orders.forEach(el => {el.order_number = this.$route.params.id})
+                        axios.post('api/orderlist', this.$data.orders)
+                            .then(response => {
+                                UIkit.notification({message: 'Заказ обновлен!', status:'success'})
+                                this.$router.push({name: 'dashboard'})
+                            })
+                            .catch(function (error) {
+                                UIkit.notification({message: error, status:'danger'})
+                                console.log("error in update order list")
+                            });
+                    })
+                    .catch(function (error) {
+                        UIkit.notification({message: error, status:'danger'})
+                        console.log("error in update order")
+                    });
+            }
+
         },
     },
     mounted() {
-        this.getClients()
-        this.getParts()
-        this.getProvider()
-        this.timeStop =
+        axios.get('/api/order/'+this.$route.params.id)
+            .then(res => {
+                //заполняем заказ
+                this.number = res.data[0][0].number
+                this.timeStart = res.data[0][0].datestart
+                this.timeStop = res.data[0][0].dateend
+                this.ipo = res.data[0][0].ipo
+                this.client = this.clients.findIndex((x) => x.id === res.data[0][0].client)
+                this.selectClient()
+                this.shipto = res.data[0][0].shipto
+                this.currency = res.data[0][0].currency
+                this.filename = res.data[0][0].ipo
+                this.delivery = res.data[0][0].delivery
+                this.delivery = res.data[0][0].comission
+                // заполняем позиции
+                res.data[1].forEach(x => {
+                    this.orders.push(
+                        {
+                            part: x.pn,
+                            provider:x.prid,
+                            price: x.price,
+                            quantity: x.quantity,
+                            order_number: x.order_number,
+                            priceClient:x.priceClient
+                        }
+                    )
+                    this.descriptions.push({
+                        description: x.description
+                    })
+                })
+            })
 
         eventBus.$on('newClient', () => {
             this.getClients()
@@ -473,6 +502,11 @@ export default {
         eventBus.$on('newProvider', () => {
             this.getProvider()
         })
+    },
+    created() {
+        this.getClients()
+        this.getParts()
+        this.getProvider()
     }
 }
 </script>

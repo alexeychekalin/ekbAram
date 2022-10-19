@@ -82,16 +82,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "About",
   data: function data() {
@@ -100,7 +90,6 @@ __webpack_require__.r(__webpack_exports__);
       address: '',
       code: '',
       email: '',
-      fax: '',
       phone: '',
       inn: '',
       iban: '',
@@ -120,7 +109,6 @@ __webpack_require__.r(__webpack_exports__);
         code: this.code,
         inn: this.inn,
         email: this.email,
-        fax: this.fax,
         phone: this.phone,
         iban: this.iban,
         swift: this.swift,
@@ -151,7 +139,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.code = res.data[0].code;
         _this.inn = res.data[0].inn;
         _this.email = res.data[0].email;
-        _this.fax = res.data[0].fax;
         _this.phone = res.data[0].phone;
         _this.iban = res.data[0].iban;
         _this.swift = res.data[0].swift;
@@ -293,7 +280,7 @@ var render = function () {
                     "div",
                     { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
                     [
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
+                      _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Company name"),
                         ]),
@@ -312,7 +299,6 @@ var render = function () {
                             type: "text",
                             required: "",
                             placeholder: "",
-                            required: "",
                           },
                           domProps: { value: _vm.name },
                           on: {
@@ -326,7 +312,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
+                      _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Bill to Address"),
                         ]),
@@ -358,46 +344,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
-                        _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Уникальный номер"),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.code,
-                              expression: "code",
-                            },
-                          ],
-                          staticClass: "uk-input",
-                          attrs: {
-                            type: "text",
-                            required: "",
-                            placeholder: "",
-                            required: "",
-                          },
-                          domProps: { value: _vm.code },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.code = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
-                    [
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
+                      _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("E-mail"),
                         ]),
@@ -429,7 +376,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
+                      _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Phone"),
                         ]),
@@ -444,7 +391,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.phone },
                           on: {
                             input: function ($event) {
@@ -452,34 +403,6 @@ var render = function () {
                                 return
                               }
                               _vm.phone = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-3@s" }, [
-                        _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Fax"),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fax,
-                              expression: "fax",
-                            },
-                          ],
-                          staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
-                          domProps: { value: _vm.fax },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.fax = $event.target.value
                             },
                           },
                         }),
@@ -506,7 +429,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.licence },
                           on: {
                             input: function ($event) {
@@ -566,7 +493,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.baddress },
                           on: {
                             input: function ($event) {
@@ -632,7 +563,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.swift },
                           on: {
                             input: function ($event) {
@@ -660,7 +595,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.branch },
                           on: {
                             input: function ($event) {
@@ -688,7 +627,11 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
-                          attrs: { type: "text", placeholder: "" },
+                          attrs: {
+                            type: "text",
+                            placeholder: "",
+                            required: "",
+                          },
                           domProps: { value: _vm.accountNumber },
                           on: {
                             input: function ($event) {

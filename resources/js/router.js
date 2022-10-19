@@ -126,6 +126,16 @@ export default new Router({
                 middleware:"auth",
                 admin: false
             }
+        },
+        {
+            path: '/edit',
+            name: 'edit',
+            component: () => import('../../resources/js/components/pages/EditOrder'),
+            meta:{
+                layout: 'main',
+                middleware:"auth",
+                admin: false
+            }
         }
     ]
 })

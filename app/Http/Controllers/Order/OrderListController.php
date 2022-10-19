@@ -15,6 +15,7 @@ class OrderListController extends Controller
         $data = $request->all();
         return OrderList::insert($data);
     }
+
     /*
     public function get()
     {
@@ -27,8 +28,8 @@ class OrderListController extends Controller
         Clients::where('id', $request['id'])->update($data);
         return $request['id'];
     }
-    public function delete(ClientsRequest $request){
-        Clients::where('id',$request['id'])->delete();
+    public function delete($id){
+        OrderList::where('id',$id)->delete();
     }
     */
 

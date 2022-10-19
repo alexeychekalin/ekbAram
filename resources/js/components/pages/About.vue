@@ -6,37 +6,27 @@
                 <div>
                     <div class="uk-card-default uk-card-body">
                         <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-3@s">
+                            <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Company name</label>
-                                <input class="uk-input" type="text" required placeholder="" required v-model="name" >
+                                <input class="uk-input" type="text" required placeholder=""  v-model="name" >
                             </div>
-                            <div class="uk-width-1-3@s">
+                            <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Bill to Address</label>
                                 <input class="uk-input" type="text" required placeholder="" v-model="address" >
                             </div>
-                            <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Уникальный номер</label>
-                                <input class="uk-input" type="text" required placeholder="" required v-model="code" >
-                            </div>
-                        </div>
-                        <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-3@s">
+                            <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">E-mail</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="email" >
                             </div>
-                            <div class="uk-width-1-3@s">
+                            <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Phone</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="phone" >
-                            </div>
-                            <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Fax</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="fax" >
+                                <input class="uk-input" type="text" placeholder="" required v-model="phone" >
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">License (if applicable)</label>
-                                <input class="uk-input" type="text" placeholder=""  v-model="licence" >
+                                <input class="uk-input" type="text" placeholder="" required  v-model="licence" >
                             </div>
                             <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Bank</label>
@@ -44,7 +34,7 @@
                             </div>
                             <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Bank Address</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="baddress" >
+                                <input class="uk-input" type="text" placeholder="" required v-model="baddress" >
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
@@ -60,15 +50,15 @@
                             -->
                             <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Swift</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="swift" >
+                                <input class="uk-input" type="text" placeholder="" required v-model="swift" >
                             </div>
                             <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Branch (if applicable)</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="branch" >
+                                <input class="uk-input" type="text" placeholder="" required v-model="branch" >
                             </div>
                             <div class="uk-width-1-4@s">
                                 <label class="uk-form-label">Account Number</label>
-                                <input class="uk-input" type="text" placeholder="" v-model="accountNumber" >
+                                <input class="uk-input" type="text" placeholder="" required v-model="accountNumber" >
                             </div>
                         </div>
                     </div>
@@ -87,7 +77,6 @@ export default {
         address:'',
         code:'',
         email:'',
-        fax:'',
         phone:'',
         inn:'',
         iban:'',
@@ -106,7 +95,6 @@ export default {
                                                     code: this.code,
                                                     inn: this.inn,
                                                     email: this.email,
-                                                    fax: this.fax,
                                                     phone: this.phone,
                                                     iban: this.iban,
                                                     swift: this.swift,
@@ -132,7 +120,6 @@ export default {
                     this.code = res.data[0].code
                     this.inn = res.data[0].inn
                     this.email = res.data[0].email
-                    this.fax = res.data[0].fax
                     this.phone = res.data[0].phone
                     this.iban = res.data[0].iban
                     this.swift = res.data[0].swift
