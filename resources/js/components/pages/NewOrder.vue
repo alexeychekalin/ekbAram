@@ -156,6 +156,16 @@
                                     </select>
                                 </div>
                                 <div class="uk-width-small@s">
+                                    <label class="uk-form-label">CD</label>
+                                    <select class="uk-select" required v-model="order.cd" >
+                                        <option value="NE">NE</option>
+                                        <option value="OH">OH</option>
+                                        <option value="SV">SV</option>
+                                        <option value="RE">RE</option>
+                                        <option value="AR">AR</option>
+                                    </select>
+                                </div>
+                                <div class="uk-width-small@s">
                                     <label class="uk-form-label">Количество</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" >
                                 </div>
@@ -239,7 +249,8 @@ export default {
             price: '',
             quantity:'',
             order_number: '',
-            priceClient:''
+            priceClient:'',
+            cd:''
         }],
         descriptions:[{
             description:''
@@ -334,7 +345,8 @@ export default {
                     price: '',
                     quantity:'',
                     order_number: '',
-                    priceClient:''
+                    priceClient:'',
+                    cd:''
                 }
             )
             this.descriptions.push({
@@ -346,8 +358,6 @@ export default {
             this.descriptions.splice(index,1)
         },
         createOrder(){
-            console.log(this.parts)
-            console.log(this.orders)
             if(this.shipto === ''){
                 UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
                 return;
@@ -375,11 +385,9 @@ export default {
             })
             // update address3 if new posted
             if(this.newaddress != ''){
-                console.log(this.newaddress)
                 axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
                     .then(res => {
                         UIkit.notification({message: 'Адрес клиета добавлен', status:'success'})
-                        console.log('address 3 updated')
                         this.clients[this.client].address3 = this.shipto
                         this.address3 = this.shipto
                     })
@@ -410,7 +418,6 @@ export default {
                         .then(response => {
                             // create order list
                             this.orders.forEach(el => {el.order_number = response.data.id})
-                            console.log(this.orders)
                             axios.post('api/orderlist', this.orders)
                                 .then(response => {
                                     UIkit.notification({message: 'Заказ добавлен!', status:'success'})
@@ -438,7 +445,8 @@ export default {
                                         price: '',
                                         quantity:'',
                                         order_number: '',
-                                        priceClient:''
+                                        priceClient:'',
+                                        cd:''
 
                                     }]
                                 })
@@ -462,7 +470,6 @@ export default {
         this.getClients()
         this.getParts()
         this.getProvider()
-        this.timeStop =
 
         eventBus.$on('newClient', () => {
             this.getClients()

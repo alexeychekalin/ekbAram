@@ -42,10 +42,10 @@
                             <td>{{result.revenue - result.expence || '-'}} {{result.currency}}</td>
                             <td class="uk-width-1-6">
                                 <ul class="uk-iconnav">
-                                    <li> <button class="uk-button uk-button-link">IPO</button></li>
-                                    <li> <button class="uk-button uk-button-link">OPF</button></li>
-                                    <li> <button class="uk-button uk-button-link">OP0</button></li>
-                                    <li> <button class="uk-button uk-button-link">OPL</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="getIpo(result.ipo)">IPO</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOpf(result.id, result.idclient)">OPF</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOpo(result.id, result.idclient)">OPO</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOpl(result.id, result.idclient)">OPL</button></li>
                                     <li> <button class="uk-button uk-button-link">OSI</button></li>
                                 </ul>
                             </td>
@@ -76,6 +76,52 @@ export default {
         exp: 0
     }),
     methods:{
+        getOpl(id, idclient){
+            axios({
+                url: "/api/documents/opl/" + id + '/' + idclient,
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                this.download(response)
+            });
+        },
+        getOpo(id, idclient){
+            axios({
+                url: "/api/documents/opo/" + id + '/' + idclient,
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                this.download(response)
+            });
+        },
+        getOpf(id, idclient){
+            axios({
+                url: "/api/documents/opf/" + id + '/' + idclient,
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                this.download(response)
+            });
+        },
+        getIpo(ipo){
+            axios({
+                url: "/api/documents/ipo/" + ipo,
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                this.download(response)
+            });
+        },
+        download(response){
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            let filename = response.headers['content-disposition'];
+            link.setAttribute("download", filename.split('=')[1]);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        },
         edit(id){
             this.$router.push({name: 'edit', params: {id: id}})
         },

@@ -34,19 +34,15 @@
                                     </div>
                                 </div>
                                 <div class="uk-grid-small" uk-grid>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-3@s">
                                         <label class="uk-form-label">E-mail</label>
                                         <input class="uk-input" type="text" required placeholder="" required v-model="email" >
                                     </div>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-3@s">
                                         <label class="uk-form-label">Phone</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="phone" >
                                     </div>
-                                    <div class="uk-width-1-4@s">
-                                        <label class="uk-form-label">Fax</label>
-                                        <input class="uk-input" type="text" placeholder="" v-model="fax" >
-                                    </div>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-3@s">
                                         <label class="uk-form-label">Primary Contact</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="contact" >
                                     </div>
@@ -103,7 +99,6 @@ export default {
                 address1: this.address1,
                 address2: this.address2,
                 email: this.email,
-                fax: this.fax,
                 phone: this.phone,
                 contact: this.contact,
                 address3: this.address3,
@@ -119,7 +114,6 @@ export default {
                     this.code = ''
                     this.ipo = ''
                     this.email = ''
-                    this.fax = ''
                     this.phone = ''
                     this.contact = ''
                     eventBus.$emit('newClient', {

@@ -70,9 +70,10 @@ Route::group(['namespace' => 'OrderList', 'prefix' => 'orderlist', 'middleware' 
     Route::post('/', [App\Http\Controllers\Order\OrderListController::class, 'index']);
 });
 Route::group(['namespace' => 'Documents', 'prefix' => 'documents', 'middleware' => 'auth:sanctum'], function (){
-    Route::get('/opf', [App\Http\Controllers\Documents\DocumentsController::class, 'opf'])->name('documents.opf');
-    Route::get('/opo', [App\Http\Controllers\Documents\DocumentsController::class, 'opo'])->name('documents.opo');
-    Route::get('/opl', [App\Http\Controllers\Documents\DocumentsController::class, 'opl'])->name('documents.opl');
+    Route::get('/ipo/{filename}', [App\Http\Controllers\Documents\DocumentsController::class, 'ipo'])->name('documents.ipo');
+    Route::get('/opf/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opf'])->name('documents.opf');
+    Route::get('/opo/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opo'])->name('documents.opo');
+    Route::get('/opl/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opl'])->name('documents.opl');
     Route::get('/osi', [App\Http\Controllers\Documents\DocumentsController::class, 'osi'])->name('documents.osi');
 
 });

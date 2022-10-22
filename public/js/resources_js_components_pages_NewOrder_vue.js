@@ -81,10 +81,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "modalClients",
@@ -123,7 +119,6 @@ __webpack_require__.r(__webpack_exports__);
         address1: this.address1,
         address2: this.address2,
         email: this.email,
-        fax: this.fax,
         phone: this.phone,
         contact: this.contact,
         address3: this.address3,
@@ -142,7 +137,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.code = '';
         _this.ipo = '';
         _this.email = '';
-        _this.fax = '';
         _this.phone = '';
         _this.contact = '';
         _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$emit('newClient', {
@@ -345,7 +339,7 @@ __webpack_require__.r(__webpack_exports__);
       address2: '',
       tradename: '',
       email: '',
-      fax: '',
+      country: '',
       phone: '',
       contact: ''
     };
@@ -360,7 +354,7 @@ __webpack_require__.r(__webpack_exports__);
         address1: this.address1,
         tradename: this.tradename,
         email: this.email,
-        fax: this.fax,
+        country: this.country,
         phone: this.phone,
         contact: this.contact
       }).then(function (res) {
@@ -373,7 +367,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.address1 = '';
         _this.tradename = '';
         _this.email = '';
-        _this.fax = '';
+        _this.country = '';
         _this.phone = '';
         _this.contact = '';
         _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$emit('newProvider', {
@@ -410,6 +404,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modals_ModalParts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../modals/ModalParts */ "./resources/js/components/modals/ModalParts.vue");
 /* harmony import */ var _modals_ModalProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../modals/ModalProvider */ "./resources/js/components/modals/ModalProvider.vue");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../store */ "./resources/store/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -650,7 +654,8 @@ __webpack_require__.r(__webpack_exports__);
         price: '',
         quantity: '',
         order_number: '',
-        priceClient: ''
+        priceClient: '',
+        cd: ''
       }],
       descriptions: [{
         description: ''
@@ -768,7 +773,8 @@ __webpack_require__.r(__webpack_exports__);
         price: '',
         quantity: '',
         order_number: '',
-        priceClient: ''
+        priceClient: '',
+        cd: ''
       });
       this.descriptions.push({
         description: ''
@@ -780,9 +786,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     createOrder: function createOrder() {
       var _this6 = this;
-
-      console.log(this.parts);
-      console.log(this.orders);
 
       if (this.shipto === '') {
         UIkit.notification({
@@ -827,7 +830,6 @@ __webpack_require__.r(__webpack_exports__);
       }); // update address3 if new posted
 
       if (this.newaddress != '') {
-        console.log(this.newaddress);
         axios.post('/api/clients/address', {
           name: 'null',
           address: 'null',
@@ -840,7 +842,6 @@ __webpack_require__.r(__webpack_exports__);
             message: 'Адрес клиета добавлен',
             status: 'success'
           });
-          console.log('address 3 updated');
           _this6.clients[_this6.client].address3 = _this6.shipto;
           _this6.address3 = _this6.shipto;
         })["catch"](function (error) {
@@ -874,7 +875,6 @@ __webpack_require__.r(__webpack_exports__);
             el.order_number = response.data.id;
           });
 
-          console.log(_this6.orders);
           axios.post('api/orderlist', _this6.orders).then(function (response) {
             UIkit.notification({
               message: 'Заказ добавлен!',
@@ -904,7 +904,8 @@ __webpack_require__.r(__webpack_exports__);
               price: '',
               quantity: '',
               order_number: '',
-              priceClient: ''
+              priceClient: '',
+              cd: ''
             }];
           })["catch"](function (error) {
             UIkit.notification({
@@ -935,7 +936,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getClients();
     this.getParts();
     this.getProvider();
-    this.timeStop = _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newClient', function () {
+    _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newClient', function () {
       _this7.getClients();
     });
     _app__WEBPACK_IMPORTED_MODULE_0__.eventBus.$on('newParts', function () {
@@ -2619,7 +2620,7 @@ var render = function () {
                           attrs: { "uk-grid": "" },
                         },
                         [
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("div", { staticClass: "uk-width-1-3@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
                               _vm._v("E-mail"),
                             ]),
@@ -2652,7 +2653,7 @@ var render = function () {
                             }),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("div", { staticClass: "uk-width-1-3@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
                               _vm._v("Phone"),
                             ]),
@@ -2680,35 +2681,7 @@ var render = function () {
                             }),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
-                            _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Fax"),
-                            ]),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.fax,
-                                  expression: "fax",
-                                },
-                              ],
-                              staticClass: "uk-input",
-                              attrs: { type: "text", placeholder: "" },
-                              domProps: { value: _vm.fax },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.fax = $event.target.value
-                                },
-                              },
-                            }),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-1-4@s" }, [
+                          _c("div", { staticClass: "uk-width-1-3@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
                               _vm._v("Primary Contact"),
                             ]),
@@ -3224,7 +3197,7 @@ var render = function () {
                           _vm._v(" "),
                           _c("div", { staticClass: "uk-width-1-4@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Fax"),
+                              _vm._v("Country"),
                             ]),
                             _vm._v(" "),
                             _c("input", {
@@ -3232,19 +3205,19 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.fax,
-                                  expression: "fax",
+                                  value: _vm.country,
+                                  expression: "country",
                                 },
                               ],
                               staticClass: "uk-input",
                               attrs: { type: "text", placeholder: "" },
-                              domProps: { value: _vm.fax },
+                              domProps: { value: _vm.country },
                               on: {
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.fax = $event.target.value
+                                  _vm.country = $event.target.value
                                 },
                               },
                             }),
@@ -4193,6 +4166,75 @@ var render = function () {
                                     )
                                   }),
                                   0
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-small@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("CD"),
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: order.cd,
+                                        expression: "order.cd",
+                                      },
+                                    ],
+                                    staticClass: "uk-select",
+                                    attrs: { required: "" },
+                                    on: {
+                                      change: function ($event) {
+                                        var $$selectedVal =
+                                          Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function (o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function (o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                        _vm.$set(
+                                          order,
+                                          "cd",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "NE" } }, [
+                                      _vm._v("NE"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "OH" } }, [
+                                      _vm._v("OH"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "SV" } }, [
+                                      _vm._v("SV"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "RE" } }, [
+                                      _vm._v("RE"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "AR" } }, [
+                                      _vm._v("AR"),
+                                    ]),
+                                  ]
                                 ),
                               ]),
                               _vm._v(" "),

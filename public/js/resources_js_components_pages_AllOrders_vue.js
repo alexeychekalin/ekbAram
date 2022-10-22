@@ -91,6 +91,64 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getOpl: function getOpl(id, idclient) {
+      var _this = this;
+
+      axios({
+        url: "/api/documents/opl/" + id + '/' + idclient,
+        method: "GET",
+        responseType: "blob" // important
+
+      }).then(function (response) {
+        _this.download(response);
+      });
+    },
+    getOpo: function getOpo(id, idclient) {
+      var _this2 = this;
+
+      axios({
+        url: "/api/documents/opo/" + id + '/' + idclient,
+        method: "GET",
+        responseType: "blob" // important
+
+      }).then(function (response) {
+        _this2.download(response);
+      });
+    },
+    getOpf: function getOpf(id, idclient) {
+      var _this3 = this;
+
+      axios({
+        url: "/api/documents/opf/" + id + '/' + idclient,
+        method: "GET",
+        responseType: "blob" // important
+
+      }).then(function (response) {
+        _this3.download(response);
+      });
+    },
+    getIpo: function getIpo(ipo) {
+      var _this4 = this;
+
+      axios({
+        url: "/api/documents/ipo/" + ipo,
+        method: "GET",
+        responseType: "blob" // important
+
+      }).then(function (response) {
+        _this4.download(response);
+      });
+    },
+    download: function download(response) {
+      var url = window.URL.createObjectURL(new Blob([response.data]));
+      var link = document.createElement("a");
+      link.href = url;
+      var filename = response.headers['content-disposition'];
+      link.setAttribute("download", filename.split('=')[1]);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    },
     edit: function edit(id) {
       this.$router.push({
         name: 'edit',
@@ -100,17 +158,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getOrders: function getOrders() {
-      var _this = this;
+      var _this5 = this;
 
       axios.get('/api/order/' + _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.auth.user.id + '/' + _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.auth.role).then(function (res) {
-        _this.results = res.data;
-        _this.allresults = res.data;
+        _this5.results = res.data;
+        _this5.allresults = res.data;
 
-        _this.countRevExp(res.data);
+        _this5.countRevExp(res.data);
       });
     },
     filter: function filter(val) {
-      var _this2 = this;
+      var _this6 = this;
 
       if (val === '') {
         this.results = this.allresults;
@@ -119,7 +177,7 @@ __webpack_require__.r(__webpack_exports__);
         this.results = this.allresults;
 
         var filterValue = function filterValue(client) {
-          return _this2.$data.results.filter(function (data) {
+          return _this6.$data.results.filter(function (data) {
             return data.client.toLowerCase().indexOf(client.toLowerCase()) > -1;
           });
         };
@@ -132,16 +190,16 @@ __webpack_require__.r(__webpack_exports__);
       UIkit.modal("#modal-change").show();
     },
     deleteOrder: function deleteOrder(param, cnt) {
-      var _this3 = this;
+      var _this7 = this;
 
       axios.post('/api/order/delete/' + param).then(function (res) {
         UIkit.notification({
           message: 'Заказ удален'
         });
 
-        _this3.results.splice(cnt, 1);
+        _this7.results.splice(cnt, 1);
 
-        _this3.allresults.splice(cnt, 1);
+        _this7.allresults.splice(cnt, 1);
       })["catch"](function (_ref) {
         var data = _ref.response.data;
         UIkit.notification({
@@ -150,13 +208,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     countRevExp: function countRevExp(arr) {
-      var _this4 = this;
+      var _this8 = this;
 
       this.exp = 0;
       this.rev = 0;
       arr.forEach(function (x) {
-        _this4.rev += x.revenue;
-        _this4.exp += x.expence;
+        _this8.rev += x.revenue;
+        _this8.exp += x.expence;
       });
     }
   },
@@ -366,7 +424,84 @@ var render = function () {
                             ),
                           ]),
                           _vm._v(" "),
-                          _vm._m(1, true),
+                          _c("td", { staticClass: "uk-width-1-6" }, [
+                            _c("ul", { staticClass: "uk-iconnav" }, [
+                              _c("li", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.getIpo(result.ipo)
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("IPO")]
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("li", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.getOpf(
+                                          result.id,
+                                          result.idclient
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("OPF")]
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("li", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.getOpo(
+                                          result.id,
+                                          result.idclient
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("OPO")]
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _c("li", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.getOpl(
+                                          result.id,
+                                          result.idclient
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("OPL")]
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(1, true),
+                            ]),
+                          ]),
                           _vm._v(" "),
                           _c("td", [
                             _c("ul", { staticClass: "uk-iconnav" }, [
@@ -453,37 +588,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "uk-width-1-6" }, [
-      _c("ul", { staticClass: "uk-iconnav" }, [
-        _c("li", [
-          _c("button", { staticClass: "uk-button uk-button-link" }, [
-            _vm._v("IPO"),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("button", { staticClass: "uk-button uk-button-link" }, [
-            _vm._v("OPF"),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("button", { staticClass: "uk-button uk-button-link" }, [
-            _vm._v("OP0"),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("button", { staticClass: "uk-button uk-button-link" }, [
-            _vm._v("OPL"),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("button", { staticClass: "uk-button uk-button-link" }, [
-            _vm._v("OSI"),
-          ]),
-        ]),
+    return _c("li", [
+      _c("button", { staticClass: "uk-button uk-button-link" }, [
+        _vm._v("OSI"),
       ]),
     ])
   },

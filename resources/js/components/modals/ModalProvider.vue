@@ -37,8 +37,8 @@
                                         <input class="uk-input" type="text" placeholder="" v-model="phone" >
                                     </div>
                                     <div class="uk-width-1-4@s">
-                                        <label class="uk-form-label">Fax</label>
-                                        <input class="uk-input" type="text" placeholder="" v-model="fax" >
+                                        <label class="uk-form-label">Country</label>
+                                        <input class="uk-input" type="text" placeholder="" v-model="country" >
                                     </div>
                                     <div class="uk-width-1-4@s">
                                         <label class="uk-form-label">Primary Contact</label>
@@ -67,7 +67,7 @@ export default {
         address2:'',
         tradename:'',
         email:'',
-        fax:'',
+        country:'',
         phone:'',
         contact:''
     }),
@@ -79,7 +79,7 @@ export default {
                 address1: this.address1,
                 tradename: this.tradename,
                 email: this.email,
-                fax: this.fax,
+                country: this.country,
                 phone: this.phone,
                 contact: this.contact,})
                 .then(res =>{
@@ -89,7 +89,7 @@ export default {
                     this.address1 = ''
                     this.tradename = ''
                     this.email = ''
-                    this.fax = ''
+                    this.country = ''
                     this.phone = ''
                     this.contact = ''
                     eventBus.$emit('newProvider', {

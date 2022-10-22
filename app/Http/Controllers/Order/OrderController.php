@@ -31,6 +31,8 @@ class OrderController extends Controller
                     'orders.dateend',
                     'orders.delivery',
                     'orders.comission',
+                    'orders.ipo',
+                    'clients.id as idclient',
                     'clients.name as client',
                     'users.name as manager',
                     DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
@@ -52,7 +54,8 @@ class OrderController extends Controller
                     'orders.dateend',
                     'orders.delivery',
                     'orders.comission',
-                    'clients.name as client',
+                    'orders.ipo',
+                    'clients.id as idclient',
                     'users.name as manager',
                     DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
                     DB::raw('SUM(order_lists.quantity*order_lists.priceClient) as revenue'),
@@ -84,7 +87,8 @@ class OrderController extends Controller
                 'order_lists.priceClient',
                 'providers.id as prid',
                 'providers.name',
-                'order_lists.order_number'
+                'order_lists.order_number',
+                'order_lists.cd'
             )
             ->where('order_lists.order_number', '=', $id)
             ->get();

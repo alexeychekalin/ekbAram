@@ -38,25 +38,23 @@
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Reg. No / TRN</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="inn" >
                             </div>
-                            <!--
-                            <div class="uk-width-1-3@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">IBAN</label>
                                 <input class="uk-input" type="text" placeholder="" v-model="iban" >
                             </div>
-                            -->
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Swift</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="swift" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Branch (if applicable)</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="branch" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Account Number</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="accountNumber" >
                             </div>

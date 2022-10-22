@@ -80,8 +80,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "About",
   data: function data() {
@@ -516,7 +514,7 @@ var render = function () {
                     "div",
                     { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
                     [
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-5@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Reg. No / TRN"),
                         ]),
@@ -548,7 +546,35 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-5@s" }, [
+                        _c("label", { staticClass: "uk-form-label" }, [
+                          _vm._v("IBAN"),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.iban,
+                              expression: "iban",
+                            },
+                          ],
+                          staticClass: "uk-input",
+                          attrs: { type: "text", placeholder: "" },
+                          domProps: { value: _vm.iban },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.iban = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "uk-width-1-5@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Swift"),
                         ]),
@@ -580,7 +606,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-5@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Branch (if applicable)"),
                         ]),
@@ -612,7 +638,7 @@ var render = function () {
                         }),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "uk-width-1-4@s" }, [
+                      _c("div", { staticClass: "uk-width-1-5@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
                           _vm._v("Account Number"),
                         ]),

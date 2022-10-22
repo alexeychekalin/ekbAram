@@ -156,6 +156,16 @@
                                     </select>
                                 </div>
                                 <div class="uk-width-small@s">
+                                    <label class="uk-form-label">CD</label>
+                                    <select class="uk-select" required v-model="order.cd" >
+                                        <option value="NE">NE</option>
+                                        <option value="OH">OH</option>
+                                        <option value="SV">SV</option>
+                                        <option value="RE">RE</option>
+                                        <option value="AR">AR</option>
+                                    </select>
+                                </div>
+                                <div class="uk-width-small@s">
                                     <label class="uk-form-label">Количество</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" >
                                 </div>
@@ -327,7 +337,8 @@ export default {
                     price: '',
                     quantity:'',
                     order_number: '',
-                    priceClient:''
+                    priceClient:'',
+                    cd:''
                 }
             )
             this.descriptions.push({
@@ -368,7 +379,7 @@ export default {
             })
 
             // update address3 if new posted
-            if(this.newaddress != ''){
+            if(this.newaddress !== ''){
                 console.log(this.newaddress)
                 axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
                     .then(res => {
@@ -484,7 +495,8 @@ export default {
                             price: x.price,
                             quantity: x.quantity,
                             order_number: x.order_number,
-                            priceClient:x.priceClient
+                            priceClient:x.priceClient,
+                            cd:x.cd
                         }
                     )
                     this.descriptions.push({
