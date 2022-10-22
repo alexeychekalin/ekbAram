@@ -205,7 +205,7 @@ class DocumentsController extends Controller
             $writer = IOFactory::createWriter($objPHPExcel, 'Dompdf');
             $writer->save(base_path().'/public/upload/opo/'.$number.$count.'.pdf');
 
-            $path[] =public_path('upload/opo/'). $number.$count.'.pdf';
+            $path[] = public_path('upload/opo/'). $number.$count.'.pdf';
             $count++;
         }
 
@@ -215,7 +215,7 @@ class DocumentsController extends Controller
         else{
             $zip = new \ZipArchive();
             $fileName = $number.'.zip';
-            if ($zip->open(public_path($fileName), \ZipArchive::CREATE))
+            if ($zip->open(public_path('upload/opo/').$fileName, \ZipArchive::CREATE))
             {
                 foreach ($path as $key => $value){
                     $relativeName = basename($value);
@@ -223,7 +223,7 @@ class DocumentsController extends Controller
                 }
                 $zip->close();
             }
-            return response()->download(public_path($fileName), $number.'.zip');
+            return response()->download(public_path('upload/opo/').$fileName, 'OPO-'.$number.'.zip');
         }
     }
 
@@ -322,7 +322,7 @@ class DocumentsController extends Controller
         else{
             $zip = new \ZipArchive();
             $fileName = $number.'.zip';
-            if ($zip->open(public_path($fileName), \ZipArchive::CREATE))
+            if ($zip->open(public_path('upload/opo/').$fileName, \ZipArchive::CREATE))
             {
                 foreach ($path as $key => $value){
                     $relativeName = basename($value);
@@ -330,45 +330,8 @@ class DocumentsController extends Controller
                 }
                 $zip->close();
             }
-            return response()->download(public_path($fileName), $number.'.zip');
+            return response()->download(public_path('upload/opo/').$fileName, 'OPL-'.$number.'.zip');
         }
     }
-
-    /*
-    public function index(OrderRequest $request)
-    {
-        $data = $request->validated();
-        return Order::create($data);
-    }
-
-    public function get($id, $role)
-    {
-        if($role == 1){
-            $clients = DB::table('orders')
-                ->join('clients', 'orders.client', '=', 'clients.id')
-                ->join('users', 'orders.manager', '=', 'users.id')
-                ->select('orders.number', 'orders.datestart', 'orders.dateend', 'clients.name as client', 'users.name as manager')
-                ->get();
-        }
-        else{
-            $clients = DB::table('orders')
-                ->join('clients', 'orders.client', '=', 'clients.id')
-                ->join('users', 'orders.manager', '=', 'users.id')
-                ->where('users.id', '=', $id)
-                ->get();
-        }
-
-        return json_decode(json_encode($clients), true);
-    }
-
-    public function update(ClientsRequest $request){
-        $data = $request->validated();
-        Clients::where('id', $request['id'])->update($data);
-        return $request['id'];
-    }
-    public function delete(ClientsRequest $request){
-        Clients::where('id',$request['id'])->delete();
-    }
-    */
 
 }
