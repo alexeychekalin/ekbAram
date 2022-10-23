@@ -210,7 +210,7 @@ class DocumentsController extends Controller
         }
 
         if(count($path) == 1){
-            return response()->download(public_path($path[0]), $number.'1.pdf');
+            return response()->download($path[0], $number.'1.pdf');
         }
         else{
             $zip = new \ZipArchive();
@@ -317,7 +317,7 @@ class DocumentsController extends Controller
         }
 
         if(count($path) == 1){
-            return response()->download(public_path($path[0]), $number.'1.pdf');
+            return response()->download($path[0], $number.'1.pdf');
         }
         else{
             $zip = new \ZipArchive();
