@@ -29,7 +29,8 @@ class Order extends Model
         'manager',
         'delivery',
         'comission',
-        'currency'
+        'currency',
+        'terms'
     ];
 
     /**

@@ -130,7 +130,7 @@
                                 <a uk-tooltip="Новый поставщик" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
                             </div>
                         </div>
-                        <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
+                        <div v-for="(order, index) in orders" :key="index" class="uk-margin-medium-top">
                             <div class="uk-grid-small" uk-grid>
                                 <div class="uk-width-1-6@s">
                                     <label class="uk-form-label">Позиция</label>
@@ -181,7 +181,31 @@
                                     <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                                 </div>
                             </div>
+                            <div class="uk-grid-small" uk-grid>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">Serial/Batch</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.sb" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">MFG</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.mfg" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">COO</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.coo" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">Sch. B</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.schb" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">ECCN</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.eccn" >
+                                </div>
+                            </div>
+                            <hr class="uk-margin-medium"/>
                         </div>
+
                         <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
                     </div>
                     <div class="uk-card-default uk-card-body uk-margin-top">
@@ -198,6 +222,10 @@
                             <div class="uk-width-1-6@s">
                                 <label class="uk-form-label">Комиссия банка</label>
                                 <input class="uk-input"  placeholder="" v-model="comission" >
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">TERMS</label>
+                                <input class="uk-input"  placeholder="" v-model="terms" >
                             </div>
                         </div>
                     </div>
@@ -250,7 +278,12 @@ export default {
             quantity:'',
             order_number: '',
             priceClient:'',
-            cd:''
+            cd:'',
+            mfg:'',
+            coo:'',
+            schb: '8807300060',
+            eccn: '9A991.D',
+            sb:''
         }],
         descriptions:[{
             description:''
@@ -258,7 +291,8 @@ export default {
         shipto:'',
         newaddress:'',
         delivery:'',
-        comission:''
+        comission:'',
+        terms:''
     }),
     components:{
         DatePicker, modalClients, modalParts, modalProvider
@@ -346,7 +380,12 @@ export default {
                     quantity:'',
                     order_number: '',
                     priceClient:'',
-                    cd:''
+                    cd:'',
+                    mfg:'',
+                    coo:'',
+                    schb: '8807300060',
+                    eccn: '9A991.D',
+                    sb:''
                 }
             )
             this.descriptions.push({
@@ -413,7 +452,8 @@ export default {
                         manager:store.state.auth.user.id,
                         delivery: this.delivery,
                         comission: this.comission,
-                        currency: this.currency
+                        currency: this.currency,
+                        terms: this.terms
                     })
                         .then(response => {
                             // create order list
@@ -446,7 +486,12 @@ export default {
                                         quantity:'',
                                         order_number: '',
                                         priceClient:'',
-                                        cd:''
+                                        cd:'',
+                                        mfg:'',
+                                        coo:'',
+                                        schb: '8807300060',
+                                        eccn: '9A991.D',
+                                        sb:''
 
                                     }]
                                 })

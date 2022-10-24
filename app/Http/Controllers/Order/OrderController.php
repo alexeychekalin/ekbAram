@@ -88,7 +88,12 @@ class OrderController extends Controller
                 'providers.id as prid',
                 'providers.name',
                 'order_lists.order_number',
-                'order_lists.cd'
+                'order_lists.cd',
+                'order_lists.mfg',
+                'order_lists.coo',
+                'order_lists.schb',
+                'order_lists.eccn',
+                'order_lists.sb'
             )
             ->where('order_lists.order_number', '=', $id)
             ->get();

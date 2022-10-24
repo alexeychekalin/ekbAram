@@ -91,11 +91,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getOpl: function getOpl(id, idclient) {
+    getOsi: function getOsi(id, idclient) {
       var _this = this;
 
       axios({
-        url: "/api/documents/opl/" + id + '/' + idclient,
+        url: "/api/documents/osi/" + id + '/' + idclient,
         method: "GET",
         responseType: "blob" // important
 
@@ -103,11 +103,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.download(response);
       });
     },
-    getOpo: function getOpo(id, idclient) {
+    getOpl: function getOpl(id, idclient) {
       var _this2 = this;
 
       axios({
-        url: "/api/documents/opo/" + id + '/' + idclient,
+        url: "/api/documents/opl/" + id + '/' + idclient,
         method: "GET",
         responseType: "blob" // important
 
@@ -115,11 +115,11 @@ __webpack_require__.r(__webpack_exports__);
         _this2.download(response);
       });
     },
-    getOpf: function getOpf(id, idclient) {
+    getOpo: function getOpo(id, idclient) {
       var _this3 = this;
 
       axios({
-        url: "/api/documents/opf/" + id + '/' + idclient,
+        url: "/api/documents/opo/" + id + '/' + idclient,
         method: "GET",
         responseType: "blob" // important
 
@@ -127,8 +127,20 @@ __webpack_require__.r(__webpack_exports__);
         _this3.download(response);
       });
     },
-    getIpo: function getIpo(ipo) {
+    getOpf: function getOpf(id, idclient) {
       var _this4 = this;
+
+      axios({
+        url: "/api/documents/opf/" + id + '/' + idclient,
+        method: "GET",
+        responseType: "blob" // important
+
+      }).then(function (response) {
+        _this4.download(response);
+      });
+    },
+    getIpo: function getIpo(ipo) {
+      var _this5 = this;
 
       axios({
         url: "/api/documents/ipo/" + ipo,
@@ -136,7 +148,7 @@ __webpack_require__.r(__webpack_exports__);
         responseType: "blob" // important
 
       }).then(function (response) {
-        _this4.download(response);
+        _this5.download(response);
       });
     },
     download: function download(response) {
@@ -156,19 +168,20 @@ __webpack_require__.r(__webpack_exports__);
           id: id
         }
       });
+      localStorage.setItem('changeid', id);
     },
     getOrders: function getOrders() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get('/api/order/' + _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.auth.user.id + '/' + _store__WEBPACK_IMPORTED_MODULE_0__["default"].state.auth.role).then(function (res) {
-        _this5.results = res.data;
-        _this5.allresults = res.data;
+        _this6.results = res.data;
+        _this6.allresults = res.data;
 
-        _this5.countRevExp(res.data);
+        _this6.countRevExp(res.data);
       });
     },
     filter: function filter(val) {
-      var _this6 = this;
+      var _this7 = this;
 
       if (val === '') {
         this.results = this.allresults;
@@ -177,7 +190,7 @@ __webpack_require__.r(__webpack_exports__);
         this.results = this.allresults;
 
         var filterValue = function filterValue(client) {
-          return _this6.$data.results.filter(function (data) {
+          return _this7.$data.results.filter(function (data) {
             return data.client.toLowerCase().indexOf(client.toLowerCase()) > -1;
           });
         };
@@ -190,16 +203,16 @@ __webpack_require__.r(__webpack_exports__);
       UIkit.modal("#modal-change").show();
     },
     deleteOrder: function deleteOrder(param, cnt) {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post('/api/order/delete/' + param).then(function (res) {
         UIkit.notification({
           message: 'Заказ удален'
         });
 
-        _this7.results.splice(cnt, 1);
+        _this8.results.splice(cnt, 1);
 
-        _this7.allresults.splice(cnt, 1);
+        _this8.allresults.splice(cnt, 1);
       })["catch"](function (_ref) {
         var data = _ref.response.data;
         UIkit.notification({
@@ -208,13 +221,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     countRevExp: function countRevExp(arr) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.exp = 0;
       this.rev = 0;
       arr.forEach(function (x) {
-        _this8.rev += x.revenue;
-        _this8.exp += x.expence;
+        _this9.rev += x.revenue;
+        _this9.exp += x.expence;
       });
     }
   },
@@ -499,7 +512,24 @@ var render = function () {
                                 ),
                               ]),
                               _vm._v(" "),
-                              _vm._m(1, true),
+                              _c("li", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    on: {
+                                      click: function ($event) {
+                                        $event.preventDefault()
+                                        return _vm.getOsi(
+                                          result.id,
+                                          result.idclient
+                                        )
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("OSI")]
+                                ),
+                              ]),
                             ]),
                           ]),
                           _vm._v(" "),
@@ -581,16 +611,6 @@ var staticRenderFns = [
         _c("th", { staticClass: "uk-table-shrink uk-text-nowrap" }, [
           _vm._v("ACTIONS"),
         ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("button", { staticClass: "uk-button uk-button-link" }, [
-        _vm._v("OSI"),
       ]),
     ])
   },

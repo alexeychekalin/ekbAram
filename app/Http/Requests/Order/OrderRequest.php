@@ -33,7 +33,8 @@ class OrderRequest extends FormRequest
             'manager' => 'required',
             'delivery' => '',
             'comission' => '',
-            'currency' => ''
+            'currency' => '',
+            'terms' => ''
         ];
     }
 }

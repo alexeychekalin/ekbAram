@@ -57,7 +57,11 @@ Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => 'auth
     Route::get('/', [App\Http\Controllers\About\AboutController::class, 'get']);
 });
 Route::group(['namespace' => 'FileUpload', 'prefix' => 'fileupload', 'middleware' => 'auth:sanctum'], function (){
+    Route::get('/{id}', [App\Http\Controllers\FileUpload::class, 'get'])->name('fileupload.get');;
     Route::post('/', [App\Http\Controllers\FileUpload::class, 'index']);
+    Route::post('/other/{id}', [App\Http\Controllers\FileUpload::class, 'other'])->name('fileupload.other');
+    Route::post('/delete', [App\Http\Controllers\FileUpload::class, 'delete'])->name('fileupload.delete');
+    Route::get('/download/{filename}/{id}', [App\Http\Controllers\FileUpload::class, 'download'])->name('fileupload.download');
 });
 Route::group(['namespace' => 'Order', 'prefix' => 'order', 'middleware' => 'auth:sanctum'], function (){
     Route::post('/', [App\Http\Controllers\Order\OrderController::class, 'index']);
@@ -74,6 +78,6 @@ Route::group(['namespace' => 'Documents', 'prefix' => 'documents', 'middleware' 
     Route::get('/opf/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opf'])->name('documents.opf');
     Route::get('/opo/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opo'])->name('documents.opo');
     Route::get('/opl/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'opl'])->name('documents.opl');
-    Route::get('/osi', [App\Http\Controllers\Documents\DocumentsController::class, 'osi'])->name('documents.osi');
+    Route::get('/osi/{id}/{idclient}', [App\Http\Controllers\Documents\DocumentsController::class, 'osi'])->name('documents.osi');
 
 });

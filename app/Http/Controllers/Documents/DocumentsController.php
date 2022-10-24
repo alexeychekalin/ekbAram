@@ -242,6 +242,11 @@ class DocumentsController extends Controller
                 'order_lists.provider',
                 'order_lists.cd',
                 'order_lists.price',
+                'order_lists.mfg',
+                'order_lists.coo',
+                'order_lists.schb',
+                'order_lists.eccn',
+                'order_lists.sb'
             )
             ->where('order_lists.order_number', '=', $id)
             ->get();
@@ -264,18 +269,25 @@ class DocumentsController extends Controller
             $total = 0;
             $description = [];
             $cd = [];
+            $sb = [];
+
+            $countOrders = 1;
 
             foreach ($o as $i => $item){
 
-                $counter[] = $count;
+                $counter[] = $countOrders;
                 $pn[] = 'p/n:' . $item->pn;
-                $description[] = $item->description;
+                $description[] =
+                    $item->description . PHP_EOL .
+                    'Mfg:' . $item->mfg . PHP_EOL .
+                    'Country of origin:' . $item->coo . PHP_EOL .
+                'Sch. B.: ' . $item->schb . '; ECCN: ' . $item->eccn . PHP_EOL . 'NLR';
                 $cd[] = $item->cd;
                 $quantity[] = $item->quantity;
                 $total += $item->quantity;
+                $sb[] = $item->sb;
+                $countOrders++;
             }
-
-            $provider = Provider::where('id', $ii)->get();
 
             $params = array(
                 '{address}' => $client[0]->address,
@@ -286,6 +298,8 @@ class DocumentsController extends Controller
                 '{datestart}' => $order[0]->datestart,
                 '{dateend}' => $order[0]->dateend,
                 '{number_ipo}' => $order[0]->number,
+                '{shipto}' => $order[0]->shipto,
+                '{terms}' => $order[0]->terms,
 
                 '{total}' => $total,
 
@@ -298,6 +312,7 @@ class DocumentsController extends Controller
                 '[counter]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$counter),
                 '[pn]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$pn),
                 '[cd]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$cd),
+                '[sb]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$sb),
                 '[description]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$description),
                 '[quantity]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$quantity),
             );
@@ -331,6 +346,140 @@ class DocumentsController extends Controller
                 $zip->close();
             }
             return response()->download(public_path('upload/opo/').$fileName, 'OPL-'.$number.'.zip');
+        }
+    }
+
+    public function osi($id, $idclient){
+        define('SPECIAL_ARRAY_TYPE', CellSetterArrayValueSpecial::class);
+        $path = [];
+
+        $order = Order::where('id', $id)->get();
+        $about = About::where('id', 1)->get();
+        $order_list = DB::table('order_lists')
+            ->join('parts','parts.id', '=', 'order_lists.part')
+            ->select(
+                'parts.pn',
+                'parts.description',
+                'order_lists.quantity',
+                'order_lists.provider',
+                'order_lists.cd',
+                'order_lists.price',
+                'order_lists.mfg',
+                'order_lists.coo',
+                'order_lists.schb',
+                'order_lists.eccn',
+                'order_lists.sb',
+                'order_lists.priceClient'
+            )
+            ->where('order_lists.order_number', '=', $id)
+            ->get();
+
+        $order_list_providers = [];
+
+        $client = Clients::where('id', $idclient)->get();
+        $maxid = Order::max('id');
+        $number = 'PF' . sprintf('%03d',$maxid) . $client[0]->code;
+
+        foreach ($order_list as $i => $item){
+            $order_list_providers[$item->provider][] = $item;
+        }
+        $count = 1;
+        foreach ($order_list_providers as $ii => $o)
+        {
+            $counter = [];
+            $pn = [];
+            $quantity = [];
+            $total = 0;
+            $description = [];
+            $cd = [];
+            $sb = [];
+            $price = [];
+            $amount = [];
+
+            $countOrders = 1;
+
+            foreach ($o as $i => $item){
+                $counter[] = $countOrders;
+                $pn[] = 'p/n:' . $item->pn . PHP_EOL . 's/n: '. $item->sb;
+                $description[] =
+                    $item->description . PHP_EOL .
+                    'Mfg:' . $item->mfg . PHP_EOL .
+                    'Country of origin:' . $item->coo . PHP_EOL .
+                    'Sch. B.: ' . $item->schb . '; ECCN: ' . $item->eccn . PHP_EOL . 'NLR';
+                $cd[] = $item->cd;
+                $quantity[] = $item->quantity;
+                $total += $item->quantity * $item->priceClient;
+                $sb[] = $item->sb;
+                $price[] = $item->priceClient;
+                $amount[] = $item->quantity * $item->priceClient;
+                $countOrders++;
+            }
+
+            $params = array(
+                '{address}' => $client[0]->address,
+                '{client}' => $client[0]->name,
+
+                '{number}' => $number.$count.'-'.$i,
+
+                '{datestart}' => $order[0]->datestart,
+                '{dateend}' => $order[0]->dateend,
+                '{number_ipo}' => $order[0]->number,
+                '{shipto}' => $order[0]->shipto,
+                '{terms}' => $order[0]->terms,
+                '{currency}' => $order[0]->currency,
+
+                '{total}' => $total,
+
+                '{inn}' => $about[0]->inn,
+                '{address_own}' => $about[0]->address,
+                '{name_own}' => $about[0]->name,
+                '{licence}' => $about[0]->licence,
+                '{phone_own}' => $about[0]->phone,
+                '{bank}' => $about[0]->bank,
+                '{iban}' => $about[0]->iban,
+                '{swift}' => $about[0]->swift,
+                '{baddress}' => $about[0]->baddress,
+
+
+
+                '[counter]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$counter),
+                '[pn]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$pn),
+                '[cd]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$cd),
+                '[description]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$description),
+                '[quantity]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$quantity),
+                '[price]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$price),
+                '[amount]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$amount),
+            );
+
+            PhpExcelTemplator::saveToFile( base_path().'/public/templates/osi.xlsx', base_path().'/public/templates/exported_file.xlsx', $params);
+
+            $inputFileType = IOFactory::identify(base_path().'/public/templates/exported_file.xlsx');
+            $objReader = IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load(base_path().'/public/templates/exported_file.xlsx');
+            $objPHPExcel->getActiveSheet()->setShowGridlines(false);
+
+            $writer = IOFactory::createWriter($objPHPExcel, 'Mpdf');
+            $writer->save(base_path().'/public/upload/osi/'.$number.$count.'.pdf');
+
+            $path[] =public_path('upload/osi/'). $number.$count.'.pdf';
+            $count++;
+        }
+
+        if(count($path) == 1){
+            return response()->download($path[0], $number.'1.pdf');
+        }
+        else{
+            $zip = new \ZipArchive();
+            $fileName = $number.'.zip';
+            if ($zip->open(public_path('upload/osi/').$fileName, \ZipArchive::CREATE))
+            {
+                foreach ($path as $key => $value){
+                    $relativeName = basename($value);
+                    $zip->addFile($value, $relativeName);
+                }
+                $zip->close();
+            }
+            return response()->download(public_path('upload/opo/').$fileName, 'OSI-'.$number.'.zip');
         }
     }
 

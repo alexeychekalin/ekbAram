@@ -46,7 +46,7 @@
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getOpf(result.id, result.idclient)">OPF</button></li>
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getOpo(result.id, result.idclient)">OPO</button></li>
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getOpl(result.id, result.idclient)">OPL</button></li>
-                                    <li> <button class="uk-button uk-button-link">OSI</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOsi(result.id, result.idclient)">OSI</button></li>
                                 </ul>
                             </td>
                             <td>
@@ -76,6 +76,15 @@ export default {
         exp: 0
     }),
     methods:{
+        getOsi(id, idclient){
+            axios({
+                url: "/api/documents/osi/" + id + '/' + idclient,
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                this.download(response)
+            });
+        },
         getOpl(id, idclient){
             axios({
                 url: "/api/documents/opl/" + id + '/' + idclient,
@@ -124,6 +133,7 @@ export default {
         },
         edit(id){
             this.$router.push({name: 'edit', params: {id: id}})
+            localStorage.setItem('changeid', id);
         },
         getOrders (){
             axios.get('/api/order/'+store.state.auth.user.id+'/'+ store.state.auth.role)

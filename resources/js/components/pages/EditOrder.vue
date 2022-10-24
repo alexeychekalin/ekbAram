@@ -181,6 +181,29 @@
                                     <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                                 </div>
                             </div>
+                            <div class="uk-grid-small" uk-grid>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">Serial/Batch</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.sb" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">MFG</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.mfg" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">COO</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.coo" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">Sch. B</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.schb" >
+                                </div>
+                                <div class="uk-width-1-5@s">
+                                    <label class="uk-form-label">ECCN</label>
+                                    <input class="uk-input" required  placeholder="" v-model="order.eccn" >
+                                </div>
+                            </div>
+                            <hr class="uk-margin-medium"/>
                         </div>
                         <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
                     </div>
@@ -199,8 +222,33 @@
                                 <label class="uk-form-label">Комиссия банка</label>
                                 <input class="uk-input"  placeholder="" v-model="comission" >
                             </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">TERMS</label>
+                                <input class="uk-input"  placeholder="" v-model="terms" >
+                            </div>
                         </div>
                     </div>
+                    <div class="uk-card-default uk-card-body uk-margin-top">
+                        <div class="uk-width-1-1" uk-grid>
+                            <div>
+                                <h3 class="uk-card-title">Файлы</h3>
+                            </div>
+                        </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-1@s">
+                                <label class="uk-form-label">Добавить новые файлы</label>
+                                <vue-dropzone ref="myVueDropzone" id="dropzone" @vdropzone-removed-file="deleteFile" :options="dropzoneOptions"></vue-dropzone>
+                            </div>
+                            <div class="uk-width-1-2@s">
+                                <label class="uk-form-label">Добавленные файлы</label>
+                                <ul class="uk-list uk-list-striped" v-for="(file, i) in files">
+                                    <li style="cursor: pointer" @click.prevent="download(file)" > <a @click.prevent="deleteFile(file, i)" class="uk-margin-small-right" uk-tooltip="удалить файл" uk-icon="trash"> </a> {{ file }} </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
                 </div>
             </div>
@@ -216,10 +264,19 @@ import modalClients from "../modals/ModalClient";
 import modalParts from "../modals/ModalParts";
 import modalProvider from "../modals/ModalProvider";
 import store from '../../../store'
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
     name: "NewOrder",
     data:() => ({
+        dropzoneOptions: {
+            addRemoveLinks: true,
+            url: '/api/fileupload/other/' + localStorage.getItem('changeid'),
+            headers: {
+                "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+            }
+        },
         description:'',
         filter: [],
         number: '',
@@ -249,12 +306,53 @@ export default {
         newaddress:'',
         delivery:'',
         comission:'',
-        fileChanged: false
+        fileChanged: false,
+        terms:'',
+        files:[],
+        save: false
     }),
     components:{
-        DatePicker, modalClients, modalParts, modalProvider
+        DatePicker, modalClients, modalParts, modalProvider, vueDropzone: vue2Dropzone
     },
     methods:{
+        download(name){
+            axios({
+                url: "/api/fileupload/download/" + name + '/' + localStorage.getItem('changeid'),
+                method: "GET",
+                responseType: "blob", // important
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement("a");
+                link.href = url;
+                let filename = response.headers['content-disposition'];
+                link.setAttribute("download", filename.split('=')[1]);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            });
+
+        },
+        getFiles(){
+            axios.get('/api/fileupload/'+localStorage.getItem('changeid'))
+                .then(res => {
+                    this.$data.files = res.data;
+                })
+        },
+        deleteFile(file, i){
+            if(this.save)
+                return;
+            name = file.name ? file.name : file
+            if(i)
+                this.files.splice(i,1)
+            axios.post('api/fileupload/delete', {name: name, id: localStorage.getItem('changeid')})
+                .then(res =>{
+
+                })
+                .catch(error => {
+                    UIkit.notification({message: error, status:'danger'})
+                    console.log(error);
+                })
+        },
         changeDate(){
             this.timeStop = this.timeStart
         },
@@ -338,7 +436,12 @@ export default {
                     quantity:'',
                     order_number: '',
                     priceClient:'',
-                    cd:''
+                    cd:'',
+                    mfg:'',
+                    coo:'',
+                    schb: '8807300060',
+                    eccn: '9A991.D',
+                    sb:''
                 }
             )
             this.descriptions.push({
@@ -350,6 +453,7 @@ export default {
             this.descriptions.splice(index,1)
         },
         createOrder(){
+            this.save = true;
             if(this.shipto === ''){
                 UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
                 return;
@@ -410,7 +514,8 @@ export default {
                             manager:store.state.auth.user.id,
                             delivery: this.delivery,
                             comission: this.comission,
-                            currency: this.currency
+                            currency: this.currency,
+                            terms : this.terms
                         })
                             .then(response => {
                                 // create order list
@@ -448,6 +553,7 @@ export default {
                     delivery: this.delivery,
                     comission: this.comission,
                     currency: this.currency,
+                    terms: this.terms,
                     id: this.$route.params.id
                 })
                     .then(response => {
@@ -486,6 +592,7 @@ export default {
                 this.filename = res.data[0][0].ipo
                 this.delivery = res.data[0][0].delivery
                 this.delivery = res.data[0][0].comission
+                this.terms = res.data[0][0].terms
                 // заполняем позиции
                 res.data[1].forEach(x => {
                     this.orders.push(
@@ -496,7 +603,12 @@ export default {
                             quantity: x.quantity,
                             order_number: x.order_number,
                             priceClient:x.priceClient,
-                            cd:x.cd
+                            cd:x.cd,
+                            mfg: x.mfg,
+                            coo: x.coo,
+                            schb: x.schb,
+                            eccn: x.eccn,
+                            sb: x.sb
                         }
                     )
                     this.descriptions.push({
@@ -516,9 +628,12 @@ export default {
         })
     },
     created() {
+        if(!this.$route.params.id)
+            this.$route.params.id = localStorage.getItem('changeid')
         this.getClients()
         this.getParts()
         this.getProvider()
+        this.getFiles()
     }
 }
 </script>

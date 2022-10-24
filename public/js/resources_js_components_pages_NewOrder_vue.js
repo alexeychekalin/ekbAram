@@ -614,6 +614,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -655,7 +683,12 @@ __webpack_require__.r(__webpack_exports__);
         quantity: '',
         order_number: '',
         priceClient: '',
-        cd: ''
+        cd: '',
+        mfg: '',
+        coo: '',
+        schb: '8807300060',
+        eccn: '9A991.D',
+        sb: ''
       }],
       descriptions: [{
         description: ''
@@ -663,7 +696,8 @@ __webpack_require__.r(__webpack_exports__);
       shipto: '',
       newaddress: '',
       delivery: '',
-      comission: ''
+      comission: '',
+      terms: ''
     };
   },
   components: {
@@ -774,7 +808,12 @@ __webpack_require__.r(__webpack_exports__);
         quantity: '',
         order_number: '',
         priceClient: '',
-        cd: ''
+        cd: '',
+        mfg: '',
+        coo: '',
+        schb: '8807300060',
+        eccn: '9A991.D',
+        sb: ''
       });
       this.descriptions.push({
         description: ''
@@ -868,7 +907,8 @@ __webpack_require__.r(__webpack_exports__);
           manager: _store__WEBPACK_IMPORTED_MODULE_6__["default"].state.auth.user.id,
           delivery: _this6.delivery,
           comission: _this6.comission,
-          currency: _this6.currency
+          currency: _this6.currency,
+          terms: _this6.terms
         }).then(function (response) {
           // create order list
           _this6.orders.forEach(function (el) {
@@ -905,7 +945,12 @@ __webpack_require__.r(__webpack_exports__);
               quantity: '',
               order_number: '',
               priceClient: '',
-              cd: ''
+              cd: '',
+              mfg: '',
+              coo: '',
+              schb: '8807300060',
+              eccn: '9A991.D',
+              sb: ''
             }];
           })["catch"](function (error) {
             UIkit.notification({
@@ -3983,7 +4028,7 @@ var render = function () {
                     _vm._l(_vm.orders, function (order, index) {
                       return _c(
                         "div",
-                        { key: index, staticClass: "uk-margin-top" },
+                        { key: index, staticClass: "uk-margin-medium-top" },
                         [
                           _c(
                             "div",
@@ -4374,6 +4419,173 @@ var render = function () {
                               ),
                             ]
                           ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "uk-grid-small",
+                              attrs: { "uk-grid": "" },
+                            },
+                            [
+                              _c("div", { staticClass: "uk-width-1-5@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Serial/Batch"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.sb,
+                                      expression: "order.sb",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.sb },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(order, "sb", $event.target.value)
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-5@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("MFG"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.mfg,
+                                      expression: "order.mfg",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.mfg },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "mfg",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-5@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("COO"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.coo,
+                                      expression: "order.coo",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.coo },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "coo",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-5@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("Sch. B"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.schb,
+                                      expression: "order.schb",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.schb },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "schb",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "uk-width-1-5@s" }, [
+                                _c("label", { staticClass: "uk-form-label" }, [
+                                  _vm._v("ECCN"),
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: order.eccn,
+                                      expression: "order.eccn",
+                                    },
+                                  ],
+                                  staticClass: "uk-input",
+                                  attrs: { required: "", placeholder: "" },
+                                  domProps: { value: order.eccn },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        order,
+                                        "eccn",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("hr", { staticClass: "uk-margin-medium" }),
                         ]
                       )
                     }),
@@ -4460,6 +4672,34 @@ var render = function () {
                                   return
                                 }
                                 _vm.comission = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-6@s" }, [
+                          _c("label", { staticClass: "uk-form-label" }, [
+                            _vm._v("TERMS"),
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.terms,
+                                expression: "terms",
+                              },
+                            ],
+                            staticClass: "uk-input",
+                            attrs: { placeholder: "" },
+                            domProps: { value: _vm.terms },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.terms = $event.target.value
                               },
                             },
                           }),
