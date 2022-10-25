@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Список всех заказов</h1>
         <div class="uk-card-default uk-card-small uk-card-hover">
             <div class="uk-card-header">
@@ -66,6 +70,7 @@
 
 <script>
 import store from '../../../store'
+import loading from 'vue-full-loading'
 export default {
     name: "AllClients",
     data:() => ({
@@ -73,51 +78,66 @@ export default {
         allresults:[],
         val:'',
         rev: 0,
-        exp: 0
+        exp: 0,
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+      loading
+    },
     methods:{
         getOsi(id, idclient){
+            this.show2 = true
             axios({
                 url: "/api/documents/osi/" + id + '/' + idclient,
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 this.download(response)
             });
         },
         getOpl(id, idclient){
+            this.show2 = true
             axios({
                 url: "/api/documents/opl/" + id + '/' + idclient,
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 this.download(response)
             });
         },
         getOpo(id, idclient){
+            this.show2 = true
             axios({
                 url: "/api/documents/opo/" + id + '/' + idclient,
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 this.download(response)
             });
         },
         getOpf(id, idclient){
+            this.show2 = true
             axios({
                 url: "/api/documents/opf/" + id + '/' + idclient,
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 this.download(response)
             });
         },
         getIpo(ipo){
+            this.show2 = true
             axios({
                 url: "/api/documents/ipo/" + ipo,
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 this.download(response)
             });
         },
