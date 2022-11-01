@@ -820,10 +820,16 @@ __webpack_require__.r(__webpack_exports__);
     deleteFile: function deleteFile(file, i) {
       var _this3 = this;
 
+      console.log(file + '-' + i);
       if (this.save) return;
       this.show2 = true;
-      name = file.name ? file.name : file;
-      if (i) this.files.splice(i, 1);
+      var name = file.name ? file.name : file;
+
+      if (i >= 0) {
+        console.log(this.files.length);
+        this.files.length === 1 ? this.files = [] : this.files.splice(i, 1);
+      }
+
       axios.post('api/fileupload/delete', {
         name: name,
         id: localStorage.getItem('changeid')
@@ -955,9 +961,11 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.show2 = true; // add new parts in db
 
+      console.log(this.parts);
+      console.log(this.orders);
       this.orders.forEach(function (el, i) {
         if (!_this8.parts.find(function (e) {
-          return e.pn.toLowerCase() === el.part;
+          return e.pn.toLowerCase() === el.part.toLowerCase();
         })) {
           axios.post('/api/parts', {
             pn: el.part,
@@ -1027,6 +1035,7 @@ __webpack_require__.r(__webpack_exports__);
             comission: _this8.comission,
             currency: _this8.currency,
             terms: _this8.terms,
+            id: _this8.$route.params.id,
             wd: _this8.wd
           }).then(function (response) {
             // create order list
@@ -1044,7 +1053,7 @@ __webpack_require__.r(__webpack_exports__);
                 name: 'dashboard'
               });
             })["catch"](function (error) {
-              this.show2 = false;
+              _this8.show2 = false;
               UIkit.notification({
                 message: error,
                 status: 'danger'
@@ -1052,7 +1061,7 @@ __webpack_require__.r(__webpack_exports__);
               console.log("error in update order list");
             });
           })["catch"](function (error) {
-            this.show2 = false;
+            _this8.show2 = false;
             UIkit.notification({
               message: error,
               status: 'danger'
@@ -1060,7 +1069,7 @@ __webpack_require__.r(__webpack_exports__);
             console.log("error in update order");
           });
         })["catch"](function (error) {
-          this.show2 = false;
+          _this8.show2 = false;
           UIkit.notification({
             message: error,
             status: 'danger'
@@ -1177,11 +1186,13 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   created: function created() {
+    this.show2 = true;
     if (!this.$route.params.id) this.$route.params.id = localStorage.getItem('changeid');
     this.getClients();
     this.getParts();
     this.getProvider();
     this.getFiles();
+    this.show2 = false;
   }
 });
 
@@ -5602,19 +5613,14 @@ var render = function () {
                             _vm._l(_vm.files, function (file, i) {
                               return _c(
                                 "ul",
-                                { staticClass: "uk-list uk-list-striped" },
+                                {
+                                  key: i,
+                                  staticClass: "uk-list uk-list-striped",
+                                },
                                 [
                                   _c(
                                     "li",
-                                    {
-                                      staticStyle: { cursor: "pointer" },
-                                      on: {
-                                        click: function ($event) {
-                                          $event.preventDefault()
-                                          return _vm.download(file)
-                                        },
-                                      },
-                                    },
+                                    { staticStyle: { cursor: "pointer" } },
                                     [
                                       _c("a", {
                                         staticClass: "uk-margin-small-right",
@@ -5629,7 +5635,19 @@ var render = function () {
                                           },
                                         },
                                       }),
-                                      _vm._v(" " + _vm._s(file) + " "),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          on: {
+                                            click: function ($event) {
+                                              $event.preventDefault()
+                                              return _vm.download(file)
+                                            },
+                                          },
+                                        },
+                                        [_vm._v(_vm._s(file))]
+                                      ),
                                     ]
                                   ),
                                 ]

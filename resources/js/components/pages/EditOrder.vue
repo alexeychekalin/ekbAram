@@ -249,8 +249,8 @@
                             </div>
                             <div class="uk-width-1-2@s">
                                 <label class="uk-form-label">Добавленные файлы</label>
-                                <ul class="uk-list uk-list-striped" v-for="(file, i) in files">
-                                    <li style="cursor: pointer" @click.prevent="download(file)" > <a @click.prevent="deleteFile(file, i)" class="uk-margin-small-right" uk-tooltip="удалить файл" uk-icon="trash"> </a> {{ file }} </li>
+                                <ul class="uk-list uk-list-striped" v-for="(file, i) in files" :key="i">
+                                    <li style="cursor: pointer" > <a @click.prevent="deleteFile(file, i)" class="uk-margin-small-right" uk-tooltip="удалить файл" uk-icon="trash"> </a>  <a @click.prevent="download(file)">{{ file }}</a> </li>
                                 </ul>
                             </div>
 
@@ -355,12 +355,15 @@ export default {
                 })
         },
         deleteFile(file, i){
+            console.log(file + '-' +i)
             if(this.save)
                 return;
             this.show2 = true
-            name = file.name ? file.name : file
-            if(i)
-                this.files.splice(i,1)
+            const name = file.name ? file.name : file;
+            if(i >= 0){
+                console.log(this.files.length)
+                this.files.length === 1 ? this.files = [] : this.files.splice(i,1)
+            }
             axios.post('api/fileupload/delete', {name: name, id: localStorage.getItem('changeid')})
                 .then(res =>{
                     this.show2 = false
@@ -472,8 +475,10 @@ export default {
 
             this.show2 = true
             // add new parts in db
+            console.log(this.parts)
+            console.log(this.orders)
             this.orders.forEach((el, i) => {
-                if(!this.parts.find(e => e.pn.toLowerCase() === el.part)){
+                if(!this.parts.find(e => e.pn.toLowerCase() === el.part.toLowerCase())){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
                         .then(res =>{
                             UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
@@ -524,6 +529,7 @@ export default {
                             comission: this.comission,
                             currency: this.currency,
                             terms : this.terms,
+                            id: this.$route.params.id,
                             wd: this.wd
                         })
                             .then(response => {
@@ -534,19 +540,19 @@ export default {
                                         UIkit.notification({message: 'Заказ обновлен!', status:'success'})
                                         this.$router.push({name: 'dashboard'})
                                     })
-                                    .catch(function (error) {
+                                    .catch(error => {
                                         this.show2 = false
                                         UIkit.notification({message: error, status:'danger'})
                                         console.log("error in update order list")
                                     });
                             })
-                            .catch(function (error) {
+                            .catch(error => {
                                 this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
                                 console.log("error in update order")
                             });
                     })
-                    .catch(function (error) {
+                    .catch(error => {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in file upload")
@@ -647,12 +653,14 @@ export default {
         })
     },
     created() {
+        this.show2 = true
         if(!this.$route.params.id)
             this.$route.params.id = localStorage.getItem('changeid')
         this.getClients()
         this.getParts()
         this.getProvider()
         this.getFiles()
+        this.show2 = false
     }
 }
 </script>

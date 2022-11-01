@@ -34,8 +34,13 @@ class FileUpload extends Controller
 
     public function get ($id)
     {
-        $files = array_diff(scandir(public_path('upload/other/'.$id), 1), array('.', '..'));
-        return json_decode(json_encode($files, true));
+        if(scandir(public_path('upload/other/'.$id))){
+            $files = array_diff(scandir(public_path('upload/other/'.$id), 1), array('.', '..'));
+            return json_decode(json_encode($files, true));
+        }
+        else
+            return response()->json(['nofiles']);
+
     }
 
     public function download($filename, $id){
