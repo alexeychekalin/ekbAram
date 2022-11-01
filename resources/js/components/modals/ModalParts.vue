@@ -1,5 +1,9 @@
 <template>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <div class="uk-margin uk-modal-container-large">
             <h3 class="uk-card-title">Новая позиция</h3>
             <div class="uk-grid-small" uk-grid>
@@ -29,17 +33,21 @@
 
 <script>
 import {eventBus} from "../../app";
-
+import loading from 'vue-full-loading'
 export default {
     name: "ModalParts",
     data:() => ({
         pn: '',
-        description: ''
+        description: '',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         newParts(){
+            this.show2 = true
             axios.post('/api/parts', {pn: this.pn, description: this.description})
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
                     this.pn = ''
                     this.description = ''
@@ -48,6 +56,7 @@ export default {
                     })
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
@@ -55,6 +64,9 @@ export default {
     },
     mounted() {
 
+    },
+    components:{
+        loading
     }
 }
 </script>

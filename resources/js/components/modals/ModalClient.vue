@@ -1,5 +1,9 @@
 <template>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-3-4">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <div class="uk-margin uk-modal-container-large">
             <h3 class="uk-card-title">Новый клиент</h3>
             <div class="uk-grid-small" uk-grid>
@@ -69,6 +73,7 @@
 
 <script>
 import {eventBus} from "../../app";
+import loading from 'vue-full-loading'
 export default {
     name: "modalClients",
     data:() => ({
@@ -85,7 +90,9 @@ export default {
         ipo:'',
         result:'',
         results: [],
-        checkedName:''
+        checkedName:'',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         newClients(){
@@ -93,6 +100,8 @@ export default {
                 UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
                 return;
             }
+
+            this.show2 = true
             axios.post('/api/clients', {
                 name: this.name,
                 address: this.address,
@@ -105,6 +114,7 @@ export default {
                 code: this.code,
                 ipo: this.ipo})
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Новый клиент добавлен', status:'success'})
                     this.name = ''
                     this.address = ''
@@ -121,6 +131,7 @@ export default {
                     })
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
@@ -145,6 +156,9 @@ export default {
     },
     mounted() {
 
+    },
+    components:{
+        loading
     }
 }
 </script>

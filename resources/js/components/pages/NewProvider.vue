@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Добавление нового поставщика</h1>
         <form @submit.prevent="newProvider()" class="uk-width-1-1">
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -80,6 +84,8 @@
 </template>
 
 <script>
+import loading from "vue-full-loading";
+
 export default {
     name: "NewProvider",
     data:() => ({
@@ -93,9 +99,15 @@ export default {
         contact:'',
         result:'',
         results: [],
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         newProvider(){
+            this.show2 = true
             axios.post('/api/provider', {
                                                     name: this.name,
                                                     address: this.address,
@@ -127,8 +139,10 @@ export default {
                     this.country = ''
                     this.phone = ''
                     this.contact = ''
+                    this.show2 = false
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })

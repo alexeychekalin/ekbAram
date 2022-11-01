@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Информация о компании </h1>
         <form @submit.prevent="updateCompany()" class="uk-width-1-1">
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -68,6 +72,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "About",
     data:() => ({
@@ -83,10 +88,13 @@ export default {
         baddress:'',
         licence:'',
         branch:'',
-        accountNumber:''
+        accountNumber:'',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         updateCompany(){
+            this.show2 = true
             axios.post('/api/about', {
                                                     name: this.name,
                                                     address: this.address,
@@ -103,9 +111,11 @@ export default {
                                                     accountNumber: this.accountNumber
             })
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Данные обновлены', status:'success'})
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
@@ -135,7 +145,10 @@ export default {
     },
     mounted() {
         this.getCompany();
-    }
+    },
+    components:{
+        loading
+    },
 }
 </script>
 

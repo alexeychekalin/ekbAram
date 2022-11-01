@@ -30,7 +30,8 @@ class Order extends Model
         'delivery',
         'comission',
         'currency',
-        'terms'
+        'terms',
+        'wd'
     ];
 
     /**

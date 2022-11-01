@@ -5,6 +5,29 @@
             :label="label">
         </loading>
         <h1 class="uk-text-center">Список всех заказов</h1>
+        <!-- Модальное окно -->
+        <div id="modal-docs" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body">
+                <h2 class="uk-modal-title">ADD NOTE</h2>
+                <div class="uk-width-1-1@s">
+                    <label class="uk-form-label">#1</label>
+                    <input class="uk-input" type="text" placeholder=""  v-model="note1" >
+                </div>
+                <div class="uk-width-1-1@s">
+                    <label class="uk-form-label">#2</label>
+                    <input class="uk-input" type="text" placeholder=""  v-model="note2" >
+                </div>
+                <div class="uk-width-1-1@s">
+                    <label class="uk-form-label">#3</label>
+                    <input class="uk-input" type="text" placeholder=""  v-model="note3" >
+                </div>
+                <p class="uk-text-right">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Закрыть</button>
+                    <button class="uk-button uk-button-primary" v-show="what==='opf'" @click.prevent="getOpf(note1, note2, note3)" type="button">Сохранить</button>
+                    <button class="uk-button uk-button-primary" v-show="what==='opo'" @click.prevent="getOpo(note1, note2, note3)" type="button">Сохранить</button>
+                </p>
+            </div>
+        </div>
         <div class="uk-card-default uk-card-small uk-card-hover">
             <div class="uk-card-header">
                 <div class="uk-grid uk-grid-small">
@@ -47,8 +70,8 @@
                             <td class="uk-width-1-6">
                                 <ul class="uk-iconnav">
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getIpo(result.ipo)">IPO</button></li>
-                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOpf(result.id, result.idclient)">OPF</button></li>
-                                    <li> <button class="uk-button uk-button-link" @click.prevent="getOpo(result.id, result.idclient)">OPO</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="setModal(result.id, result.idclient, 'opf')" uk-toggle="target: #modal-docs">OPF</button></li>
+                                    <li> <button class="uk-button uk-button-link" @click.prevent="setModal(result.id, result.idclient, 'opo')" uk-toggle="target: #modal-docs">OPO</button></li>
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getOpl(result.id, result.idclient)">OPL</button></li>
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getOsi(result.id, result.idclient)">OSI</button></li>
                                 </ul>
@@ -80,12 +103,34 @@ export default {
         rev: 0,
         exp: 0,
         show2: false,
-        label: 'Loading...'
+        label: 'Loading...',
+        note1:'',
+        note2:'',
+        note3:'',
+        modalID:'',
+        modalClient:'',
+        what:''
     }),
     components:{
       loading
     },
     methods:{
+        setModal(id,client, what){
+            this.modalID = id
+            this.modalClient = client
+            this.what = what
+            if(what === 'opf'){
+                this.note1 = "Not for use in U.A.E."
+                this.note2 = "Delivery DXB"
+                this.note3 = "DAFZA"
+            }
+            else{
+                this.note1 = "U.A.E. SHJ"
+                this.note2 = "CUST PICK UP"
+                this.note3 = ""
+            }
+
+        },
         getOsi(id, idclient){
             this.show2 = true
             axios({
@@ -108,23 +153,35 @@ export default {
                 this.download(response)
             });
         },
-        getOpo(id, idclient){
+        getOpo(note1, note2, note3){
+            UIkit.modal('#modal-docs').hide();
             this.show2 = true
             axios({
-                url: "/api/documents/opo/" + id + '/' + idclient,
+                url: "/api/documents/opo/" + this.modalID + '/' + this.modalClient,
                 method: "GET",
                 responseType: "blob", // important
+                params:{
+                    note1: note1,
+                    note2: note2,
+                    note3: note3,
+                }
             }).then((response) => {
                 this.show2 = false
                 this.download(response)
             });
         },
-        getOpf(id, idclient){
+        getOpf(note1, note2, note3){
+            UIkit.modal('#modal-docs').hide();
             this.show2 = true
             axios({
-                url: "/api/documents/opf/" + id + '/' + idclient,
+                url: "/api/documents/opf/" + this.modalID + '/' + this.modalClient,
                 method: "GET",
                 responseType: "blob", // important
+                params:{
+                    note1: note1,
+                    note2: note2,
+                    note3: note3,
+                }
             }).then((response) => {
                 this.show2 = false
                 this.download(response)

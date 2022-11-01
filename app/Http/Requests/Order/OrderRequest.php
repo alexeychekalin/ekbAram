@@ -34,7 +34,8 @@ class OrderRequest extends FormRequest
             'delivery' => '',
             'comission' => '',
             'currency' => '',
-            'terms' => ''
+            'terms' => '',
+            'wd' => ''
         ];
     }
 }

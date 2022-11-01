@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Добавление новой позиции</h1>
         <form @submit.prevent="newParts()" class="uk-width-1-1">
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -40,6 +44,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "NewParts",
     data:() => ({
@@ -47,9 +52,15 @@ export default {
         description: '',
         result:'',
         results: [],
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         newParts(){
+            this.show2 = true
             axios.post('/api/parts', {pn: this.pn, description: this.description})
                 .then(res =>{
                     UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
@@ -61,8 +72,10 @@ export default {
                     )
                     this.pn = ''
                     this.description = ''
+                    this.show2 = false
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })

@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Добавление нового клиента</h1>
         <form @submit.prevent="newClients()" class="uk-width-1-1">
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -90,6 +94,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "NewClients",
     data:() => ({
@@ -105,14 +110,20 @@ export default {
         ipo:'',
         result:'',
         results: [],
-        checkedName:''
+        checkedName:'',
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         newClients(){
             if(this.checkedName !== 'uk-form-success'){
                 UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
                 return;
             }
+            this.show2 = true
             axios.post('/api/clients', {
                 name: this.name,
                 address: this.address,
@@ -151,8 +162,10 @@ export default {
                     this.email = ''
                     this.phone = ''
                     this.contact = ''
+                    this.show2 = false
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })

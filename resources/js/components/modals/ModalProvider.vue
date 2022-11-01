@@ -1,5 +1,9 @@
 <template>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-3-4">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <div class="uk-margin uk-modal-container-large">
             <h3 class="uk-card-title">Новый поставщик</h3>
             <div class="uk-grid-small" uk-grid>
@@ -57,7 +61,7 @@
 
 <script>
 import {eventBus} from "../../app";
-
+import loading from 'vue-full-loading'
 export default {
     name: "AllProvider",
     data:() => ({
@@ -69,10 +73,13 @@ export default {
         email:'',
         country:'',
         phone:'',
-        contact:''
+        contact:'',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         newProvider(){
+            this.show2 = true
             axios.post('/api/provider', {
                 name: this.name,
                 address: this.address,
@@ -83,6 +90,7 @@ export default {
                 phone: this.phone,
                 contact: this.contact,})
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Новый поставщик добавлен', status:'success'})
                     this.name = ''
                     this.address = ''
@@ -97,12 +105,16 @@ export default {
                     })
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
         }
     },
     mounted() {
+    },
+    components:{
+        loading
     }
 }
 </script>

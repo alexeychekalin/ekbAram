@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Список всех поставщиков</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-3-4">
@@ -112,6 +116,7 @@
 </template>
 
 <script>
+import loading from "vue-full-loading";
 export default {
     name: "AllProvider",
     data:() => ({
@@ -132,8 +137,13 @@ export default {
             'ID' : 'id',
             'P/N' : 'pn',
             'Описание' : 'description'
-        }
+        },
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         getProvider (){
             axios.get('/api/provider')
@@ -169,6 +179,7 @@ export default {
             this.tradename = param[9]
         },
         updateProvider(param){
+            this.show2 = true
             axios.post('/api/provider/update', {
                                                         id: this.id,
                                                         name: this.name,
@@ -182,9 +193,11 @@ export default {
                                                         tradename: this.tradename
             })
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Поставщик обновлен'})
                     UIkit.modal("#modal-change").hide()
                 }).catch(({response:{data}})=>{
+                this.show2 = false
                 UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
@@ -192,12 +205,15 @@ export default {
                 })
         },
         deleteProvider(param){
+            this.show2 = true
             axios.post('/api/provider/delete', {id: param[0], name: 'null', address: 'null', email: 'null'})
                 .then(res => {
+                    this.show2 = true
                     UIkit.notification({message: 'Поставщик удален'})
                     this.results.splice(param[1],1)
                     this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
+                this.show2 = true
                 UIkit.notification({message: 'Ошибка удаления. Поставщик указан в заказах'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()

@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Список всех клиентов</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-3-4">
@@ -122,6 +126,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "AllClients",
     data:() => ({
@@ -139,7 +144,9 @@ export default {
         allresults:[],
         val:'',
         id:'',
-        checkedName:''
+        checkedName:'',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         checkName(){
@@ -194,6 +201,7 @@ export default {
             //this.ipo = param.ipo
         },
         updateСlients(param){
+            this.show2 = true
             axios.post('/api/clients/update', {
                                                         id: this.id,
                                                         name: this.name,
@@ -208,9 +216,11 @@ export default {
                                                        // ipo: this.ipo
             })
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Клиент обновлен'})
                     UIkit.modal("#modal-change").hide()
                 }).catch(({response:{data}})=>{
+                this.show2 = false
                 UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
@@ -218,8 +228,10 @@ export default {
                 })
         },
         deleteClients(param, cnt){
+            this.show2 = true
             axios.post('/api/clients/delete', {id: param, name: 'null', address: 'null', email: 'null', code:'null'})
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Клиент удален'})
                     this.results.splice(cnt,1)
                     this.allresults.splice(cnt,1)
@@ -233,7 +245,10 @@ export default {
     },
     mounted() {
         this.getClients()
-    }
+    },
+    components:{
+        loading
+    },
 }
 </script>
 

@@ -1,5 +1,9 @@
 <template xmlns="http://www.w3.org/1999/html">
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <div id="modal-newClient" class="uk-modal-container" uk-modal>
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <modalClients/>
@@ -226,6 +230,10 @@
                                 <label class="uk-form-label">TERMS</label>
                                 <input class="uk-input"  placeholder="" v-model="terms" >
                             </div>
+                            <div class="uk-width-expand@s">
+                                <label class="uk-form-label">W&D</label>
+                                <input class="uk-input"  placeholder="" v-model="wd" >
+                            </div>
                         </div>
                     </div>
                     <div class="uk-card-default uk-card-body uk-margin-top">
@@ -266,6 +274,7 @@ import modalProvider from "../modals/ModalProvider";
 import store from '../../../store'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import loading from 'vue-full-loading'
 
 export default {
     name: "NewOrder",
@@ -309,18 +318,23 @@ export default {
         fileChanged: false,
         terms:'',
         files:[],
-        save: false
+        save: false,
+        show2: false,
+        label: 'Loading...',
+        wd:''
     }),
     components:{
-        DatePicker, modalClients, modalParts, modalProvider, vueDropzone: vue2Dropzone
+        DatePicker, modalClients, modalParts, modalProvider, vueDropzone: vue2Dropzone, loading
     },
     methods:{
         download(name){
+            this.show2 = true
             axios({
                 url: "/api/fileupload/download/" + name + '/' + localStorage.getItem('changeid'),
                 method: "GET",
                 responseType: "blob", // important
             }).then((response) => {
+                this.show2 = false
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement("a");
                 link.href = url;
@@ -333,22 +347,26 @@ export default {
 
         },
         getFiles(){
+            this.show2 = true
             axios.get('/api/fileupload/'+localStorage.getItem('changeid'))
                 .then(res => {
+                    this.show2 = false
                     this.$data.files = res.data;
                 })
         },
         deleteFile(file, i){
             if(this.save)
                 return;
+            this.show2 = true
             name = file.name ? file.name : file
             if(i)
                 this.files.splice(i,1)
             axios.post('api/fileupload/delete', {name: name, id: localStorage.getItem('changeid')})
                 .then(res =>{
-
+                    this.show2 = false
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
@@ -378,18 +396,6 @@ export default {
         },
         clearNewAddress(){
             this.newaddress = ''
-        },
-        newParts(){
-            axios.post('/api/parts', {pn: this.pn, description: this.description})
-                .then(res =>{
-                    UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
-                    this.pn = ''
-                    this.description = ''
-                })
-                .catch(error => {
-                    UIkit.notification({message: error, status:'danger'})
-                    console.log(error);
-                })
         },
         onFileChange(e){
             this.filename = e.target.files[0].name
@@ -464,6 +470,7 @@ export default {
                 headers: { 'content-type': 'multipart/form-data' }
             }
 
+            this.show2 = true
             // add new parts in db
             this.orders.forEach((el, i) => {
                 if(!this.parts.find(e => e.pn.toLowerCase() === el.part)){
@@ -493,6 +500,7 @@ export default {
                         this.address3 = this.shipto
                     })
                     .catch(function (error) {
+                        this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in update address")
                     });
@@ -515,7 +523,8 @@ export default {
                             delivery: this.delivery,
                             comission: this.comission,
                             currency: this.currency,
-                            terms : this.terms
+                            terms : this.terms,
+                            wd: this.wd
                         })
                             .then(response => {
                                 // create order list
@@ -526,16 +535,19 @@ export default {
                                         this.$router.push({name: 'dashboard'})
                                     })
                                     .catch(function (error) {
+                                        this.show2 = false
                                         UIkit.notification({message: error, status:'danger'})
                                         console.log("error in update order list")
                                     });
                             })
                             .catch(function (error) {
+                                this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
                                 console.log("error in update order")
                             });
                     })
                     .catch(function (error) {
+                        this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in file upload")
                     });
@@ -554,7 +566,8 @@ export default {
                     comission: this.comission,
                     currency: this.currency,
                     terms: this.terms,
-                    id: this.$route.params.id
+                    id: this.$route.params.id,
+                    wd: this.wd
                 })
                     .then(response => {
                         // create order list
@@ -565,19 +578,23 @@ export default {
                                 this.$router.push({name: 'dashboard'})
                             })
                             .catch(function (error) {
+                                this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
                                 console.log("error in update order list")
                             });
                     })
                     .catch(function (error) {
+                        this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in update order")
                     });
             }
 
+            this.show2 = false
         },
     },
     mounted() {
+        this.show2 = true
         axios.get('/api/order/'+this.$route.params.id)
             .then(res => {
                 //заполняем заказ
@@ -593,6 +610,7 @@ export default {
                 this.delivery = res.data[0][0].delivery
                 this.delivery = res.data[0][0].comission
                 this.terms = res.data[0][0].terms
+                this.wd = res.data[0][0].wd
                 // заполняем позиции
                 res.data[1].forEach(x => {
                     this.orders.push(
@@ -614,6 +632,7 @@ export default {
                     this.descriptions.push({
                         description: x.description
                     })
+                    this.show2 = false
                 })
             })
 

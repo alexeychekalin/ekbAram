@@ -1,5 +1,9 @@
 <template>
     <div class="uk-grid-small uk-padding-remove-top uk-padding">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Добавление пользователей</h1>
         <form @submit.prevent="newUser()" class="uk-width-1-1">
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -59,6 +63,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "NewUser",
     data:() => ({
@@ -70,7 +75,9 @@ export default {
         result:'',
         results: [],
         roles:['Админ', 'Менеджер'],
-        checkedTel:''
+        checkedTel:'',
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         newUser(){
@@ -78,8 +85,10 @@ export default {
                 UIkit.notification({message: 'Пользователь с данным номером существует в системе'})
                 return;
             }
+            this.show2 = true
             axios.post('/api/users', {name: this.name, password: this.password, phone: this.phone, prefix: this.prefix, role: this.role})
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Пользователь добавлен!', status:'success'})
                     this.$data.results.push(
                         {
@@ -97,6 +106,7 @@ export default {
                     this.checkedTel = ''
                 })
                 .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                 })
         },

@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Список всех пользователей</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -91,6 +95,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "AllUser",
     data:() => ({
@@ -112,7 +117,9 @@ export default {
             'Телефон' : 'phone',
             'Роль' : 'role',
             'Префикс' : 'prefix'
-        }
+        },
+        show2: false,
+        label: 'Loading...'
     }),
     methods:{
         getUsers (){
@@ -158,11 +165,14 @@ export default {
                 })
         },
         updateUser(){
+            this.show2= true
             axios.post('/api/users/update', {id: this.id, name: this.name, password: this.password || 'null', phone: this.phone, prefix: this.prefix, role: this.role})
                 .then(res => {
+                    this.show2 = false
                     UIkit.modal("#modal-change").hide()
                     UIkit.notification({message: 'Пользователь обновлен'})
                 }).catch(({response:{data}})=>{
+                    this.show2 = false
                 UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
@@ -170,12 +180,15 @@ export default {
                 })
         },
         deleteUser(param){
+            this.show2 = true
             axios.post('/api/users/delete', {id: param[0], name: 'null', password: 'null', phone: 'null', prefix: 'null', role: 0})
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Пользователь удален'})
                     this.results.splice(param[1],1)
                     this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
+                    this.show2 = false
                 UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
@@ -186,7 +199,10 @@ export default {
     mounted() {
         axios.get('/sanctum/csrf-cookie')
         this.getUsers()
-    }
+    },
+    components:{
+        loading
+    },
 }
 </script>
 

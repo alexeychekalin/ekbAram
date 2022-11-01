@@ -1,5 +1,9 @@
 <template>
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <h1 class="uk-text-center">Список всех позиций</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -72,6 +76,7 @@
 </template>
 
 <script>
+import loading from 'vue-full-loading'
 export default {
     name: "AllParts",
     data:() => ({
@@ -86,8 +91,13 @@ export default {
             'ID' : 'id',
             'P/N' : 'pn',
             'Описание' : 'description'
-        }
+        },
+        show2: false,
+        label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         getParts (){
             axios.get('/api/parts',{withCredentials: true} )
@@ -116,11 +126,14 @@ export default {
             this.description = param[2]
         },
         updateParts(param){
+            this.show2 = true
             axios.post('/api/parts/update', {id: this.id, pn: this.pn, description: this.description})
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Позиция обновлена'})
                     UIkit.modal("#modal-change").hide()
                 }).catch(({response:{data}})=>{
+                this.show2 = false
                 UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
@@ -128,12 +141,15 @@ export default {
                 })
         },
         deleteParts(param){
+            this.show2 = true
             axios.post('/api/parts/delete', {id: param[0], pn: 'null', description: 'null'})
                 .then(res => {
+                    this.show2 = false
                     UIkit.notification({message: 'Позиция удалена'})
                     this.results.splice(param[1],1)
                     this.allresults.splice(param[1],1)
                 }).catch(({response:{data}})=>{
+                this.show2 = false
                 UIkit.notification({message: 'Ошибка удаления. Данная позиция добавлена в заказ!'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()

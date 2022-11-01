@@ -1,5 +1,9 @@
 <template xmlns="http://www.w3.org/1999/html">
     <div class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <loading
+            :show="show2"
+            :label="label">
+        </loading>
         <div id="modal-newClient" class="uk-modal-container" uk-modal>
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <modalClients/>
@@ -227,6 +231,10 @@
                                 <label class="uk-form-label">TERMS</label>
                                 <input class="uk-input"  placeholder="" v-model="terms" >
                             </div>
+                            <div class="uk-width-expand@s">
+                                <label class="uk-form-label">W&D</label>
+                                <input class="uk-input" placeholder="" v-model="wd" >
+                            </div>
                         </div>
                     </div>
                     <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
@@ -244,6 +252,7 @@ import modalClients from "../modals/ModalClient";
 import modalParts from "../modals/ModalParts";
 import modalProvider from "../modals/ModalProvider";
 import store from '../../../store'
+import loading from 'vue-full-loading'
 
 export default {
     name: "NewOrder",
@@ -292,10 +301,13 @@ export default {
         newaddress:'',
         delivery:'',
         comission:'',
-        terms:''
+        terms:'',
+        show2: false,
+        label: 'Loading...',
+        wd:''
     }),
     components:{
-        DatePicker, modalClients, modalParts, modalProvider
+        DatePicker, modalClients, modalParts, modalProvider, loading
     },
     methods:{
         changeDate(){
@@ -325,8 +337,10 @@ export default {
             this.newaddress = ''
         },
         newParts(){
+            this.show2 = true
             axios.post('/api/parts', {pn: this.pn, description: this.description})
                 .then(res =>{
+                    this.show2 = false
                     UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
                     this.pn = ''
                     this.description = ''
@@ -401,6 +415,7 @@ export default {
                 UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
                 return;
             }
+            this.show2 = true
             // upload file
             const config = {
                 headers: { 'content-type': 'multipart/form-data' }
@@ -414,6 +429,7 @@ export default {
                             this.orders[i].part = res.data.id;
                         })
                         .catch(error => {
+                            this.show2 = false
                             UIkit.notification({message: error, status:'danger'})
                             console.log(error);
                         })
@@ -431,6 +447,7 @@ export default {
                         this.address3 = this.shipto
                     })
                     .catch(function (error) {
+                        this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in update address")
                     });
@@ -453,7 +470,8 @@ export default {
                         delivery: this.delivery,
                         comission: this.comission,
                         currency: this.currency,
-                        terms: this.terms
+                        terms: this.terms,
+                        wd: this.wd
                     })
                         .then(response => {
                             // create order list
@@ -479,6 +497,7 @@ export default {
                                     this.$data.contact =''
                                     this.$data.code =''
                                     this.$data.newaddress =''
+                                    this.$data.wd = ''
                                     this.$data.orders = [{
                                         part:'',
                                         provider:'',
@@ -495,20 +514,24 @@ export default {
 
                                     }]
                                 })
-                                .catch(function (error) {
+                                .catch(error => {
+                                    this.show2 = false
                                     UIkit.notification({message: error, status:'danger'})
                                     console.log("error in create order list")
                                 });
                         })
-                        .catch(function (error) {
+                        .catch(error => {
+                            this.show2 = false
                             UIkit.notification({message: error, status:'danger'})
                             console.log("error in create order")
                         });
                 })
-                .catch(function (error) {
+                .catch(error => {
+                    this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
                     console.log("error in file upload")
                 });
+            this.show2 = false
         },
     },
     mounted() {

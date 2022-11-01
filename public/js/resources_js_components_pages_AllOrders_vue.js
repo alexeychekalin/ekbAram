@@ -83,6 +83,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -95,13 +118,34 @@ __webpack_require__.r(__webpack_exports__);
       rev: 0,
       exp: 0,
       show2: false,
-      label: 'Loading...'
+      label: 'Loading...',
+      note1: '',
+      note2: '',
+      note3: '',
+      modalID: '',
+      modalClient: '',
+      what: ''
     };
   },
   components: {
     loading: vue_full_loading__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   methods: {
+    setModal: function setModal(id, client, what) {
+      this.modalID = id;
+      this.modalClient = client;
+      this.what = what;
+
+      if (what === 'opf') {
+        this.note1 = "Not for use in U.A.E.";
+        this.note2 = "Delivery DXB";
+        this.note3 = "DAFZA";
+      } else {
+        this.note1 = "U.A.E. SHJ";
+        this.note2 = "CUST PICK UP";
+        this.note3 = "";
+      }
+    },
     getOsi: function getOsi(id, idclient) {
       var _this = this;
 
@@ -132,30 +176,42 @@ __webpack_require__.r(__webpack_exports__);
         _this2.download(response);
       });
     },
-    getOpo: function getOpo(id, idclient) {
+    getOpo: function getOpo(note1, note2, note3) {
       var _this3 = this;
 
+      UIkit.modal('#modal-docs').hide();
       this.show2 = true;
       axios({
-        url: "/api/documents/opo/" + id + '/' + idclient,
+        url: "/api/documents/opo/" + this.modalID + '/' + this.modalClient,
         method: "GET",
-        responseType: "blob" // important
-
+        responseType: "blob",
+        // important
+        params: {
+          note1: note1,
+          note2: note2,
+          note3: note3
+        }
       }).then(function (response) {
         _this3.show2 = false;
 
         _this3.download(response);
       });
     },
-    getOpf: function getOpf(id, idclient) {
+    getOpf: function getOpf(note1, note2, note3) {
       var _this4 = this;
 
+      UIkit.modal('#modal-docs').hide();
       this.show2 = true;
       axios({
-        url: "/api/documents/opf/" + id + '/' + idclient,
+        url: "/api/documents/opf/" + this.modalID + '/' + this.modalClient,
         method: "GET",
-        responseType: "blob" // important
-
+        responseType: "blob",
+        // important
+        params: {
+          note1: note1,
+          note2: note2,
+          note3: note3
+        }
       }).then(function (response) {
         _this4.show2 = false;
 
@@ -1252,6 +1308,147 @@ var render = function () {
         _vm._v("Список всех заказов"),
       ]),
       _vm._v(" "),
+      _c("div", { attrs: { id: "modal-docs", "uk-modal": "" } }, [
+        _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
+          _c("h2", { staticClass: "uk-modal-title" }, [_vm._v("ADD NOTE")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-width-1-1@s" }, [
+            _c("label", { staticClass: "uk-form-label" }, [_vm._v("#1")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note1,
+                  expression: "note1",
+                },
+              ],
+              staticClass: "uk-input",
+              attrs: { type: "text", placeholder: "" },
+              domProps: { value: _vm.note1 },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.note1 = $event.target.value
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-width-1-1@s" }, [
+            _c("label", { staticClass: "uk-form-label" }, [_vm._v("#2")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note2,
+                  expression: "note2",
+                },
+              ],
+              staticClass: "uk-input",
+              attrs: { type: "text", placeholder: "" },
+              domProps: { value: _vm.note2 },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.note2 = $event.target.value
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-width-1-1@s" }, [
+            _c("label", { staticClass: "uk-form-label" }, [_vm._v("#3")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note3,
+                  expression: "note3",
+                },
+              ],
+              staticClass: "uk-input",
+              attrs: { type: "text", placeholder: "" },
+              domProps: { value: _vm.note3 },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.note3 = $event.target.value
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "uk-text-right" }, [
+            _c(
+              "button",
+              {
+                staticClass: "uk-button uk-button-default uk-modal-close",
+                attrs: { type: "button" },
+              },
+              [_vm._v("Закрыть")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.what === "opf",
+                    expression: "what==='opf'",
+                  },
+                ],
+                staticClass: "uk-button uk-button-primary",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.getOpf(_vm.note1, _vm.note2, _vm.note3)
+                  },
+                },
+              },
+              [_vm._v("Сохранить")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.what === "opo",
+                    expression: "what==='opo'",
+                  },
+                ],
+                staticClass: "uk-button uk-button-primary",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.getOpo(_vm.note1, _vm.note2, _vm.note3)
+                  },
+                },
+              },
+              [_vm._v("Сохранить")]
+            ),
+          ]),
+        ]),
+      ]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "uk-card-default uk-card-small uk-card-hover" },
@@ -1382,12 +1579,16 @@ var render = function () {
                                   "button",
                                   {
                                     staticClass: "uk-button uk-button-link",
+                                    attrs: {
+                                      "uk-toggle": "target: #modal-docs",
+                                    },
                                     on: {
                                       click: function ($event) {
                                         $event.preventDefault()
-                                        return _vm.getOpf(
+                                        return _vm.setModal(
                                           result.id,
-                                          result.idclient
+                                          result.idclient,
+                                          "opf"
                                         )
                                       },
                                     },
@@ -1401,12 +1602,16 @@ var render = function () {
                                   "button",
                                   {
                                     staticClass: "uk-button uk-button-link",
+                                    attrs: {
+                                      "uk-toggle": "target: #modal-docs",
+                                    },
                                     on: {
                                       click: function ($event) {
                                         $event.preventDefault()
-                                        return _vm.getOpo(
+                                        return _vm.setModal(
                                           result.id,
-                                          result.idclient
+                                          result.idclient,
+                                          "opo"
                                         )
                                       },
                                     },
