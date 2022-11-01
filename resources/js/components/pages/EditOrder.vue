@@ -283,7 +283,8 @@ export default {
             addRemoveLinks: true,
             url: '/api/fileupload/other/' + localStorage.getItem('changeid'),
             headers: {
-                "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+                "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content,
+                "X-Requested-With": 'XMLHttpRequest'
             }
         },
         description:'',
@@ -557,7 +558,7 @@ export default {
             }
             else{
                 // create order
-                axios.post('api/order/update/', {
+                axios.post('api/order/update', {
                     number: this.number,
                     datestart: this.timeStart,
                     dateend: this.timeStop,
