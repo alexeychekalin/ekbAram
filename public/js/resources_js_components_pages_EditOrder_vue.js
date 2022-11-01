@@ -820,13 +820,11 @@ __webpack_require__.r(__webpack_exports__);
     deleteFile: function deleteFile(file, i) {
       var _this3 = this;
 
-      console.log(file + '-' + i);
       if (this.save) return;
       this.show2 = true;
       var name = file.name ? file.name : file;
 
       if (i >= 0) {
-        console.log(this.files.length);
         this.files.length === 1 ? this.files = [] : this.files.splice(i, 1);
       }
 
@@ -961,8 +959,6 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.show2 = true; // add new parts in db
 
-      console.log(this.parts);
-      console.log(this.orders);
       this.orders.forEach(function (el, i) {
         if (!_this8.parts.find(function (e) {
           return e.pn.toLowerCase() === el.part.toLowerCase();
@@ -1108,7 +1104,7 @@ __webpack_require__.r(__webpack_exports__);
               name: 'dashboard'
             });
           })["catch"](function (error) {
-            this.show2 = false;
+            _this8.show2 = false;
             UIkit.notification({
               message: error,
               status: 'danger'
@@ -1116,7 +1112,7 @@ __webpack_require__.r(__webpack_exports__);
             console.log("error in update order list");
           });
         })["catch"](function (error) {
-          this.show2 = false;
+          _this8.show2 = false;
           UIkit.notification({
             message: error,
             status: 'danger'

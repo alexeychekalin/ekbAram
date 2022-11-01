@@ -355,13 +355,12 @@ export default {
                 })
         },
         deleteFile(file, i){
-            console.log(file + '-' +i)
+
             if(this.save)
                 return;
             this.show2 = true
             const name = file.name ? file.name : file;
             if(i >= 0){
-                console.log(this.files.length)
                 this.files.length === 1 ? this.files = [] : this.files.splice(i,1)
             }
             axios.post('api/fileupload/delete', {name: name, id: localStorage.getItem('changeid')})
@@ -475,8 +474,6 @@ export default {
 
             this.show2 = true
             // add new parts in db
-            console.log(this.parts)
-            console.log(this.orders)
             this.orders.forEach((el, i) => {
                 if(!this.parts.find(e => e.pn.toLowerCase() === el.part.toLowerCase())){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
@@ -583,19 +580,18 @@ export default {
                                 UIkit.notification({message: 'Заказ обновлен!', status:'success'})
                                 this.$router.push({name: 'dashboard'})
                             })
-                            .catch(function (error) {
+                            .catch(error => {
                                 this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
                                 console.log("error in update order list")
                             });
                     })
-                    .catch(function (error) {
+                    .catch(error => {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
                         console.log("error in update order")
                     });
             }
-
             this.show2 = false
         },
     },

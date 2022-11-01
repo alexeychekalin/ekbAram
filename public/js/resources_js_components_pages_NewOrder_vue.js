@@ -1004,6 +1004,9 @@ __webpack_require__.r(__webpack_exports__);
             _this6.$data.code = '';
             _this6.$data.newaddress = '';
             _this6.$data.wd = '';
+            _this6.descriptions = [{
+              description: ''
+            }];
             _this6.$data.orders = [{
               part: '',
               provider: '',

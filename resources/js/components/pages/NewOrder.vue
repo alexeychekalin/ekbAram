@@ -498,6 +498,9 @@ export default {
                                     this.$data.code =''
                                     this.$data.newaddress =''
                                     this.$data.wd = ''
+                                    this.descriptions = [{
+                                        description: ''
+                                    }]
                                     this.$data.orders = [{
                                         part:'',
                                         provider:'',
