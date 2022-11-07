@@ -245,7 +245,13 @@
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-1@s">
                                 <label class="uk-form-label">Добавить новые файлы</label>
-                                <vue-dropzone ref="myVueDropzone" id="dropzone" @vdropzone-removed-file="deleteFile" :options="dropzoneOptions"></vue-dropzone>
+                                <div class="js-upload uk-placeholder uk-text-center">
+                                    <span uk-icon="icon: cloud-upload"></span>
+                                    <div uk-form-custom>
+                                        <input type="file" v-on:change="OtherFileUpload">
+                                        <span class="uk-link">Нажмите для выбора файлов</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="uk-width-1-2@s">
                                 <label class="uk-form-label">Добавленные файлы</label>
@@ -272,21 +278,11 @@ import modalClients from "../modals/ModalClient";
 import modalParts from "../modals/ModalParts";
 import modalProvider from "../modals/ModalProvider";
 import store from '../../../store'
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import loading from 'vue-full-loading'
 
 export default {
     name: "NewOrder",
     data:() => ({
-        dropzoneOptions: {
-            addRemoveLinks: true,
-            url: '/api/fileupload/other/' + localStorage.getItem('changeid'),
-            headers: {
-                "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content,
-                "X-Requested-With": 'XMLHttpRequest'
-            }
-        },
         description:'',
         filter: [],
         number: '',
@@ -322,10 +318,11 @@ export default {
         save: false,
         show2: false,
         label: 'Loading...',
-        wd:''
+        wd:'',
+        csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     }),
     components:{
-        DatePicker, modalClients, modalParts, modalProvider, vueDropzone: vue2Dropzone, loading
+        DatePicker, modalClients, modalParts, modalProvider, loading
     },
     methods:{
         download(name){
@@ -404,6 +401,21 @@ export default {
             this.filename = e.target.files[0].name
             this.file = e.target.files[0]
             this.fileChanged = true;
+        },
+        OtherFileUpload(e){
+            // upload file
+            this.show2 = true
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+            let formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            axios.post('/api/fileupload/other/' + localStorage.getItem('changeid'), formData, config)
+                .then(res =>{
+                    this.show2 = false;
+                        this.getFiles();
+
+                        })
         },
         getClients (){
             axios.get('/api/clients')

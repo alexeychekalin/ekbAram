@@ -61,7 +61,7 @@
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
                         <tr>
                             <td>{{cnt + 1}}</td>
-                            <td>{{result.number || '-'}}</td>
+                            <td>{{ result.number || '-' }}</td>
                             <td class="uk-text-nowrap">{{result.datestart || '-'}}</td>
                             <td>{{result.client || '-'}}</td>
                             <td>{{result.revenue || '-'}} {{result.currency}}</td>
@@ -203,7 +203,9 @@ export default {
             const link = document.createElement("a");
             link.href = url;
             let filename = response.headers['content-disposition'];
-            link.setAttribute("download", filename.split('=')[1]);
+            console.log(filename)
+            link.setAttribute("download", filename.split('=')[1].replaceAll('"', ''));
+            console.log(link)
             document.body.appendChild(link);
             link.click();
             link.remove();

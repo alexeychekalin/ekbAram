@@ -32,6 +32,8 @@ Route::group(['namespace' => 'Check', 'prefix' => 'check', 'middleware' => 'auth
     Route::post('/phone', [App\Http\Controllers\Check\CheckController::class, 'phone'])->name('check.phone');
     Route::post('/people', [App\Http\Controllers\Check\CheckController::class, 'people'])->name('check.people');
     Route::post('/client', [App\Http\Controllers\Check\CheckController::class, 'client'])->name('check.client');
+    Route::post('/part', [App\Http\Controllers\Check\CheckController::class, 'part'])->name('check.part');
+    Route::post('/provider', [App\Http\Controllers\Check\CheckController::class, 'provider'])->name('check.provider');
 });
 Route::group(['namespace' => 'Parts', 'prefix' => 'parts', 'middleware' => 'auth:sanctum'], function (){
     Route::post('/', [App\Http\Controllers\Parts\PartsController::class, 'index']);
@@ -56,7 +58,7 @@ Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => 'auth
     Route::post('/', [App\Http\Controllers\About\AboutController::class, 'index']);
     Route::get('/', [App\Http\Controllers\About\AboutController::class, 'get']);
 });
-Route::group(['namespace' => 'FileUpload', 'prefix' => 'fileupload', 'middleware' => 'auth:sanctum'], function (){
+Route::group(['namespace' => 'FileUpload', 'prefix' => 'fileupload'], function (){
     Route::get('/{id}', [App\Http\Controllers\FileUpload::class, 'get'])->name('fileupload.get');;
     Route::post('/', [App\Http\Controllers\FileUpload::class, 'index']);
     Route::post('/other/{id}', [App\Http\Controllers\FileUpload::class, 'other'])->name('fileupload.other');

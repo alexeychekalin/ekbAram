@@ -249,12 +249,20 @@ __webpack_require__.r(__webpack_exports__);
       pn: '',
       description: '',
       show2: false,
-      label: 'Loading...'
+      label: 'Loading...',
+      checkedName: ''
     };
   },
   methods: {
     newParts: function newParts() {
       var _this = this;
+
+      if (this.checkedName !== 'uk-form-success') {
+        UIkit.notification({
+          message: 'Клиент с таким "Customer Name" уже существует'
+        });
+        return;
+      }
 
       this.show2 = true;
       axios.post('/api/parts', {
@@ -278,6 +286,30 @@ __webpack_require__.r(__webpack_exports__);
           status: 'danger'
         });
         console.log(error);
+      });
+    },
+    checkName: function checkName() {
+      var _this2 = this;
+
+      if (this.pn === '') return;
+      axios.post('/api/check/part', {
+        name: this.pn
+      }).then(function (res) {
+        console.log(res);
+
+        if (res.data.length == 0) {
+          _this2.$data.checkedName = 'uk-form-success';
+        } else {
+          _this2.$data.checkedName = 'uk-form-danger';
+          UIkit.notification({
+            message: 'Позиция с таким "P/N" уже существует'
+          });
+        }
+      })["catch"](function (error) {
+        UIkit.notification({
+          message: error,
+          status: 'danger'
+        });
       });
     }
   },
@@ -379,12 +411,20 @@ __webpack_require__.r(__webpack_exports__);
       phone: '',
       contact: '',
       show2: false,
-      label: 'Loading...'
+      label: 'Loading...',
+      checkedName: ''
     };
   },
   methods: {
     newProvider: function newProvider() {
       var _this = this;
+
+      if (this.checkedName !== 'uk-form-success') {
+        UIkit.notification({
+          message: 'Клиент с таким "Customer Name" уже существует'
+        });
+        return;
+      }
 
       this.show2 = true;
       axios.post('/api/provider', {
@@ -420,6 +460,30 @@ __webpack_require__.r(__webpack_exports__);
           status: 'danger'
         });
         console.log(error);
+      });
+    },
+    checkName: function checkName() {
+      var _this2 = this;
+
+      if (this.name === '') return;
+      axios.post('/api/check/provider', {
+        name: this.name
+      }).then(function (res) {
+        console.log(res);
+
+        if (res.data.length == 0) {
+          _this2.$data.checkedName = 'uk-form-success';
+        } else {
+          _this2.$data.checkedName = 'uk-form-danger';
+          UIkit.notification({
+            message: 'Клиент с таким "Customer Name" уже существует'
+          });
+        }
+      })["catch"](function (error) {
+        UIkit.notification({
+          message: error,
+          status: 'danger'
+        });
       });
     }
   },
@@ -3552,6 +3616,7 @@ var render = function () {
                                 },
                               ],
                               staticClass: "uk-input",
+                              class: _vm.checkedName,
                               attrs: {
                                 type: "text",
                                 placeholder: "",
@@ -3559,6 +3624,7 @@ var render = function () {
                               },
                               domProps: { value: _vm.pn },
                               on: {
+                                blur: _vm.checkName,
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return
@@ -3698,6 +3764,7 @@ var render = function () {
                                 },
                               ],
                               staticClass: "uk-input",
+                              class: _vm.checkedName,
                               attrs: {
                                 type: "text",
                                 required: "",
@@ -3706,6 +3773,7 @@ var render = function () {
                               },
                               domProps: { value: _vm.name },
                               on: {
+                                blur: _vm.checkName,
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return

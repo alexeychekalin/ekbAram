@@ -67,7 +67,8 @@ __webpack_require__.r(__webpack_exports__);
       result: '',
       results: [],
       show2: false,
-      label: 'Loading...'
+      label: 'Loading...',
+      checkedName: ''
     };
   },
   components: {
@@ -76,6 +77,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     newParts: function newParts() {
       var _this = this;
+
+      if (this.checkedName !== 'uk-form-success') {
+        UIkit.notification({
+          message: 'Клиент с таким "Customer Name" уже существует'
+        });
+        return;
+      }
 
       this.show2 = true;
       axios.post('/api/parts', {
@@ -102,6 +110,30 @@ __webpack_require__.r(__webpack_exports__);
           status: 'danger'
         });
         console.log(error);
+      });
+    },
+    checkName: function checkName() {
+      var _this2 = this;
+
+      if (this.pn === '') return;
+      axios.post('/api/check/part', {
+        name: this.pn
+      }).then(function (res) {
+        console.log(res);
+
+        if (res.data.length == 0) {
+          _this2.$data.checkedName = 'uk-form-success';
+        } else {
+          _this2.$data.checkedName = 'uk-form-danger';
+          UIkit.notification({
+            message: 'Позиция с таким "P/N" уже существует'
+          });
+        }
+      })["catch"](function (error) {
+        UIkit.notification({
+          message: error,
+          status: 'danger'
+        });
       });
     }
   },
@@ -1207,6 +1239,7 @@ var render = function () {
                             },
                           ],
                           staticClass: "uk-input",
+                          class: _vm.checkedName,
                           attrs: {
                             type: "text",
                             placeholder: "",
@@ -1214,6 +1247,7 @@ var render = function () {
                           },
                           domProps: { value: _vm.pn },
                           on: {
+                            blur: _vm.checkName,
                             input: function ($event) {
                               if ($event.target.composing) {
                                 return

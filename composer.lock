@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04a9eb7e2fd74076cab65dc552ec67dd",
+    "content-hash": "4b6def09ca141cedadfe32a5b2ff01ee",
     "packages": [
         {
             "name": "alhimik1986/php-excel-templator",
@@ -9197,7 +9197,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^7.3|^8.0",
+        "ext-zip": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

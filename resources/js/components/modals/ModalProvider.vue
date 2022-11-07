@@ -14,7 +14,7 @@
                                 <div class="uk-grid-small" uk-grid>
                                     <div class="uk-width-1-2@s">
                                         <label class="uk-form-label">Legal Name</label>
-                                        <input class="uk-input" type="text" required placeholder="" required v-model="name" >
+                                        <input class="uk-input" type="text" required placeholder="" required v-model="name" :class="checkedName" @blur="checkName" >
                                     </div>
                                     <div class="uk-width-1-2@s">
                                         <label class="uk-form-label">Trade Name</label>
@@ -75,10 +75,15 @@ export default {
         phone:'',
         contact:'',
         show2: false,
-        label: 'Loading...'
+        label: 'Loading...',
+        checkedName:'',
     }),
     methods:{
         newProvider(){
+            if(this.checkedName !== 'uk-form-success'){
+                UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
+                return;
+            }
             this.show2 = true
             axios.post('/api/provider', {
                 name: this.name,
@@ -109,7 +114,25 @@ export default {
                     UIkit.notification({message: error, status:'danger'})
                     console.log(error);
                 })
-        }
+        },
+        checkName(){
+
+            if(this.name === '')
+                return;
+            axios.post('/api/check/provider', {name: this.name})
+                .then(res =>{
+                    console.log(res);
+                    if(res.data.length == 0){
+                        this.$data.checkedName = 'uk-form-success'
+                    }else{
+                        this.$data.checkedName = 'uk-form-danger'
+                        UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
+                    }
+                })
+                .catch(error => {
+                    UIkit.notification({message: error, status:'danger'})
+                })
+        },
     },
     mounted() {
     },

@@ -100,14 +100,14 @@ class DocumentsController extends Controller
 
         );
 
-        PhpExcelTemplator::saveToFile( base_path().'/public/templates/opf.xlsx', base_path().'/public/templates/exported_file.xlsx', $params);
+        PhpExcelTemplator::saveToFile( base_path().'/public/templates/opf3.xlsx', base_path().'/public/templates/exported_file.xlsx', $params);
 
         $inputFileType = IOFactory::identify(base_path().'/public/templates/exported_file.xlsx');
         $objReader = IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load(base_path().'/public/templates/exported_file.xlsx');
         $objPHPExcel->getActiveSheet()->setShowGridlines(false);
 
-        $writer = IOFactory::createWriter($objPHPExcel, 'Dompdf');
+        $writer = IOFactory::createWriter($objPHPExcel, 'Mpdf');
         $writer->save(base_path().'/public/upload/opf/'.$number.'.pdf');
 
         $path =public_path('upload/opf/'). $number.'.pdf';
@@ -170,12 +170,14 @@ class DocumentsController extends Controller
 
             $provider = Provider::where('id', $ii)->get();
 
+            $count = count($order_list_providers) > 1 ? $count : '';
+
             $params = array(
                 '{pname}' => $provider[0]->name,
                 '{paddress}' => $provider[0]->address,
                 '{pemail}' => $provider[0]->email,
 
-                '{number}' => $number,
+                '{number}' => $number.$count,
 
                 '{datestart}' => date("d-M-Y", strtotime($order[0]->datestart)),
                 '{dateend}' => date("d-M-Y", strtotime($order[0]->dateend)),
@@ -213,7 +215,7 @@ class DocumentsController extends Controller
             $objPHPExcel->getActiveSheet()->setShowGridlines(false);
 
             $writer = IOFactory::createWriter($objPHPExcel, 'Mpdf');
-            $count = count($order_list_providers) > 1 ? $count : '';
+
             $writer->save(base_path().'/public/upload/opo/'.'PO '. $number.$count.'.pdf');
             $path[] = public_path('upload/opo/'). 'PO '.  $number.$count.'.pdf';
             $count++;
@@ -298,15 +300,15 @@ class DocumentsController extends Controller
                 $sb[] = $item->sb;
                 $countOrders++;
             }
-
+            $count = count($order_list_providers) > 1 ? $count : '';
             $params = array(
                 '{address}' => $client[0]->address,
                 '{client}' => $client[0]->name,
 
-                '{number}' => $number,
+                '{number}' => $number.$count,
 
-                '{datestart}' => $order[0]->datestart,
-                '{dateend}' => $order[0]->dateend,
+                '{datestart}' => date("d-M-Y", strtotime($order[0]->datestart)),
+                '{dateend}' => date("d-M-Y", strtotime($order[0]->dateend)),
                 '{number_ipo}' => $order[0]->number,
                 '{shipto}' => $order[0]->shipto,
                 '{terms}' => $order[0]->terms,
@@ -314,10 +316,10 @@ class DocumentsController extends Controller
 
                 '{total}' => $total,
 
-                '{inn}' => 'TRN '. $about[0]->inn,
+                '{inn}' => 'TRN: '. $about[0]->inn,
                 '{address_own}' => $about[0]->address,
                 '{name_own}' => $about[0]->name,
-                '{licence}' => '# '.$about[0]->licence,
+                '{licence}' => 'License #'.$about[0]->licence,
                 '{phone_own}' => 'T: ' . $about[0]->phone,
 
                 '[counter]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$counter),
@@ -328,7 +330,7 @@ class DocumentsController extends Controller
                 '[quantity]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$quantity),
             );
 
-            PhpExcelTemplator::saveToFile( base_path().'/public/templates/opl.xlsx', base_path().'/public/templates/exported_file.xlsx', $params);
+            PhpExcelTemplator::saveToFile( base_path().'/public/templates/opl2.xlsx', base_path().'/public/templates/exported_file.xlsx', $params);
 
             $inputFileType = IOFactory::identify(base_path().'/public/templates/exported_file.xlsx');
             $objReader = IOFactory::createReader($inputFileType);
@@ -337,7 +339,7 @@ class DocumentsController extends Controller
 
             $writer = IOFactory::createWriter($objPHPExcel, 'Mpdf');
 
-            $count = count($order_list_providers) > 1 ? $count : '';
+
 
             $writer->save(base_path().'/public/upload/opl/'.'PL '. $number.$count.'.pdf');
 
@@ -351,7 +353,7 @@ class DocumentsController extends Controller
         else{
             $zip = new \ZipArchive();
             $fileName = $number.'.zip';
-            if ($zip->open(public_path('upload/opo/').$fileName, \ZipArchive::CREATE))
+            if ($zip->open(public_path('upload/opl/').$fileName, \ZipArchive::CREATE))
             {
                 foreach ($path as $key => $value){
                     $relativeName = basename($value);
@@ -359,7 +361,7 @@ class DocumentsController extends Controller
                 }
                 $zip->close();
             }
-            return response()->download(public_path('upload/opo/').$fileName, 'PL '.$number.'.zip');
+            return response()->download(public_path('upload/opl/').$fileName, 'PL '.$number.'.zip');
         }
     }
 
@@ -429,14 +431,16 @@ class DocumentsController extends Controller
                 $countOrders++;
             }
 
+            $count = count($order_list_providers) > 1 ? $count : '';
+
             $params = array(
                 '{address}' => $client[0]->address,
                 '{client}' => $client[0]->name,
 
-                '{number}' => $number.$count.'-'.$i,
+                '{number}' => $number.$count,
 
-                '{datestart}' => $order[0]->datestart,
-                '{dateend}' => $order[0]->dateend,
+                '{datestart}' => date("d-M-Y", strtotime($order[0]->datestart)),
+                '{dateend}' => date("d-M-Y", strtotime($order[0]->dateend)),
                 '{number_ipo}' => $order[0]->number,
                 '{shipto}' => $order[0]->shipto,
                 '{terms}' => $order[0]->terms,
@@ -444,15 +448,15 @@ class DocumentsController extends Controller
 
                 '{total}' => number_format( $total, 2, ',', ' '),
 
-                '{inn}' => 'TRN '.$about[0]->inn,
+                '{inn}' => 'TRN: '.$about[0]->inn,
                 '{address_own}' => $about[0]->address,
                 '{name_own}' => $about[0]->name,
-                '{licence}' => '# '.$about[0]->licence,
+                '{licence}' => 'License # '.$about[0]->licence,
                 '{phone_own}' => 'T: '.$about[0]->phone,
-                '{bank}' => $about[0]->bank,
+                '{bank}' => $about[0]->accountNumber,
+                '{baddress}' => $about[0]->bank . ", ".$about[0]->baddress,
                 '{iban}' => $about[0]->iban,
                 '{swift}' => $about[0]->swift,
-                '{baddress}' => $about[0]->baddress,
 
                 '[counter]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$counter),
                 '[pn]' => new ExcelParam(SPECIAL_ARRAY_TYPE,$pn),
@@ -472,7 +476,6 @@ class DocumentsController extends Controller
 
             $writer = IOFactory::createWriter($objPHPExcel, 'Mpdf');
 
-            $count = count($order_list_providers) > 1 ? $count : '';
             $writer->save(base_path().'/public/upload/osi/'.'SI '.$number.$count.'.pdf');
 
             $path[] =public_path('upload/osi/'). 'SI '. $number.$count.'.pdf';
@@ -493,7 +496,7 @@ class DocumentsController extends Controller
                 }
                 $zip->close();
             }
-            return response()->download(public_path('upload/opo/').$fileName, 'SI '.$number.'.zip');
+            return response()->download(public_path('upload/osi/').$fileName, 'SI '.$number.'.zip');
         }
     }
 
