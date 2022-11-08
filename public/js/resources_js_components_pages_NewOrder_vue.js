@@ -969,7 +969,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.orders.forEach(function (el, i) {
         if (!_this6.parts.find(function (e) {
-          return e.pn.toLowerCase() === el.part;
+          return e.pn.toLowerCase() === el.part.toLowerCase();
         })) {
           axios.post('/api/parts', {
             pn: el.part,
