@@ -46,7 +46,7 @@ export default {
     methods:{
         newParts(){
             if(this.checkedName !== 'uk-form-success'){
-                UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
+                UIkit.notification({message: 'P/N уже существует'})
                 return;
             }
             this.show2 = true

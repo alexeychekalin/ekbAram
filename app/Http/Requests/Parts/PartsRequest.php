@@ -24,7 +24,7 @@ class PartsRequest extends FormRequest
     public function rules()
     {
         return [
-            'pn' => 'required|string',
+            'pn' => 'required|string|unique',
             'description' => 'string'
         ];
     }

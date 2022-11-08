@@ -80,7 +80,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.checkedName !== 'uk-form-success') {
         UIkit.notification({
-          message: 'Клиент с таким "Customer Name" уже существует'
+          message: 'P/N уже существует'
         });
         return;
       }
