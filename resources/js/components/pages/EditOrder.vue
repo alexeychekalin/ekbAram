@@ -317,7 +317,7 @@ export default {
         files:[],
         save: false,
         show2: false,
-        label: 'Loading...',
+        label: 'Loading...wait',
         wd:'',
         csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     }),
