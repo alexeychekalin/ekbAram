@@ -422,7 +422,7 @@ export default {
             }
             // add new parts in db
             this.orders.forEach((el, i) => {
-                if(!this.parts.find(e => e.pn.toLowerCase() === el.part)){
+                if(!this.parts.find(e => e.pn.toLowerCase() === el.part.toLowerCase())){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
                         .then(res =>{
                             UIkit.notification({message: 'Новая позиции добавлены!', status:'success'})

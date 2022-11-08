@@ -79,6 +79,9 @@ export default {
         show2: false,
         label: 'Loading...'
     }),
+    components:{
+        loading
+    },
     methods:{
         newUser(){
             if(this.checkedTel !== 'uk-form-success'){
