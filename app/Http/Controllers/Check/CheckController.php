@@ -26,7 +26,7 @@ class CheckController extends Controller
 
     public function part(CheckRequest $request)
     {
-        $check = DB::table( 'parts')->where('name', '=' ,$request['name'])->get();
+        $check = DB::table( 'parts')->where('pn', '=' ,$request['pn'])->get();
         return json_decode(json_encode($check), true);
     }
 

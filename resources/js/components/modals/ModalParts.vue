@@ -69,7 +69,7 @@ export default {
         checkName(){
             if(this.pn === '')
                 return;
-            axios.post('/api/check/part', {name: this.pn})
+            axios.post('/api/check/part', {pn: this.pn})
                 .then(res =>{
                     console.log(res);
                     if(res.data.length == 0){

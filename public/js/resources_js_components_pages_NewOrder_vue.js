@@ -293,7 +293,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.pn === '') return;
       axios.post('/api/check/part', {
-        name: this.pn
+        pn: this.pn
       }).then(function (res) {
         console.log(res);
 
