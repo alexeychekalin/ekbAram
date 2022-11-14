@@ -197,7 +197,7 @@ __webpack_require__.r(__webpack_exports__);
       this.show2 = true;
       axios.post('/api/users/update', {
         id: this.id,
-        name: this.name,
+        name: "'" + this.name + "'",
         password: this.password || 'null',
         phone: this.phone,
         prefix: this.prefix,
@@ -1400,7 +1400,6 @@ var render = function () {
                                           staticClass: "uk-input",
                                           attrs: {
                                             type: "text",
-                                            required: "",
                                             placeholder: "",
                                           },
                                           domProps: { value: _vm.password },

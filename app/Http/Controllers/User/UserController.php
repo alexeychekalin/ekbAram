@@ -27,7 +27,7 @@ class UserController extends Controller
                 ->where('id', $request['id'])
                 ->update(
                     [
-                        'name' =>DB::raw($data['name']),
+                        'name' => DB::raw($data['name']),
                         'phone' => DB::raw($data['phone']),
                         'prefix' => DB::raw($data['prefix']),
                         'role' => DB::raw($data['role']),

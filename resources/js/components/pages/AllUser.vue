@@ -25,7 +25,7 @@
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Пароль</label>
-                                                <input class="uk-input" type="text" required placeholder="" v-model="password" >
+                                                <input class="uk-input" type="text" placeholder="" v-model="password" >
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Префикс</label>
@@ -166,7 +166,7 @@ export default {
         },
         updateUser(){
             this.show2= true
-            axios.post('/api/users/update', {id: this.id, name: this.name, password: this.password || 'null', phone: this.phone, prefix: this.prefix, role: this.role})
+            axios.post('/api/users/update', {id: this.id, name: "'"+this.name+"'", password: this.password || 'null', phone: this.phone, prefix: this.prefix, role: this.role})
                 .then(res => {
                     this.show2 = false
                     UIkit.modal("#modal-change").hide()

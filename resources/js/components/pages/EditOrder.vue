@@ -337,7 +337,7 @@ export default {
                 const link = document.createElement("a");
                 link.href = url;
                 let filename = response.headers['content-disposition'];
-                link.setAttribute("download", filename.split('=')[1]);
+                link.setAttribute("download", filename.split('=')[1].replaceAll('"', ''));
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
