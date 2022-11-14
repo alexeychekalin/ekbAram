@@ -860,7 +860,7 @@ __webpack_require__.r(__webpack_exports__);
         var link = document.createElement("a");
         link.href = url;
         var filename = response.headers['content-disposition'];
-        link.setAttribute("download", filename.split('=')[1]);
+        link.setAttribute("download", filename.split('=')[1].replaceAll('"', ''));
         document.body.appendChild(link);
         link.click();
         link.remove();
