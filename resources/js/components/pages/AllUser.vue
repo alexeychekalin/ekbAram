@@ -4,11 +4,11 @@
             :show="show2"
             :label="label">
         </loading>
-        <h1 class="uk-text-center">Список всех пользователей</h1>
+        <h1 class="uk-text-center">User List</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                 <div class="uk-margin uk-modal-container-large">
-                    <h3 class="uk-card-title">Редактирование пользователя</h3>
+                    <h3 class="uk-card-title">Edit/Update</h3>
                     <div class="uk-grid-small" uk-grid>
                         <form @submit.prevent="updateUser()" class="uk-width-1-1">
                             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -16,31 +16,31 @@
                                     <div class="uk-card-default uk-card-body">
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-width-1-3@s">
-                                                <label class="uk-form-label">ФИО</label>
+                                                <label class="uk-form-label">User Name</label>
                                                 <input class="uk-input" type="text" placeholder="" required v-model="name" >
                                             </div>
                                             <div class="uk-width-1-3@s">
-                                                <label class="uk-form-label">Телефон</label>
+                                                <label class="uk-form-label">Email</label>
                                                 <input class="uk-input" type="text" placeholder="" required pattern="\d+" v-model="phone" :class="checkedTel">
                                             </div>
                                             <div class="uk-width-1-3@s">
-                                                <label class="uk-form-label">Пароль</label>
+                                                <label class="uk-form-label">Password</label>
                                                 <input class="uk-input" type="text" placeholder="" v-model="password" >
                                             </div>
                                             <div class="uk-width-1-3@s">
-                                                <label class="uk-form-label">Префикс</label>
+                                                <label class="uk-form-label">User Code</label>
                                                 <input class="uk-input" type="text" placeholder="" required v-model="prefix">
                                             </div>
                                             <div class="uk-width-1-3@s">
-                                                <label class="uk-form-label">Роль</label>
+                                                <label class="uk-form-label">Role</label>
                                                 <select class="uk-select" required v-model="role">
-                                                    <option value="1">Админ</option>
-                                                    <option value="2">Менеджер</option>
+                                                    <option value="1">Admin</option>
+                                                    <option value="2">Associate</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add </button>
                                 </div>
                             </div>
                         </form>
@@ -54,7 +54,7 @@
                     <div class="uk-width-expand">
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
-                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Поиск по ФИО" v-model="val" @input="filter(val)">
+                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Search" v-model="val" @input="filter(val)">
                         </div>
                     </div>
                 </div>
@@ -64,12 +64,12 @@
                     <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" style="background-color: white;">
                         <thead>
                         <tr>
-                            <th class="uk-table-shrink">#</th>
-                            <th class="">ФИО</th>
-                            <th class="">Телефон</th>
-                            <th class="">Префикс</th>
-                            <th class="">Роль</th>
-                            <th class="">Действия</th>
+                            <th class="uk-table-shrink">Num</th>
+                            <th class="">User Name</th>
+                            <th class="">Email</th>
+                            <th class="">User Code</th>
+                            <th class="">Role</th>
+                            <th class="">Actions</th>
                         </tr>
                         </thead>
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
@@ -81,8 +81,8 @@
                             <td class="uk-text-nowrap">{{roles[result.role-1]}}</td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.name, result.phone, result.prefix, result.role, result.id])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteUser([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show([result.name, result.phone, result.prefix, result.role, result.id])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteUser([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -107,7 +107,7 @@ export default {
         results: [],
         allresults:[],
         val:'',
-        roles:['Администратор', 'Менеджер'],
+        roles:['Admin', 'Associate'],
         checkedTel:'',
         password:'',
         id:'',

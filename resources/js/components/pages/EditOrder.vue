@@ -17,26 +17,26 @@
             <modalProvider/>
         </div>
         <form @submit.prevent="createOrder" class="uk-width-1-1">
-            <h1 class="uk-text-center">Изменение заказа</h1>
+            <h1 class="uk-text-center">Edit Entry</h1>
             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
                 <div>
                     <div class="uk-card-default uk-card-body">
-                        <h3 class="uk-card-title">Детали заказа</h3>
+                        <h3 class="uk-card-title">Order Details</h3>
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-4@s">
-                                <label class="uk-form-label">Номер</label>
+                                <label class="uk-form-label">Order Number</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="number" >
                             </div>
                             <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Дата заказа</label>
+                                <label class="uk-form-label">Order Date</label>
                                 <date-picker style="display: block" class="uk-input" required v-model="timeStart" @change="changeDate" valueType="format"></date-picker>
                             </div>
                             <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Дата исполнения</label>
+                                <label class="uk-form-label">Due Date</label>
                                 <date-picker style="display: block" class="uk-input" required v-model="timeStop" valueType="format"></date-picker>
                             </div>
                             <div class="uk-width-auto@s">
-                                <label class="uk-form-label">Валюта</label>
+                                <label class="uk-form-label">Currency</label>
                                 <select class="uk-select" required v-model="currency" >
                                     <option value="USD">USD</option>
                                     <option value="EUR">EUR</option>
@@ -44,10 +44,10 @@
                                 </select>
                             </div>
                             <div class="uk-width-expand">
-                                <label class="uk-form-label">IPO</label>
+                                <label class="uk-form-label">Attach PO</label>
                                 <div style="display: block" class="js-upload" uk-form-custom>
                                     <input v-on:change="onFileChange" type="file" single accept="application/pdf" >
-                                    <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
+                                    <button class="uk-button uk-button-default" type="button" tabindex="-1">Select file</button>
                                     <p style="display: inline" class="uk-margin-small-left uk-text-primary uk-text-medium">{{filename}}</p>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                     <div class="uk-card-default uk-card-body uk-margin-top">
                         <div class="uk-width-1-1" uk-grid>
                             <div>
-                                <h3 class="uk-card-title">Клиент</h3>
+                                <h3 class="uk-card-title">Customer</h3>
                             </div>
                             <div>
                                 <select class="uk-select" required @change="selectClient" v-model="client" >
@@ -66,7 +66,7 @@
                                 </select>
                             </div>
                             <div style="margin-left: auto">
-                                <a style="margin-top: 5px;" uk-tooltip="Новый клиент" uk-icon="icon: credit-card" href="#modal-newClient" uk-toggle ></a>
+                                <a style="margin-top: 5px;" uk-tooltip="Add Customer" uk-icon="icon: credit-card" href="#modal-newClient" uk-toggle ></a>
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
@@ -127,17 +127,17 @@
                     <div class="uk-card-default uk-card-body uk-margin-top">
                         <div class="uk-width-1-1" uk-grid>
                             <div>
-                                <h3 class="uk-card-title">Заказ</h3>
+                                <h3 class="uk-card-title">Order Items</h3>
                             </div>
                             <div style="margin-left: auto">
-                                <a class="uk-margin-small-right"  uk-tooltip="Новая позиция" uk-icon="icon: cart" href="#modal-newParts" uk-toggle ></a>
-                                <a uk-tooltip="Новый поставщик" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
+                                <a class="uk-margin-small-right"  uk-tooltip="Part Num" uk-icon="icon: cart" href="#modal-newParts" uk-toggle ></a>
+                                <a uk-tooltip="New Supplier" uk-icon="icon: world" href="#modal-newProvider" uk-toggle ></a>
                             </div>
                         </div>
                         <div v-for="(order, index) in orders" :key="index" class="uk-margin-top">
                             <div class="uk-grid-small" uk-grid>
                                 <div class="uk-width-1-6@s">
-                                    <label class="uk-form-label">Позиция</label>
+                                    <label class="uk-form-label">Part Num</label>
                                     <input class="uk-input" required  placeholder="" v-model="order.part"  @input="search(order.part, index)">
                                     <div uk-dropdown="pos: bottom-justify; boundary: .boundary-align; boundary-align: true; mode: click">
                                         <ul class="uk-list" >
@@ -148,11 +148,11 @@
                                     </div>
                                 </div>
                                 <div class="uk-width-1-6@s">
-                                    <label class="uk-form-label">Описание</label>
+                                    <label class="uk-form-label">Description</label>
                                     <input class="uk-input"  required placeholder="" v-model="descriptions[index].description" >
                                 </div>
                                 <div class="uk-width-1-4@s">
-                                    <label class="uk-form-label">Поставщик</label>
+                                    <label class="uk-form-label">Supplier</label>
                                     <select class="uk-select" required v-model="order.provider" >
                                         <option v-for="pr in providers" v-bind:value="pr.id">
                                             {{ pr.name }}
@@ -160,7 +160,7 @@
                                     </select>
                                 </div>
                                 <div class="uk-width-small@s">
-                                    <label class="uk-form-label">CD</label>
+                                    <label class="uk-form-label">Condition</label>
                                     <select class="uk-select" required v-model="order.cd" >
                                         <option value="NE">NE</option>
                                         <option value="OH">OH</option>
@@ -170,19 +170,19 @@
                                     </select>
                                 </div>
                                 <div class="uk-width-small@s">
-                                    <label class="uk-form-label">Количество</label>
+                                    <label class="uk-form-label">Qty</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" >
                                 </div>
                                 <div class="uk-width-small@s">
-                                    <label class="uk-form-label">Цена </label>
+                                    <label class="uk-form-label">Rate</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.price" >
                                 </div>
                                 <div class="uk-width-small@s">
-                                    <label class="uk-form-label">Цена для клиента</label>
+                                    <label class="uk-form-label">Customer Price</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.priceClient" >
                                 </div>
                                 <div style="margin-top: 1.8%">
-                                    <a uk-tooltip="Удалить" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                                    <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                                 </div>
                             </div>
                             <div class="uk-grid-small" uk-grid>
@@ -209,21 +209,21 @@
                             </div>
                             <hr class="uk-margin-medium"/>
                         </div>
-                        <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> еще </button>
+                        <button @click.prevent="addOrder" class="uk-button uk-width-1-4@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add Line Item </button>
                     </div>
                     <div class="uk-card-default uk-card-body uk-margin-top">
                         <div class="uk-width-1-1" uk-grid>
                             <div>
-                                <h3 class="uk-card-title">Долнительные расходы</h3>
+                                <h3 class="uk-card-title">Added cost</h3>
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Доставка</label>
+                                <label class="uk-form-label">Freight Cost</label>
                                 <input class="uk-input"  placeholder="" v-model="delivery">
                             </div>
                             <div class="uk-width-1-6@s">
-                                <label class="uk-form-label">Комиссия банка</label>
+                                <label class="uk-form-label">Wire Fee</label>
                                 <input class="uk-input"  placeholder="" v-model="comission" >
                             </div>
                             <div class="uk-width-1-6@s">
@@ -244,26 +244,26 @@
                         </div>
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-1@s">
-                                <label class="uk-form-label">Добавить новые файлы</label>
+                                <label class="uk-form-label">Add new files</label>
                                 <div class="js-upload uk-placeholder uk-text-center">
                                     <span uk-icon="icon: cloud-upload"></span>
                                     <div uk-form-custom>
                                         <input type="file" v-on:change="OtherFileUpload">
-                                        <span class="uk-link">Нажмите для выбора файлов</span>
+                                        <span class="uk-link">Tap to select files</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="uk-width-1-2@s">
-                                <label class="uk-form-label">Добавленные файлы</label>
+                                <label class="uk-form-label">Added files</label>
                                 <ul class="uk-list uk-list-striped" v-for="(file, i) in files" :key="i">
-                                    <li style="cursor: pointer" > <a @click.prevent="deleteFile(file, i)" class="uk-margin-small-right" uk-tooltip="удалить файл" uk-icon="trash"> </a>  <a @click.prevent="download(file)">{{ file }}</a> </li>
+                                    <li style="cursor: pointer" > <a @click.prevent="deleteFile(file, i)" class="uk-margin-small-right" uk-tooltip="delete file" uk-icon="trash"> </a>  <a @click.prevent="download(file)">{{ file }}</a> </li>
                                 </ul>
                             </div>
 
                         </div>
                     </div>
 
-                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Save </button>
                 </div>
             </div>
         </form>

@@ -1194,9 +1194,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Список всех позиций"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("All Items List")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "modal-change", "uk-modal": "" } }, [
         _c(
@@ -1207,9 +1205,7 @@ var render = function () {
           },
           [
             _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
-              _c("h3", { staticClass: "uk-card-title" }, [
-                _vm._v("Редактирование позиции"),
-              ]),
+              _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Update")]),
               _vm._v(" "),
               _c(
                 "div",
@@ -1292,7 +1288,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Описание")]
+                                          [_vm._v("Description")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -1371,7 +1367,7 @@ var render = function () {
                       },
                     ],
                     staticClass: "uk-input uk-width-1-1 search-fld",
-                    attrs: { type: "text", placeholder: "Поиск по P/N" },
+                    attrs: { type: "text", placeholder: "Part Num Search" },
                     domProps: { value: _vm.val },
                     on: {
                       input: [
@@ -1427,7 +1423,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: file-edit",
-                                    "uk-tooltip": "Редактировать",
+                                    "uk-tooltip": "Update",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1446,7 +1442,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: trash",
-                                    "uk-tooltip": "title: Удалить; pos: bottom",
+                                    "uk-tooltip": "title: Remove; pos: bottom",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1484,9 +1480,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("P/N")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Описание")]),
+        _c("th", {}, [_vm._v("Description")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Действия")]),
+        _c("th", {}, [_vm._v("Actions")]),
       ]),
     ])
   },

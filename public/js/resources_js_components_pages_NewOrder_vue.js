@@ -3185,7 +3185,7 @@ var render = function () {
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
       _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
-        _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Новый клиент")]),
+        _c("h3", { staticClass: "uk-card-title" }, [_vm._v("New Customer")]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } }, [
           _c(
@@ -3527,7 +3527,7 @@ var render = function () {
                         staticClass:
                           "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                       },
-                      [_vm._v(" Сохранить ")]
+                      [_vm._v(" Add ")]
                     ),
                   ]),
                 ]
@@ -3570,7 +3570,7 @@ var render = function () {
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
       _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
-        _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Новая позиция")]),
+        _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Add New Item")]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } }, [
           _c(
@@ -3637,7 +3637,7 @@ var render = function () {
                           _vm._v(" "),
                           _c("div", { staticClass: "uk-width-3-4@s" }, [
                             _c("label", { staticClass: "uk-form-label" }, [
-                              _vm._v("Описание"),
+                              _vm._v("Description"),
                             ]),
                             _vm._v(" "),
                             _c("input", {
@@ -3672,7 +3672,7 @@ var render = function () {
                         staticClass:
                           "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                       },
-                      [_vm._v(" Сохранить ")]
+                      [_vm._v(" Add ")]
                     ),
                   ]),
                 ]
@@ -3718,7 +3718,9 @@ var render = function () {
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
       _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
-        _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Новый поставщик")]),
+        _c("h3", { staticClass: "uk-card-title" }, [
+          _vm._v("Add New Supplier"),
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } }, [
           _c(
@@ -4016,7 +4018,7 @@ var render = function () {
                         staticClass:
                           "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                       },
-                      [_vm._v(" Сохранить ")]
+                      [_vm._v(" Add ")]
                     ),
                   ]),
                 ]
@@ -4121,7 +4123,7 @@ var render = function () {
           },
         },
         [
-          _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Новый заказ")]),
+          _c("h1", { staticClass: "uk-text-center" }, [_vm._v("New Entry")]),
           _vm._v(" "),
           _c(
             "div",
@@ -4133,7 +4135,7 @@ var render = function () {
               _c("div", [
                 _c("div", { staticClass: "uk-card-default uk-card-body" }, [
                   _c("h3", { staticClass: "uk-card-title" }, [
-                    _vm._v("Детали заказа"),
+                    _vm._v("Order Details"),
                   ]),
                   _vm._v(" "),
                   _c(
@@ -4142,7 +4144,7 @@ var render = function () {
                     [
                       _c("div", { staticClass: "uk-width-1-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Номер"),
+                          _vm._v("Order Number"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -4177,7 +4179,7 @@ var render = function () {
                         { staticClass: "uk-width-1-6@s" },
                         [
                           _c("label", { staticClass: "uk-form-label" }, [
-                            _vm._v("Дата заказа"),
+                            _vm._v("Order Date"),
                           ]),
                           _vm._v(" "),
                           _c("date-picker", {
@@ -4202,7 +4204,7 @@ var render = function () {
                         { staticClass: "uk-width-1-6@s" },
                         [
                           _c("label", { staticClass: "uk-form-label" }, [
-                            _vm._v("Дата исполнения"),
+                            _vm._v("Due Date"),
                           ]),
                           _vm._v(" "),
                           _c("date-picker", {
@@ -4223,7 +4225,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-auto@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Валюта"),
+                          _vm._v("Currency"),
                         ]),
                         _vm._v(" "),
                         _c(
@@ -4273,7 +4275,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-expand" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("IPO"),
+                          _vm._v("Attach PO"),
                         ]),
                         _vm._v(" "),
                         _c(
@@ -4300,7 +4302,7 @@ var render = function () {
                                 staticClass: "uk-button uk-button-default",
                                 attrs: { type: "button", tabindex: "-1" },
                               },
-                              [_vm._v("Выбрать файл")]
+                              [_vm._v("Select file")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -4754,7 +4756,7 @@ var render = function () {
                             [
                               _c("div", { staticClass: "uk-width-1-6@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Позиция"),
+                                  _vm._v("Part Num"),
                                 ]),
                                 _vm._v(" "),
                                 _c("input", {
@@ -4833,7 +4835,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-1-6@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Описание"),
+                                  _vm._v("Description"),
                                 ]),
                                 _vm._v(" "),
                                 _c("input", {
@@ -4869,7 +4871,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-1-4@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Поставщик"),
+                                  _vm._v("Supplier"),
                                 ]),
                                 _vm._v(" "),
                                 _c(
@@ -4931,7 +4933,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-small@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("CD"),
+                                  _vm._v("Condition"),
                                 ]),
                                 _vm._v(" "),
                                 _c(
@@ -5000,7 +5002,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-small@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Количество"),
+                                  _vm._v("Qty"),
                                 ]),
                                 _vm._v(" "),
                                 _c("input", {
@@ -5036,7 +5038,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-small@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Цена "),
+                                  _vm._v("Rate "),
                                 ]),
                                 _vm._v(" "),
                                 _c("input", {
@@ -5072,7 +5074,7 @@ var render = function () {
                               _vm._v(" "),
                               _c("div", { staticClass: "uk-width-small@s" }, [
                                 _c("label", { staticClass: "uk-form-label" }, [
-                                  _vm._v("Цена для клиента"),
+                                  _vm._v("Customer Price"),
                                 ]),
                                 _vm._v(" "),
                                 _c("input", {
@@ -5120,7 +5122,7 @@ var render = function () {
                                       },
                                     ],
                                     attrs: {
-                                      "uk-tooltip": "Удалить",
+                                      "uk-tooltip": "Remove",
                                       "uk-icon": "icon: trash",
                                     },
                                     on: {
@@ -5317,7 +5319,7 @@ var render = function () {
                           },
                         },
                       },
-                      [_vm._v(" еще ")]
+                      [_vm._v(" Add Line Item ")]
                     ),
                   ],
                   2
@@ -5338,7 +5340,7 @@ var render = function () {
                       [
                         _c("div", { staticClass: "uk-width-1-6@s" }, [
                           _c("label", { staticClass: "uk-form-label" }, [
-                            _vm._v("Доставка"),
+                            _vm._v("Freight Cost"),
                           ]),
                           _vm._v(" "),
                           _c("input", {
@@ -5366,7 +5368,7 @@ var render = function () {
                         _vm._v(" "),
                         _c("div", { staticClass: "uk-width-1-6@s" }, [
                           _c("label", { staticClass: "uk-form-label" }, [
-                            _vm._v("Комиссия банка"),
+                            _vm._v("Wire Fee"),
                           ]),
                           _vm._v(" "),
                           _c("input", {
@@ -5458,7 +5460,7 @@ var render = function () {
                     staticClass:
                       "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                   },
-                  [_vm._v(" Сохранить ")]
+                  [_vm._v(" Save ")]
                 ),
               ]),
             ]
@@ -5475,7 +5477,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Клиент")]),
+      _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Customer")]),
     ])
   },
   function () {
@@ -5486,7 +5488,7 @@ var staticRenderFns = [
       _c("a", {
         staticStyle: { "margin-top": "5px" },
         attrs: {
-          "uk-tooltip": "Новый клиент",
+          "uk-tooltip": "Add Customer",
           "uk-icon": "icon: credit-card",
           href: "#modal-newClient",
           "uk-toggle": "",
@@ -5503,14 +5505,14 @@ var staticRenderFns = [
       { staticClass: "uk-width-1-1", attrs: { "uk-grid": "" } },
       [
         _c("div", [
-          _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Заказ")]),
+          _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Order Items")]),
         ]),
         _vm._v(" "),
         _c("div", { staticStyle: { "margin-left": "auto" } }, [
           _c("a", {
             staticClass: "uk-margin-small-right",
             attrs: {
-              "uk-tooltip": "Новая позиция",
+              "uk-tooltip": "Add New Item",
               "uk-icon": "icon: cart",
               href: "#modal-newParts",
               "uk-toggle": "",
@@ -5519,7 +5521,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("a", {
             attrs: {
-              "uk-tooltip": "Новый поставщик",
+              "uk-tooltip": "Add New Supplier",
               "uk-icon": "icon: world",
               href: "#modal-newProvider",
               "uk-toggle": "",
@@ -5538,9 +5540,7 @@ var staticRenderFns = [
       { staticClass: "uk-width-1-1", attrs: { "uk-grid": "" } },
       [
         _c("div", [
-          _c("h3", { staticClass: "uk-card-title" }, [
-            _vm._v("Долнительные расходы"),
-          ]),
+          _c("h3", { staticClass: "uk-card-title" }, [_vm._v("Added cost")]),
         ]),
       ]
     )

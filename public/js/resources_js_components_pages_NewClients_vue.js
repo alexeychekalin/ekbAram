@@ -1209,9 +1209,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Добавление нового клиента"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Add New Customer")]),
       _vm._v(" "),
       _c(
         "form",
@@ -1547,7 +1545,7 @@ var render = function () {
                     staticClass:
                       "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                   },
-                  [_vm._v(" Сохранить ")]
+                  [_vm._v(" Add ")]
                 ),
               ]),
             ]

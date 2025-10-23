@@ -1257,7 +1257,7 @@ var render = function () {
                     [
                       _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("ФИО"),
+                          _vm._v("User Name"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1289,7 +1289,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Телефон"),
+                          _vm._v("Email"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1324,7 +1324,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Пароль"),
+                          _vm._v("Password"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1356,7 +1356,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Префикс"),
+                          _vm._v("User Code"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1388,7 +1388,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-1-3@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Роль"),
+                          _vm._v("Role"),
                         ]),
                         _vm._v(" "),
                         _c(
@@ -1422,11 +1422,11 @@ var render = function () {
                           },
                           [
                             _c("option", { attrs: { value: "1" } }, [
-                              _vm._v("Админ"),
+                              _vm._v("Admin"),
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "2" } }, [
-                              _vm._v("Менеджер"),
+                              _vm._v("Associate"),
                             ]),
                           ]
                         ),
@@ -1441,7 +1441,7 @@ var render = function () {
                     staticClass:
                       "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                   },
-                  [_vm._v(" Сохранить ")]
+                  [_vm._v(" Add ")]
                 ),
               ]),
             ]
@@ -1494,15 +1494,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { staticClass: "uk-table-shrink" }, [_vm._v("#")]),
+        _c("th", { staticClass: "uk-table-shrink" }, [_vm._v("Num")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("ФИО")]),
+        _c("th", {}, [_vm._v("User Name")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Телефон")]),
+        _c("th", {}, [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Префикс")]),
+        _c("th", {}, [_vm._v("User Code")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Роль")]),
+        _c("th", {}, [_vm._v("Role")]),
       ]),
     ])
   },

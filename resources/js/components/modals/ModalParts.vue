@@ -5,7 +5,7 @@
             :label="label">
         </loading>
         <div class="uk-margin uk-modal-container-large">
-            <h3 class="uk-card-title">Новая позиция</h3>
+            <h3 class="uk-card-title">Add New Item</h3>
             <div class="uk-grid-small" uk-grid>
                 <form @submit.prevent="newParts()" class="uk-width-1-1">
                     <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -17,12 +17,12 @@
                                         <input class="uk-input" type="text" placeholder="" required v-model="pn" :class="checkedName" @blur="checkName">
                                     </div>
                                     <div class="uk-width-3-4@s">
-                                        <label class="uk-form-label">Описание</label>
+                                        <label class="uk-form-label">Description</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="description" >
                                     </div>
                                 </div>
                             </div>
-                            <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                            <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add </button>
                         </div>
                     </div>
                 </form>

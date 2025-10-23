@@ -4,11 +4,11 @@
             :show="show2"
             :label="label">
         </loading>
-        <h1 class="uk-text-center">Список всех позиций</h1>
+        <h1 class="uk-text-center">All Items List</h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                 <div class="uk-margin uk-modal-container-large">
-                    <h3 class="uk-card-title">Редактирование позиции</h3>
+                    <h3 class="uk-card-title">Update</h3>
                     <div class="uk-grid-small" uk-grid>
                         <form @submit.prevent="updateParts()" class="uk-width-1-1">
                             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -20,7 +20,7 @@
                                                 <input class="uk-input" type="text" required placeholder="" required v-model="pn" >
                                             </div>
                                             <div class="uk-width-3-4@s">
-                                                <label class="uk-form-label">Описание</label>
+                                                <label class="uk-form-label">Description</label>
                                                 <input class="uk-input" type="text" required placeholder="" v-model="description" >
                                             </div>
                                         </div>
@@ -39,7 +39,7 @@
                     <div class="uk-width-expand">
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
-                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Поиск по P/N" v-model="val" @input="filter(val)">
+                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Part Num Search" v-model="val" @input="filter(val)">
                         </div>
                     </div>
                 </div>
@@ -51,8 +51,8 @@
                         <tr>
                             <th class="uk-table-shrink">#</th>
                             <th class="">P/N</th>
-                            <th class="">Описание</th>
-                            <th class="">Действия</th>
+                            <th class="">Description</th>
+                            <th class="">Actions</th>
                         </tr>
                         </thead>
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
@@ -62,8 +62,8 @@
                             <td class="uk-text-nowrap">{{result.description || '-'}}</td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.pn, result.description])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteParts([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Update" @click.prevent="show([result.id, result.pn, result.description])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteParts([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>

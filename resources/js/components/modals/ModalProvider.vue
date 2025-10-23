@@ -5,7 +5,7 @@
             :label="label">
         </loading>
         <div class="uk-margin uk-modal-container-large">
-            <h3 class="uk-card-title">Новый поставщик</h3>
+            <h3 class="uk-card-title">Add New Supplier</h3>
             <div class="uk-grid-small" uk-grid>
                 <form @submit.prevent="newProvider()" class="uk-width-1-1">
                     <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                            <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add </button>
                         </div>
                     </div>
                 </form>

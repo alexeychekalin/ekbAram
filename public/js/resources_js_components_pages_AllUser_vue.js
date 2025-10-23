@@ -121,7 +121,7 @@ __webpack_require__.r(__webpack_exports__);
       results: [],
       allresults: [],
       val: '',
-      roles: ['Администратор', 'Менеджер'],
+      roles: ['Admin', 'Associate'],
       checkedTel: '',
       password: '',
       id: '',
@@ -1248,9 +1248,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Список всех пользователей"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("User List")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "modal-change", "uk-modal": "" } }, [
         _c(
@@ -1262,7 +1260,7 @@ var render = function () {
           [
             _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
               _c("h3", { staticClass: "uk-card-title" }, [
-                _vm._v("Редактирование пользователя"),
+                _vm._v("Edit/Update"),
               ]),
               _vm._v(" "),
               _c(
@@ -1307,7 +1305,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("ФИО")]
+                                          [_vm._v("User Name")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -1345,7 +1343,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Телефон")]
+                                          [_vm._v("Email")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -1385,7 +1383,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Пароль")]
+                                          [_vm._v("Password")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -1422,7 +1420,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Префикс")]
+                                          [_vm._v("User Code")]
                                         ),
                                         _vm._v(" "),
                                         _c("input", {
@@ -1460,7 +1458,7 @@ var render = function () {
                                         _c(
                                           "label",
                                           { staticClass: "uk-form-label" },
-                                          [_vm._v("Роль")]
+                                          [_vm._v("Role")]
                                         ),
                                         _vm._v(" "),
                                         _c(
@@ -1504,13 +1502,13 @@ var render = function () {
                                             _c(
                                               "option",
                                               { attrs: { value: "1" } },
-                                              [_vm._v("Админ")]
+                                              [_vm._v("Admin")]
                                             ),
                                             _vm._v(" "),
                                             _c(
                                               "option",
                                               { attrs: { value: "2" } },
-                                              [_vm._v("Менеджер")]
+                                              [_vm._v("Associate")]
                                             ),
                                           ]
                                         ),
@@ -1527,7 +1525,7 @@ var render = function () {
                                 staticClass:
                                   "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                               },
-                              [_vm._v(" Сохранить ")]
+                              [_vm._v(" Add ")]
                             ),
                           ]),
                         ]
@@ -1564,7 +1562,7 @@ var render = function () {
                       },
                     ],
                     staticClass: "uk-input uk-width-1-1 search-fld",
-                    attrs: { type: "text", placeholder: "Поиск по ФИО" },
+                    attrs: { type: "text", placeholder: "Search" },
                     domProps: { value: _vm.val },
                     on: {
                       input: [
@@ -1626,7 +1624,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: file-edit",
-                                    "uk-tooltip": "Редактировать",
+                                    "uk-tooltip": "Edit/Update",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1647,7 +1645,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: trash",
-                                    "uk-tooltip": "title: Удалить; pos: bottom",
+                                    "uk-tooltip": "title: Remove; pos: bottom",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1681,17 +1679,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { staticClass: "uk-table-shrink" }, [_vm._v("#")]),
+        _c("th", { staticClass: "uk-table-shrink" }, [_vm._v("Num")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("ФИО")]),
+        _c("th", {}, [_vm._v("User Name")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Телефон")]),
+        _c("th", {}, [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Префикс")]),
+        _c("th", {}, [_vm._v("User Code")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Роль")]),
+        _c("th", {}, [_vm._v("Role")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Действия")]),
+        _c("th", {}, [_vm._v("Actions")]),
       ]),
     ])
   },

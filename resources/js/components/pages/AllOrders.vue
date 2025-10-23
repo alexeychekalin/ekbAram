@@ -4,7 +4,7 @@
             :show="show2"
             :label="label">
         </loading>
-        <h1 class="uk-text-center">Список всех заказов</h1>
+        <h1 class="uk-text-center">Order List</h1>
         <!-- Модальное окно -->
         <div id="modal-docs" uk-modal>
             <div class="uk-modal-dialog uk-modal-body">
@@ -22,9 +22,9 @@
                     <input class="uk-input" type="text" placeholder=""  v-model="note3" >
                 </div>
                 <p class="uk-text-right">
-                    <button class="uk-button uk-button-default uk-modal-close" type="button">Закрыть</button>
-                    <button class="uk-button uk-button-primary" v-show="what==='opf'" @click.prevent="getOpf(note1, note2, note3)" type="button">Сохранить</button>
-                    <button class="uk-button uk-button-primary" v-show="what==='opo'" @click.prevent="getOpo(note1, note2, note3)" type="button">Сохранить</button>
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+                    <button class="uk-button uk-button-primary" v-show="what==='opf'" @click.prevent="getOpf(note1, note2, note3)" type="button">Save</button>
+                    <button class="uk-button uk-button-primary" v-show="what==='opo'" @click.prevent="getOpo(note1, note2, note3)" type="button">Save</button>
                 </p>
             </div>
         </div>
@@ -34,7 +34,7 @@
                     <div class="uk-width-1-1 uk-grid">
                         <div class="uk-inline uk-width-expand">
                             <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
-                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Поиск по Клиенту" v-model="val" @input="filter(val)">
+                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Search" v-model="val" @input="filter(val)">
                         </div>
                         <div style="margin-top: 6px">
                             <span class="uk-text-bold"> REVENUE: {{rev}} <span class="uk-text-muted">|</span> EXPENSE: {{exp}} </span>
@@ -78,8 +78,8 @@
                             </td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="edit(result.id)"></a></li>
-                                    <li v-if="$store.state.auth.role === 1"><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteOrder(result.id, cnt)"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="edit(result.id)"></a></li>
+                                    <li v-if="$store.state.auth.role === 1"><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteOrder(result.id, cnt)"></a></li>
                                 </ul>
                             </td>
                         </tr>

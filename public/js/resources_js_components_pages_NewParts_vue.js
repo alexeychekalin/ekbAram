@@ -1195,9 +1195,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Добавление новой позиции"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Add New Item")]),
       _vm._v(" "),
       _c(
         "form",
@@ -1260,7 +1258,7 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "uk-width-3-4@s" }, [
                         _c("label", { staticClass: "uk-form-label" }, [
-                          _vm._v("Описание"),
+                          _vm._v("Description"),
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1295,7 +1293,7 @@ var render = function () {
                     staticClass:
                       "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                   },
-                  [_vm._v(" Сохранить ")]
+                  [_vm._v(" Add  ")]
                 ),
               ]),
             ]
@@ -1346,7 +1344,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("P/N")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Описание")]),
+        _c("th", {}, [_vm._v("Description")]),
       ]),
     ])
   },

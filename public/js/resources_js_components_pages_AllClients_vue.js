@@ -1285,9 +1285,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Список всех клиентов"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Customer List")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "modal-change", "uk-modal": "" } }, [
         _c(
@@ -1299,7 +1297,7 @@ var render = function () {
           [
             _c("div", { staticClass: "uk-margin uk-modal-container-large" }, [
               _c("h3", { staticClass: "uk-card-title" }, [
-                _vm._v("Редактирование клиента"),
+                _vm._v("Edit/Update"),
               ]),
               _vm._v(" "),
               _c(
@@ -1716,7 +1714,7 @@ var render = function () {
                                 staticClass:
                                   "uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom",
                               },
-                              [_vm._v(" Сохранить ")]
+                              [_vm._v(" Add ")]
                             ),
                           ]),
                         ]
@@ -1753,7 +1751,7 @@ var render = function () {
                       },
                     ],
                     staticClass: "uk-input uk-width-1-1 search-fld",
-                    attrs: { type: "text", placeholder: "Поиск по Имени" },
+                    attrs: { type: "text", placeholder: "Search" },
                     domProps: { value: _vm.val },
                     on: {
                       input: [
@@ -1821,7 +1819,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: file-edit",
-                                    "uk-tooltip": "Редактировать",
+                                    "uk-tooltip": "Edit/Update",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1836,7 +1834,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: trash",
-                                    "uk-tooltip": "title: Удалить; pos: bottom",
+                                    "uk-tooltip": "title: Remove; pos: bottom",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1886,7 +1884,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {}, [_vm._v("Primary contact")]),
         _vm._v(" "),
-        _c("th", {}, [_vm._v("Действия")]),
+        _c("th", {}, [_vm._v("Actions")]),
       ]),
     ])
   },

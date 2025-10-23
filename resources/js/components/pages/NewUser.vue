@@ -11,42 +11,42 @@
                     <div class="uk-card-default uk-card-body">
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">ФИО</label>
+                                <label class="uk-form-label">User Name</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="name" >
                             </div>
                             <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Телефон</label>
+                                <label class="uk-form-label">Email</label>
                                 <input class="uk-input" type="text" placeholder="" required pattern="\d+" v-model="phone" :class="checkedTel" @blur="checkPhone">
                             </div>
                             <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Пароль</label>
+                                <label class="uk-form-label">Password</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="password" >
                             </div>
                             <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Префикс</label>
+                                <label class="uk-form-label">User Code</label>
                                 <input class="uk-input" type="text" placeholder="" required v-model="prefix">
                             </div>
                             <div class="uk-width-1-3@s">
-                                <label class="uk-form-label">Роль</label>
+                                <label class="uk-form-label">Role</label>
                                 <select class="uk-select" required v-model="role">
-                                    <option value="1">Админ</option>
-                                    <option value="2">Менеджер</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Associate</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add </button>
                 </div>
             </div>
         </form>
         <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" style="background-color: white;" v-if="results.length != 0">
             <thead>
             <tr>
-                <th class="uk-table-shrink">#</th>
-                <th class="">ФИО</th>
-                <th class="">Телефон</th>
-                <th class="">Префикс</th>
-                <th class="">Роль</th>
+                <th class="uk-table-shrink">Num</th>
+                <th class="">User Name</th>
+                <th class="">Email</th>
+                <th class="">User Code</th>
+                <th class="">Role</th>
             </tr>
             </thead>
             <tbody v-for="(result, cnt) in results">

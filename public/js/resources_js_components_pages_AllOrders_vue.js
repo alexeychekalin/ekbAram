@@ -1306,9 +1306,7 @@ var render = function () {
     [
       _c("loading", { attrs: { show: _vm.show2, label: _vm.label } }),
       _vm._v(" "),
-      _c("h1", { staticClass: "uk-text-center" }, [
-        _vm._v("Список всех заказов"),
-      ]),
+      _c("h1", { staticClass: "uk-text-center" }, [_vm._v("Order List")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "modal-docs", "uk-modal": "" } }, [
         _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
@@ -1399,7 +1397,7 @@ var render = function () {
                 staticClass: "uk-button uk-button-default uk-modal-close",
                 attrs: { type: "button" },
               },
-              [_vm._v("Закрыть")]
+              [_vm._v("Close")]
             ),
             _vm._v(" "),
             _c(
@@ -1422,7 +1420,7 @@ var render = function () {
                   },
                 },
               },
-              [_vm._v("Сохранить")]
+              [_vm._v("Save")]
             ),
             _vm._v(" "),
             _c(
@@ -1445,7 +1443,7 @@ var render = function () {
                   },
                 },
               },
-              [_vm._v("Сохранить")]
+              [_vm._v("Save")]
             ),
           ]),
         ]),
@@ -1474,7 +1472,7 @@ var render = function () {
                       },
                     ],
                     staticClass: "uk-input uk-width-1-1 search-fld",
-                    attrs: { type: "text", placeholder: "Поиск по Клиенту" },
+                    attrs: { type: "text", placeholder: "Search" },
                     domProps: { value: _vm.val },
                     on: {
                       input: [
@@ -1668,7 +1666,7 @@ var render = function () {
                                 _c("a", {
                                   attrs: {
                                     "uk-icon": "icon: file-edit",
-                                    "uk-tooltip": "Редактировать",
+                                    "uk-tooltip": "Edit/Update",
                                   },
                                   on: {
                                     click: function ($event) {
@@ -1685,7 +1683,7 @@ var render = function () {
                                       attrs: {
                                         "uk-icon": "icon: trash",
                                         "uk-tooltip":
-                                          "title: Удалить; pos: bottom",
+                                          "title: Remove; pos: bottom",
                                       },
                                       on: {
                                         click: function ($event) {

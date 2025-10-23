@@ -4,11 +4,11 @@
             :show="show2"
             :label="label">
         </loading>
-        <h1 class="uk-text-center">Список всех поставщиков</h1>
+        <h1 class="uk-text-center">Supplier List </h1>
         <div id="modal-change" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-3-4">
                 <div class="uk-margin uk-modal-container-large">
-                    <h3 class="uk-card-title">Редактирование поставщика</h3>
+                    <h3 class="uk-card-title">Edit/Update</h3>
                     <div class="uk-grid-small" uk-grid>
                         <form @submit.prevent="updateProvider()" class="uk-width-1-1">
                             <div class="uk-grid-match uk-child-width-1-1@s" uk-grid>
@@ -20,7 +20,7 @@
                                                 <input class="uk-input" type="text" required placeholder="" v-model="name" >
                                             </div>
                                             <div class="uk-width-1-2@s">
-                                                <label class="uk-form-label">Trade Name</label>
+                                                <label class="uk-form-label">Supplier Code</label>
                                                 <input class="uk-input" type="text" placeholder="" v-model="tradename" >
                                             </div>
                                         </div>
@@ -53,7 +53,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Сохранить </button>
+                                    <button class="uk-button uk-button-primary uk-width-1-3@m uk-width-1-1@s uk-align-center uk-margin-bottom"> Add </button>
                                 </div>
                             </div>
                         </form>
@@ -67,7 +67,7 @@
                     <div class="uk-width-expand">
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
-                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Поиск по Имени" v-model="val" @input="filter(val)">
+                            <input class="uk-input uk-width-1-1 search-fld" type="text" placeholder="Search" v-model="val" @input="filter(val)">
                         </div>
                     </div>
                 </div>
@@ -84,9 +84,9 @@
                             <th class="">Ship from Address</th>
                             <th class="">Email</th>
                             <th class="">Phone</th>
-                            <th class="">country</th>
+                            <th class="">Country</th>
                             <th class="">Primary Contact</th>
-                            <th> Действия </th>
+                            <th> Actions </th>
                         </tr>
                         </thead>
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
@@ -102,8 +102,8 @@
                             <td>{{result.contact || '-'}}</td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Редактировать" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.country, result.contact, result.tradename])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Удалить; pos: bottom" @click.prevent="deleteProvider([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.country, result.contact, result.tradename])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove ; pos: bottom" @click.prevent="deleteProvider([result.id, cnt])"></a></li>
                                 </ul>
                             </td>
                         </tr>
