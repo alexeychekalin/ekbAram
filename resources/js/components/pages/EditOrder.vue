@@ -171,18 +171,19 @@
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Qty</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" >
+                                    <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Rate</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.price" >
+                                    <input class="uk-input" required type="number" placeholder="" v-model="order.price" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Customer Price</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.priceClient" >
                                 </div>
-                                <div style="margin-top: 1.8%">
-                                    <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                                <div class="uk-width-small@s">
+                                    <label class="uk-form-label">Subtotal</label>
+                                    <input class="uk-input" disabled placeholder="" v-model="order.subtotal" >
                                 </div>
                             </div>
                             <div class="uk-grid-small" uk-grid>
@@ -206,6 +207,9 @@
                                     <label class="uk-form-label">ECCN</label>
                                     <input class="uk-input" required  placeholder="" v-model="order.eccn" >
                                 </div>
+                            </div>
+                            <div style="margin-top: 1.8%">
+                                <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                             </div>
                             <hr class="uk-margin-medium"/>
                         </div>
@@ -325,6 +329,10 @@ export default {
         DatePicker, modalClients, modalParts, modalProvider, loading
     },
     methods:{
+        subttl(index){
+            console.log(index)
+            this.orders[index].subtotal = this.orders[index].price*this.orders[index].quantity
+        },
         download(name){
             this.show2 = true
             axios({
@@ -458,11 +466,12 @@ export default {
                     order_number: '',
                     priceClient:'',
                     cd:'',
-                    mfg:'',
-                    coo:'',
+                    mfg:'TBD',
+                    coo:'TBD',
                     schb: '8807300060',
                     eccn: '9A991.D',
-                    sb:''
+                    sb:'TBD',
+                    subtotal:''
                 }
             )
             this.descriptions.push({
@@ -641,7 +650,8 @@ export default {
                             coo: x.coo,
                             schb: x.schb,
                             eccn: x.eccn,
-                            sb: x.sb
+                            sb: x.sb,
+                            subtotal: x.subtotal
                         }
                     )
                     this.descriptions.push({

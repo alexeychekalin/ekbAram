@@ -171,18 +171,19 @@
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Qty</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" >
+                                    <input class="uk-input" required type="number" placeholder="" v-model="order.quantity" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Rate </label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.price" >
+                                    <input class="uk-input" required placeholder="" v-model="order.price" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Customer Price</label>
                                     <input class="uk-input" required type="number" placeholder="" v-model="order.priceClient" >
                                 </div>
-                                <div style="margin-top: 1.8%">
-                                    <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                                <div class="uk-width-small@s">
+                                    <label class="uk-form-label">Subtotal</label>
+                                    <input class="uk-input" disabled placeholder="" v-model="order.subtotal" >
                                 </div>
                             </div>
                             <div class="uk-grid-small" uk-grid>
@@ -206,6 +207,9 @@
                                     <label class="uk-form-label">ECCN</label>
                                     <input class="uk-input" required  placeholder="" v-model="order.eccn" >
                                 </div>
+                            </div>
+                            <div style="margin-top: 1.8%">
+                                <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
                             </div>
                             <hr class="uk-margin-medium"/>
                         </div>
@@ -288,11 +292,12 @@ export default {
             order_number: '',
             priceClient:'',
             cd:'',
-            mfg:'',
-            coo:'',
+            mfg:'TBD',
+            coo:'TBD',
             schb: '8807300060',
             eccn: '9A991.D',
-            sb:''
+            sb:'TBD',
+            subtotal:''
         }],
         descriptions:[{
             description:''
@@ -310,6 +315,9 @@ export default {
         DatePicker, modalClients, modalParts, modalProvider, loading
     },
     methods:{
+        subttl(index){
+          this.orders[index].subtotal = this.orders[index].price*this.orders[index].quantity
+        },
         changeDate(){
             this.timeStop = this.timeStart
         },
@@ -395,11 +403,12 @@ export default {
                     order_number: '',
                     priceClient:'',
                     cd:'',
-                    mfg:'',
-                    coo:'',
+                    mfg:'TBD',
+                    coo:'TBD',
                     schb: '8807300060',
                     eccn: '9A991.D',
-                    sb:''
+                    sb:'TBD',
+                    subtotal: ''
                 }
             )
             this.descriptions.push({
@@ -439,7 +448,7 @@ export default {
                 }
             })
             // update address3 if new posted
-            if(this.newaddress != ''){
+            if(this.newaddress !== ''){
                 axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
                     .then(res => {
                         UIkit.notification({message: 'Адрес клиета добавлен', status:'success'})
@@ -509,12 +518,12 @@ export default {
                                         order_number: '',
                                         priceClient:'',
                                         cd:'',
-                                        mfg:'',
-                                        coo:'',
+                                        mfg:'TBD',
+                                        coo:'TBD',
                                         schb: '8807300060',
                                         eccn: '9A991.D',
-                                        sb:''
-
+                                        sb:'TBD',
+                                        subtotal: ''
                                     }]
                                 })
                                 .catch(error => {

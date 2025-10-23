@@ -31,7 +31,8 @@ class Order extends Model
         'comission',
         'currency',
         'terms',
-        'wd'
+        'wd',
+        'subtotal'
     ];
 
     /**
