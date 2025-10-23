@@ -36,7 +36,6 @@ class OrderController extends Controller
                     'clients.id as idclient',
                     'clients.name as client',
                     'users.name as manager',
-                    'orders.subtotal',
                     DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
                     DB::raw('SUM(order_lists.quantity*order_lists.priceClient) as revenue'),
                     'orders.currency'
@@ -98,7 +97,7 @@ class OrderController extends Controller
                 'order_lists.schb',
                 'order_lists.eccn',
                 'order_lists.sb',
-                'order_lists.subtotal',
+                'order_lists.subtotal'
             )
             ->where('order_lists.order_number', '=', $id)
             ->get();
