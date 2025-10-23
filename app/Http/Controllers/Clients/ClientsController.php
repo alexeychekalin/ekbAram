@@ -17,7 +17,7 @@ class ClientsController extends Controller
     }
     public function get()
     {
-        $clients = DB::table('clients')->get();
+        $clients = DB::table('clients')->orderBy('name')->get();
         return json_decode(json_encode($clients), true);
     }
 

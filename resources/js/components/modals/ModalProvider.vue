@@ -32,21 +32,32 @@
                                     </div>
                                 </div>
                                 <div class="uk-grid-small" uk-grid>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-5@s">
                                         <label class="uk-form-label">E-mail</label>
                                         <input class="uk-input" type="text" required placeholder="" required v-model="email" >
                                     </div>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-5@s">
                                         <label class="uk-form-label">Phone</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="phone" >
                                     </div>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-5@s">
                                         <label class="uk-form-label">Country</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="country" >
                                     </div>
-                                    <div class="uk-width-1-4@s">
+                                    <div class="uk-width-1-5@s">
                                         <label class="uk-form-label">Primary Contact</label>
                                         <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                                    </div>
+                                    <div class="uk-width-1-5@s">
+                                        <label class="uk-form-label">Status</label>
+                                        <select class="uk-select" required v-model="status_provider">
+                                            <option value="1">Approved</option>
+                                            <option value="2">Active</option>
+                                            <option value="3">Pending</option>
+                                            <option value="4">On Hold</option>
+                                            <option value="5">Disqualified</option>
+                                            <option value="6">Dormant</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -77,6 +88,7 @@ export default {
         show2: false,
         label: 'Loading...',
         checkedName:'',
+        status_provider:''
     }),
     methods:{
         newProvider(){
@@ -93,7 +105,8 @@ export default {
                 email: this.email,
                 country: this.country,
                 phone: this.phone,
-                contact: this.contact,})
+                contact: this.contact,
+                status_provider: this.status_provider})
                 .then(res =>{
                     this.show2 = false
                     UIkit.notification({message: 'Новый поставщик добавлен', status:'success'})
@@ -105,6 +118,7 @@ export default {
                     this.country = ''
                     this.phone = ''
                     this.contact = ''
+                    this.status_provider = ''
                     eventBus.$emit('newProvider', {
                         status: 'yes'
                     })

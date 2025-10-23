@@ -49,7 +49,7 @@
                     <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" style="background-color: white;">
                         <thead>
                         <tr>
-                            <th class="uk-table-shrink">#</th>
+                            <th class="uk-table-shrink">Num</th>
                             <th class="">P/N</th>
                             <th class="">Description</th>
                             <th class="">Actions</th>
@@ -63,7 +63,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Update" @click.prevent="show([result.id, result.pn, result.description])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteParts([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteParts([result.id, cnt, result.pn])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -141,20 +141,22 @@ export default {
                 })
         },
         deleteParts(param){
-            this.show2 = true
-            axios.post('/api/parts/delete', {id: param[0], pn: 'null', description: 'null'})
-                .then(res => {
+            UIkit.modal.confirm('Please confirm you wish to remove item with p/n "' + param[2]+'"').then((answer)=> {
+                this.show2 = true
+                axios.post('/api/parts/delete', {id: param[0], pn: 'null', description: 'null'})
+                    .then(res => {
+                        this.show2 = false
+                        UIkit.notification({message: 'Позиция удалена'})
+                        this.results.splice(param[1],1)
+                        this.allresults.splice(param[1],1)
+                    }).catch(({response:{data}})=>{
                     this.show2 = false
-                    UIkit.notification({message: 'Позиция удалена'})
-                    this.results.splice(param[1],1)
-                    this.allresults.splice(param[1],1)
-                }).catch(({response:{data}})=>{
-                this.show2 = false
-                UIkit.notification({message: 'Ошибка удаления. Данная позиция добавлена в заказ!'})
-            }).finally(()=>{
-                UIkit.modal("#modal-change").hide()
-                this.getParts();
-            })
+                    UIkit.notification({message: 'Ошибка удаления. Данная позиция добавлена в заказ!'})
+                }).finally(()=>{
+                    UIkit.modal("#modal-change").hide()
+                    this.getParts();
+                })
+            },function () {});
         }
     },
     mounted() {

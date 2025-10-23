@@ -86,18 +86,18 @@
             </div>
             <div class="uk-card-body uk-margin-medium-bottom uk-padding-remove-top">
                 <div class="form-container uk-overflow-auto">
-                    <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" style="background-color: white;">
+                    <table class="uk-table uk-table-hover uk-table-middle uk-text-center uk-table-divider" style="background-color: white;">
                         <thead>
                         <tr>
                             <th class="uk-table-shrink">#</th>
-                            <th class="">Customer Name</th>
-                            <th class="">Bill to Address</th>
-                            <th class="">Ship to Address</th>
-                            <th class="">E-mail</th>
-                            <th class="">Phone</th>
-                            <th class="">Reference number</th>
-                            <th class="">Primary contact</th>
-                            <th class="">Actions</th>
+                            <th class="uk-table-middle uk-text-center">Customer Name</th>
+                            <th class="uk-table-middle uk-text-center">Bill to Address</th>
+                            <th class="uk-table-middle uk-text-center">Ship to Address</th>
+                            <th class="uk-table-middle uk-text-center">E-mail</th>
+                            <th class="uk-table-middle uk-text-center">Phone</th>
+                            <th class="uk-table-middle uk-text-center">Reference number</th>
+                            <th class="uk-table-middle uk-text-center">Primary contact</th>
+                            <th class="uk-table-middle uk-text-center">Actions</th>
                         </tr>
                         </thead>
                         <tbody v-for="(result, cnt) in results"  :id="result.id">
@@ -113,7 +113,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show(result)"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteClients(result.id, cnt)"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteClients(result.id, cnt, result.name)"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -227,20 +227,22 @@ export default {
                 this.getClients();
                 })
         },
-        deleteClients(param, cnt){
-            this.show2 = true
-            axios.post('/api/clients/delete', {id: param, name: 'null', address: 'null', email: 'null', code:'null'})
-                .then(res => {
-                    this.show2 = false
-                    UIkit.notification({message: 'Клиент удален'})
-                    this.results.splice(cnt,1)
-                    this.allresults.splice(cnt,1)
-                }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Ошибка удаления. У клиента имеются заказы'})
-            }).finally(()=>{
-                UIkit.modal("#modal-change").hide()
-                this.getClients();
-            })
+        deleteClients(param, cnt, name){
+            UIkit.modal.confirm('Please confirm you wish to remove supplier "' + name + '"').then((answer)=> {
+                this.show2 = true
+                axios.post('/api/clients/delete', {id: param, name: 'null', address: 'null', email: 'null', code:'null'})
+                    .then(res => {
+                        this.show2 = false
+                        UIkit.notification({message: 'Клиент удален'})
+                        this.results.splice(cnt,1)
+                        this.allresults.splice(cnt,1)
+                    }).catch(({response:{data}})=>{
+                    UIkit.notification({message: 'Ошибка удаления. У клиента имеются заказы'})
+                }).finally(()=>{
+                    UIkit.modal("#modal-change").hide()
+                    this.getClients();
+                })
+            },function () {});
         }
     },
     mounted() {

@@ -35,21 +35,32 @@
                                             </div>
                                         </div>
                                         <div class="uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-4@s">
+                                            <div class="uk-width-1-5@s">
                                                 <label class="uk-form-label">E-mail</label>
-                                                <input class="uk-input" type="text" required placeholder=""  v-model="email" >
+                                                <input class="uk-input" type="text" required placeholder="" required v-model="email" >
                                             </div>
-                                            <div class="uk-width-1-4@s">
+                                            <div class="uk-width-1-5@s">
                                                 <label class="uk-form-label">Phone</label>
-                                                <input class="uk-input" type="text" required placeholder="" v-model="phone" >
+                                                <input class="uk-input" type="text" placeholder="" v-model="phone" >
                                             </div>
-                                            <div class="uk-width-1-4@s">
+                                            <div class="uk-width-1-5@s">
                                                 <label class="uk-form-label">Country</label>
-                                                <input class="uk-input" type="text" required placeholder="" v-model="country" >
+                                                <input class="uk-input" type="text" placeholder="" v-model="country" >
                                             </div>
-                                            <div class="uk-width-1-4@s">
+                                            <div class="uk-width-1-5@s">
                                                 <label class="uk-form-label">Primary Contact</label>
-                                                <input class="uk-input" type="text" required placeholder="" v-model="contact" >
+                                                <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                                            </div>
+                                            <div class="uk-width-1-5@s">
+                                                <label class="uk-form-label">Status</label>
+                                                <select class="uk-select" required v-model="status_provider">
+                                                    <option value="1">Approved</option>
+                                                    <option value="2">Active</option>
+                                                    <option value="3">Pending</option>
+                                                    <option value="4">On Hold</option>
+                                                    <option value="5">Disqualified</option>
+                                                    <option value="6">Dormant</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -79,13 +90,14 @@
                         <tr>
                             <th class="uk-table-shrink">#</th>
                             <th class="">Legal Name</th>
-                            <th class="">Trade Name</th>
+                            <th class="">Supplier Code</th>
                             <th class="">Bill to Address</th>
                             <th class="">Ship from Address</th>
                             <th class="">Email</th>
                             <th class="">Phone</th>
                             <th class="">Country</th>
                             <th class="">Primary Contact</th>
+                            <th class="">Status</th>
                             <th> Actions </th>
                         </tr>
                         </thead>
@@ -100,10 +112,11 @@
                             <td>{{result.phone || '-'}}</td>
                             <td>{{result.country || '-'}}</td>
                             <td>{{result.contact || '-'}}</td>
+                            <td>{{statuses_provider[result.status_provider-1]}}</td>
                             <td>
                                 <ul class="uk-iconnav">
-                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.country, result.contact, result.tradename])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove ; pos: bottom" @click.prevent="deleteProvider([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show([result.id, result.name, result.address, result.address1, result.address2, result.email, result.phone, result.country, result.contact, result.tradename, result.status_provider])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove ; pos: bottom" @click.prevent="deleteProvider([result.id, cnt, result.name])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -129,6 +142,8 @@ export default {
         country:'',
         phone:'',
         contact:'',
+        status_provider: '',
+        statuses_provider:['Approved', 'Active', 'Pending', 'On Hold', 'Disqualified', 'Dormant'],
         results: [],
         allresults:[],
         val:'',
@@ -177,6 +192,7 @@ export default {
             this.contact = param[8]
             this.id = param[0]
             this.tradename = param[9]
+            this.status_provider = param[10]
         },
         updateProvider(param){
             this.show2 = true
@@ -190,7 +206,8 @@ export default {
                                                         country: this.country,
                                                         phone: this.phone,
                                                         contact: this.contact,
-                                                        tradename: this.tradename
+                                                        tradename: this.tradename,
+                                                        status_provider: this.status_provider
             })
                 .then(res => {
                     this.show2 = false
@@ -205,20 +222,22 @@ export default {
                 })
         },
         deleteProvider(param){
-            this.show2 = true
-            axios.post('/api/provider/delete', {id: param[0], name: 'null', address: 'null', email: 'null'})
-                .then(res => {
-                    this.show2 = true
-                    UIkit.notification({message: 'Поставщик удален'})
-                    this.results.splice(param[1],1)
-                    this.allresults.splice(param[1],1)
-                }).catch(({response:{data}})=>{
+            UIkit.modal.confirm('Please confirm you wish to remove supplier "'+param[2]+'"').then((answer)=> {
                 this.show2 = true
-                UIkit.notification({message: 'Ошибка удаления. Поставщик указан в заказах'})
-            }).finally(()=>{
-                UIkit.modal("#modal-change").hide()
-                this.getProvider();
-            })
+                axios.post('/api/provider/delete', {id: param[0], name: 'null', address: 'null', email: 'null'})
+                    .then(res => {
+                        this.show2 = true
+                        UIkit.notification({message: 'Поставщик удален'})
+                        this.results.splice(param[1],1)
+                        this.allresults.splice(param[1],1)
+                    }).catch(({response:{data}})=>{
+                    this.show2 = true
+                    UIkit.notification({message: 'Ошибка удаления. Поставщик указан в заказах'})
+                }).finally(()=>{
+                    UIkit.modal("#modal-change").hide()
+                    this.getProvider();
+                })
+            },function () {});
         }
     },
     mounted() {

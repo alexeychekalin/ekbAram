@@ -28,7 +28,8 @@ class Provider extends Model
         'contact',
         'address1',
         'address2',
-        'tradename'
+        'tradename',
+        'status_provider'
     ];
 
     /**

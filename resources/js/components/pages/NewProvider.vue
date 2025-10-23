@@ -15,7 +15,7 @@
                                 <input class="uk-input" type="text" required placeholder="" required v-model="name" :class="checkedName" @blur="checkName">
                             </div>
                             <div class="uk-width-1-2@s">
-                                <label class="uk-form-label">Supplier Code </label>
+                                <label class="uk-form-label">Supplier Code</label>
                                 <input class="uk-input" type="text" placeholder="" v-model="tradename" >
                             </div>
                         </div>
@@ -30,21 +30,32 @@
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">E-mail</label>
                                 <input class="uk-input" type="text" required placeholder="" required v-model="email" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Phone</label>
                                 <input class="uk-input" type="text" placeholder="" v-model="phone" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Country</label>
                                 <input class="uk-input" type="text" placeholder="" v-model="country" >
                             </div>
-                            <div class="uk-width-1-4@s">
+                            <div class="uk-width-1-5@s">
                                 <label class="uk-form-label">Primary Contact</label>
                                 <input class="uk-input" type="text" placeholder="" v-model="contact" >
+                            </div>
+                            <div class="uk-width-1-5@s">
+                                <label class="uk-form-label">Status</label>
+                                <select class="uk-select" required v-model="status_provider">
+                                    <option value="1">Approved</option>
+                                    <option value="2">Active</option>
+                                    <option value="3">Pending</option>
+                                    <option value="4">On Hold</option>
+                                    <option value="5">Disqualified</option>
+                                    <option value="6">Dormant</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -57,13 +68,14 @@
             <tr>
                 <th class="uk-table-shrink">#</th>
                 <th class="">Legal Name</th>
-                <th class="">Trade Name</th>
+                <th class="">Supplier Code</th>
                 <th class="">Bill to Address</th>
                 <th class="">Ship from Address</th>
                 <th class="">Email</th>
                 <th class="">Phone</th>
                 <th class="">Country</th>
                 <th class="">Primary Contact</th>
+                <th class="">Status</th>
             </tr>
             </thead>
             <tbody v-for="(result, cnt) in results">
@@ -77,6 +89,7 @@
                 <td>{{result.phone || '-'}}</td>
                 <td>{{result.country || '-'}}</td>
                 <td>{{result.contact || '-'}}</td>
+                <td>{{statuses_provider[result.status_provider-1]}}</td>
             </tr>
             </tbody>
         </table>
@@ -102,6 +115,8 @@ export default {
         show2: false,
         label: 'Loading...',
         checkedName:'',
+        status_provider:'',
+        statuses_provider:['Approved', 'Active', 'Pending', 'On Hold', 'Disqualified', 'Dormant'],
     }),
     components:{
         loading
@@ -121,7 +136,8 @@ export default {
                                                     email: this.email,
                                                     country: this.country,
                                                     phone: this.phone,
-                                                    contact: this.contact,})
+                                                    contact: this.contact,
+                                                    status_provider: this.status_provider})
                 .then(res =>{
                     UIkit.notification({message: 'Новый поставщик добавлен', status:'success'})
                     this.$data.results.push(
@@ -133,7 +149,8 @@ export default {
                             email: this.email,
                             country: this.country,
                             phone: this.phone,
-                            contact: this.contact
+                            contact: this.contact,
+                            status_provider: this.status_provider
                         }
                     )
                     this.name = ''
@@ -144,6 +161,7 @@ export default {
                     this.country = ''
                     this.phone = ''
                     this.contact = ''
+                    this.status_provider = ''
                     this.show2 = false
                 })
                 .catch(error => {

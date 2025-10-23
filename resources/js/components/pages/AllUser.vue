@@ -82,7 +82,7 @@
                             <td>
                                 <ul class="uk-iconnav">
                                     <li><a uk-icon="icon: file-edit" uk-tooltip="Edit/Update" @click.prevent="show([result.name, result.phone, result.prefix, result.role, result.id])"></a></li>
-                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteUser([result.id, cnt])"></a></li>
+                                    <li><a uk-icon="icon: trash" uk-tooltip="title: Remove; pos: bottom" @click.prevent="deleteUser([result.id, cnt, result.name])"></a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -180,20 +180,29 @@ export default {
                 })
         },
         deleteUser(param){
-            this.show2 = true
-            axios.post('/api/users/delete', {id: param[0], name: 'null', password: 'null', phone: 'null', prefix: 'null', role: 0})
-                .then(res => {
+            UIkit.modal.confirm('Please confirm you wish to remove user "' + param[2]+'"').then((answer)=> {
+                this.show2 = true
+                axios.post('/api/users/delete', {
+                    id: param[0],
+                    name: 'null',
+                    password: 'null',
+                    phone: 'null',
+                    prefix: 'null',
+                    role: 0
+                })
+                    .then(res => {
+                        this.show2 = false
+                        UIkit.notification({message: 'Пользователь удален'})
+                        this.results.splice(param[1], 1)
+                        this.allresults.splice(param[1], 1)
+                    }).catch(({response: {data}}) => {
                     this.show2 = false
-                    UIkit.notification({message: 'Пользователь удален'})
-                    this.results.splice(param[1],1)
-                    this.allresults.splice(param[1],1)
-                }).catch(({response:{data}})=>{
-                    this.show2 = false
-                UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
-            }).finally(()=>{
-                UIkit.modal("#modal-change").hide()
-                this.getUsers();
-            })
+                    UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                }).finally(() => {
+                    UIkit.modal("#modal-change").hide()
+                    this.getUsers();
+                })
+            },function () {});
         }
     },
     mounted() {

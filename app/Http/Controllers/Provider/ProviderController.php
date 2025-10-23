@@ -20,7 +20,7 @@ class ProviderController extends Controller
     }
     public function get()
     {
-        $provider = DB::table('providers')->get();
+        $provider = DB::table('providers')->orderBy('name')->get();
         return json_decode(json_encode($provider), true);
     }
 

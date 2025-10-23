@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                             <div style="margin-top: 1.8%">
-                                <a uk-tooltip="Remove" uk-icon="icon: trash" @click.prevent="deleteOrder(index)" v-show="index != 0" ></a>
+                                <a uk-tooltip="Remove" @click.prevent="deleteOrder(index)" uk-icon="icon: trash" v-show="index != 0" ></a>
                             </div>
                             <hr class="uk-margin-medium"/>
                         </div>
@@ -416,8 +416,10 @@ export default {
             })
         },
         deleteOrder(index){
-            this.orders.splice(index,1)
-            this.descriptions.splice(index,1)
+            UIkit.modal.confirm('Please confirm you wish to remove line item').then((answer)=> {
+                this.orders.splice(index,1)
+                this.descriptions.splice(index,1)
+            },function () {});
         },
         createOrder(){
             if(this.shipto === ''){
