@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
     if(to.meta.middleware=="guest"){
         if(store.state.auth.authenticated){
             if(to.meta.admin){
-                if(store.state.auth.role == 1){
+                if(store.state.auth.role == '1'){
                     next()
                 }
                 else{

@@ -19,7 +19,7 @@ class OrderController extends Controller
 
     public function get($id, $role)
     {
-        if($role == 1){
+        //if($role == 1){
             $orders = DB::table('orders')
                 ->join('clients', 'orders.client', '=', 'clients.id')
                 ->join('users', 'orders.manager', '=', 'users.id')
@@ -36,13 +36,14 @@ class OrderController extends Controller
                     'clients.id as idclient',
                     'clients.name as client',
                     'users.name as manager',
-                    DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
-                    DB::raw('SUM(order_lists.quantity*order_lists.priceClient) as revenue'),
+                    DB::raw('SUM(ROUND(order_lists.quantity*order_lists.price,2)) as expence'),
+                    DB::raw('SUM(ROUND(order_lists.quantity*order_lists.priceClient,2)) as revenue'),
                     'orders.currency'
                 )
                 ->groupBy('orders.id')
                 ->get();
-        }
+       // }
+        /*
         else{
             $orders = DB::table('orders')
                 ->join('clients', 'orders.client', '=', 'clients.id')
@@ -57,7 +58,6 @@ class OrderController extends Controller
                     'orders.comission',
                     'orders.ipo',
                     'orders.wd',
-                    'orders.subtotal',
                     'clients.id as idclient',
                     'users.name as manager',
                     DB::raw('SUM(order_lists.quantity*order_lists.price) as expence'),
@@ -68,7 +68,7 @@ class OrderController extends Controller
                 ->groupBy('orders.id')
                 ->get();
         }
-
+        */
         return json_decode(json_encode($orders), true);
     }
 

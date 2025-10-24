@@ -20,6 +20,7 @@ class UserController extends Controller
     }
 
     public function update(UserRequest $request){
+    //return DB::raw($data['phone'];
         if($request['password'] != 'null'){
             $data = $request->validated();
             $data['password'] = bcrypt($data['password']);
@@ -27,24 +28,25 @@ class UserController extends Controller
                 ->where('id', $request['id'])
                 ->update(
                     [
-                        'name' => DB::raw($data['name']),
-                        'phone' => DB::raw($data['phone']),
-                        'prefix' => DB::raw($data['prefix']),
-                        'role' => DB::raw($data['role']),
+                        'name' =>$data['name'],
+                        'phone' => $data['phone'],
+                        'prefix' => $data['prefix'],
+                        'role' => $data['role'],
                         'password' => $data['password']
                     ]
                 );
             return $request['id'];
         }
         else{
+            $data = $request->validated();
             DB::table('users')
                 ->where('id', $request['id'])
                 ->update(
                     [
-                        'name' =>DB::raw($request['name']),
-                        'phone' => DB::raw($request['phone']),
-                        'prefix' => DB::raw($request['prefix']),
-                        'role' => DB::raw($request['role'])
+                        'name' =>$data['name'],
+                        'phone' => $data['phone'],
+                        'prefix' => $data['prefix'],
+                        'role' => $data['role']
                     ]
                 );
             return $request['id'];

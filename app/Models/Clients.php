@@ -30,7 +30,9 @@ class Clients extends Model
         'address2',
         'address3',
         'code',
-        'ipo'
+        'ipo',
+        'terms',
+        'creditline',
     ];
 
     /**

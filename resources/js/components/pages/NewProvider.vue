@@ -124,7 +124,7 @@ export default {
     methods:{
         newProvider(){
             if(this.checkedName !== 'uk-form-success'){
-                UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
+                UIkit.notification({message: 'Customer already exist'})
                 return;
             }
             this.show2 = true
@@ -139,7 +139,7 @@ export default {
                                                     contact: this.contact,
                                                     status_provider: this.status_provider})
                 .then(res =>{
-                    UIkit.notification({message: 'Новый поставщик добавлен', status:'success'})
+                    UIkit.notification({message: 'New customer added!', status:'success'})
                     this.$data.results.push(
                         {
                             name: this.name,
@@ -180,7 +180,7 @@ export default {
                         this.$data.checkedName = 'uk-form-success'
                     }else{
                         this.$data.checkedName = 'uk-form-danger'
-                        UIkit.notification({message: 'Клиент с таким "Customer Name" уже существует'})
+                        UIkit.notification({message: 'Customer already exist'})
                     }
                 })
                 .catch(error => {

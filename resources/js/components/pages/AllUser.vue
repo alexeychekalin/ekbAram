@@ -21,7 +21,7 @@
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Email</label>
-                                                <input class="uk-input" type="text" placeholder="" required pattern="\d+" v-model="phone" :class="checkedTel">
+                                                <input class="uk-input" type="text" placeholder="" required v-model="phone" :class="checkedTel">
                                             </div>
                                             <div class="uk-width-1-3@s">
                                                 <label class="uk-form-label">Password</label>
@@ -157,7 +157,7 @@ export default {
                         this.$data.checkedTel = 'uk-form-success'
                     }else{
                         this.$data.checkedTel = 'uk-form-danger'
-                        UIkit.notification({message: 'Пользователь с данным номером существует в системе'})
+                        UIkit.notification({message: 'User already exist'})
                     }
                 })
                 .catch(error => {
@@ -166,14 +166,14 @@ export default {
         },
         updateUser(){
             this.show2= true
-            axios.post('/api/users/update', {id: this.id, name: "'"+this.name+"'", password: this.password || 'null', phone: this.phone, prefix: this.prefix, role: this.role})
+            axios.post('/api/users/update',{id: this.id, name: this.name, password: this.password || 'null', phone: this.phone, prefix: this.prefix, role: this.role})
                 .then(res => {
                     this.show2 = false
                     UIkit.modal("#modal-change").hide()
-                    UIkit.notification({message: 'Пользователь обновлен'})
+                    UIkit.notification({message: 'User updated'})
                 }).catch(({response:{data}})=>{
                     this.show2 = false
-                UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
+                UIkit.notification({message: 'Fatal error on update. Please contact admin'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
                 this.getUsers();
@@ -192,12 +192,12 @@ export default {
                 })
                     .then(res => {
                         this.show2 = false
-                        UIkit.notification({message: 'Пользователь удален'})
+                        UIkit.notification({message: 'User deleted'})
                         this.results.splice(param[1], 1)
                         this.allresults.splice(param[1], 1)
                     }).catch(({response: {data}}) => {
                     this.show2 = false
-                    UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                    UIkit.notification({message: 'Fatal error on delete. Please contact admin'})
                 }).finally(() => {
                     UIkit.modal("#modal-change").hide()
                     this.getUsers();

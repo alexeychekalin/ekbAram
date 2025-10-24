@@ -112,7 +112,7 @@ export default {
             })
                 .then(res =>{
                     this.show2 = false
-                    UIkit.notification({message: 'Данные обновлены', status:'success'})
+                    UIkit.notification({message: 'Company info updated', status:'success'})
                 })
                 .catch(error => {
                     this.show2 = false

@@ -130,11 +130,11 @@ export default {
             axios.post('/api/parts/update', {id: this.id, pn: this.pn, description: this.description})
                 .then(res => {
                     this.show2 = false
-                    UIkit.notification({message: 'Позиция обновлена'})
+                    UIkit.notification({message: 'Item list updated'})
                     UIkit.modal("#modal-change").hide()
                 }).catch(({response:{data}})=>{
                 this.show2 = false
-                UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
+                UIkit.notification({message: 'Fatal error on update. Please contact admin'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
                 this.getParts();
@@ -146,12 +146,12 @@ export default {
                 axios.post('/api/parts/delete', {id: param[0], pn: 'null', description: 'null'})
                     .then(res => {
                         this.show2 = false
-                        UIkit.notification({message: 'Позиция удалена'})
+                        UIkit.notification({message: 'Item list deleted'})
                         this.results.splice(param[1],1)
                         this.allresults.splice(param[1],1)
                     }).catch(({response:{data}})=>{
                     this.show2 = false
-                    UIkit.notification({message: 'Ошибка удаления. Данная позиция добавлена в заказ!'})
+                    UIkit.notification({message: 'Error on delete Item list. Item list added to another order!'})
                 }).finally(()=>{
                     UIkit.modal("#modal-change").hide()
                     this.getParts();

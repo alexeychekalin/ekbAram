@@ -33,7 +33,9 @@ class ClientsRequest extends FormRequest
             'address2' => '',
             'address3' => '',
             'code' => 'required|string',
-            'ipo' => ''
+            'ipo' => '',
+            'terms' => '',
+            'creditline'=>''
         ];
     }
 }

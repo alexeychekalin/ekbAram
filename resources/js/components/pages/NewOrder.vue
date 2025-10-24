@@ -103,6 +103,16 @@
                                 <input class="uk-input" type="text" placeholder="" v-model="phone" disabled>
                             </div>
                         </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-expand@s">
+                                <label class="uk-form-label">Terms</label>
+                                <input class="uk-input" type="text" placeholder="" v-model="terms_cl" disabled>
+                            </div>
+                            <div class="uk-width-1-6@s">
+                                <label class="uk-form-label">Credit Line</label>
+                                <input class="uk-input" type="number" step="0.01" placeholder="" v-model="creditline" disabled>
+                            </div>
+                        </div>
                         <div class="uk-grid-small" uk-grid v-show="client !== ''">
                             <div class="uk-width-1-2@s">
                                 <label class="uk-form-label">Ship to</label>
@@ -175,11 +185,11 @@
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Rate </label>
-                                    <input class="uk-input" required placeholder="" v-model="order.price" @input="subttl(index)">
+                                    <input class="uk-input" required placeholder="" type="number" step="0.01" v-model="order.price" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Customer Price</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.priceClient" >
+                                    <input class="uk-input" required type="number" step="0.01" placeholder="" v-model="order.priceClient" >
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Subtotal</label>
@@ -281,6 +291,8 @@ export default {
         phone:'',
         contact:'',
         code:'',
+        terms_cl:'',
+        creditline:0,
         parts:[],
         providers:[],
         currency:'',
@@ -349,7 +361,7 @@ export default {
             axios.post('/api/parts', {pn: this.pn, description: this.description})
                 .then(res =>{
                     this.show2 = false
-                    UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
+                    UIkit.notification({message: 'New item list added!', status:'success'})
                     this.pn = ''
                     this.description = ''
                 })
@@ -379,6 +391,8 @@ export default {
             this.email = this.clients[this.client].email
             this.contact = this.clients[this.client].contact
             this.code = this.clients[this.client].code
+            this.terms_cl = this.clients[this.client].terms
+            this.creditline = this.clients[this.client].creditline
         },
         getParts(){
             axios.get('/api/parts',{withCredentials: true} )
@@ -423,7 +437,7 @@ export default {
         },
         createOrder(){
             if(this.shipto === ''){
-                UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
+                UIkit.notification({message: 'Delivery address not set', status:'danger'})
                 return;
             }
             this.show2 = true
@@ -436,13 +450,12 @@ export default {
                 if(!this.parts.find(e => e.pn.toLowerCase() === el.part.toLowerCase())){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
                         .then(res =>{
-                            UIkit.notification({message: 'Новая позиции добавлены!', status:'success'})
+                            UIkit.notification({message: 'New item list added!', status:'success'})
                             this.orders[i].part = res.data.id;
                         })
                         .catch(error => {
                             this.show2 = false
                             UIkit.notification({message: error, status:'danger'})
-                            console.log(error);
                         })
                 }
                 else{
@@ -453,14 +466,13 @@ export default {
             if(this.newaddress !== ''){
                 axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
                     .then(res => {
-                        UIkit.notification({message: 'Адрес клиета добавлен', status:'success'})
+                        UIkit.notification({message: 'Delivery address added', status:'success'})
                         this.clients[this.client].address3 = this.shipto
                         this.address3 = this.shipto
                     })
                     .catch(function (error) {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
-                        console.log("error in update address")
                     });
             }
 
@@ -489,7 +501,7 @@ export default {
                             this.orders.forEach(el => {el.order_number = response.data.id})
                             axios.post('api/orderlist', this.orders)
                                 .then(response => {
-                                    UIkit.notification({message: 'Заказ добавлен!', status:'success'})
+                                    UIkit.notification({message: 'New entry added!', status:'success'})
                                     this.$data.number = ''
                                     this.$data.ipo = ''
                                     this.$data.timeStart =''
@@ -531,19 +543,16 @@ export default {
                                 .catch(error => {
                                     this.show2 = false
                                     UIkit.notification({message: error, status:'danger'})
-                                    console.log("error in create order list")
                                 });
                         })
                         .catch(error => {
                             this.show2 = false
                             UIkit.notification({message: error, status:'danger'})
-                            console.log("error in create order")
                         });
                 })
                 .catch(error => {
                     this.show2 = false
                     UIkit.notification({message: error, status:'danger'})
-                    console.log("error in file upload")
                 });
             this.show2 = false
         },

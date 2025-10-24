@@ -56,7 +56,7 @@ export default {
                 this.signIn()
                 localStorage.setItem('user', JSON.stringify(data.data))
             }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Неверное имя пользователя или пароль'})
+                UIkit.notification({message: 'Wrong email or password'})
             }).finally(()=>{
                 this.processing = false
             })

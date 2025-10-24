@@ -66,7 +66,7 @@
                             <td>{{result.client || '-'}}</td>
                             <td>{{result.revenue || '-'}} {{result.currency}}</td>
                             <td>{{result.expence || '-'}} {{result.currency}}</td>
-                            <td>{{result.revenue - result.expence || '-'}} {{result.currency}}</td>
+                            <td>{{result.revenue - result.expence || 0}} {{result.currency}}</td>
                             <td class="uk-width-1-6">
                                 <ul class="uk-iconnav">
                                     <li> <button class="uk-button uk-button-link" @click.prevent="getIpo(result.ipo)">IPO</button></li>
@@ -247,7 +247,7 @@ export default {
                     this.results.splice(cnt,1)
                     this.allresults.splice(cnt,1)
                 }).catch(({response:{data}})=>{
-                UIkit.notification({message: 'Ошибка удаления. Обратитесь к администратору'})
+                UIkit.notification({message: 'Fatal error on delete. Please contact admin'})
             })
         },
         countRevExp(arr){

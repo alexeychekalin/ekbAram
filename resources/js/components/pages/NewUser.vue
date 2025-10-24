@@ -16,7 +16,7 @@
                             </div>
                             <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Email</label>
-                                <input class="uk-input" type="text" placeholder="" required pattern="\d+" v-model="phone" :class="checkedTel" @blur="checkPhone">
+                                <input class="uk-input" type="text" placeholder="" required v-model="phone" :class="checkedTel" @blur="checkPhone">
                             </div>
                             <div class="uk-width-1-3@s">
                                 <label class="uk-form-label">Password</label>
@@ -85,14 +85,14 @@ export default {
     methods:{
         newUser(){
             if(this.checkedTel !== 'uk-form-success'){
-                UIkit.notification({message: 'Пользователь с данным номером существует в системе'})
+                UIkit.notification({message: 'User with this email already exist'})
                 return;
             }
             this.show2 = true
             axios.post('/api/users', {name: this.name, password: this.password, phone: this.phone, prefix: this.prefix, role: this.role})
                 .then(res =>{
                     this.show2 = false
-                    UIkit.notification({message: 'Пользователь добавлен!', status:'success'})
+                    UIkit.notification({message: 'User added!', status:'success'})
                     this.$data.results.push(
                         {
                             name : this.name,
@@ -123,7 +123,7 @@ export default {
                         this.$data.checkedTel = 'uk-form-success'
                     }else{
                         this.$data.checkedTel = 'uk-form-danger'
-                        UIkit.notification({message: 'Пользователь с данным номером существует в системе'})
+                        UIkit.notification({message: 'User with email already exist'})
                     }
                 })
                 .catch(error => {

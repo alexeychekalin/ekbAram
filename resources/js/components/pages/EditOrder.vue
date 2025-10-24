@@ -175,11 +175,11 @@
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Rate</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.price" @input="subttl(index)">
+                                    <input class="uk-input" required type="number" step="0.01" placeholder="" v-model="order.price" @input="subttl(index)">
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Customer Price</label>
-                                    <input class="uk-input" required type="number" placeholder="" v-model="order.priceClient" >
+                                    <input class="uk-input" required type="number" step="0.01" placeholder="" v-model="order.priceClient" >
                                 </div>
                                 <div class="uk-width-small@s">
                                     <label class="uk-form-label">Subtotal</label>
@@ -485,7 +485,7 @@ export default {
         createOrder(){
             this.save = true;
             if(this.shipto === ''){
-                UIkit.notification({message: 'Не установлен адрес доставки', status:'danger'})
+                UIkit.notification({message: 'Not set delivery address', status:'danger'})
                 return;
             }
 
@@ -500,7 +500,7 @@ export default {
                 if(!this.parts.find(e => e.pn.toLowerCase() === el.part.toLowerCase())){
                     axios.post('/api/parts', {pn: el.part, description: this.descriptions[i].description})
                         .then(res =>{
-                            UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
+                            UIkit.notification({message: 'New Item list added!', status:'success'})
                             this.orders[i].part = res.data.id;
                         })
                         .catch(error => {
@@ -518,15 +518,13 @@ export default {
                 console.log(this.newaddress)
                 axios.post('/api/clients/address',{name:'null', address:'null', email:'null', code:'null', id: this.clients[this.client].id, newaddress: this.shipto} )
                     .then(res => {
-                        UIkit.notification({message: 'Адрес клиета добавлен', status:'success'})
-                        console.log('address 3 updated')
+                        UIkit.notification({message: 'Customer address updated', status:'success'})
                         this.clients[this.client].address3 = this.shipto
                         this.address3 = this.shipto
                     })
                     .catch(function (error) {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
-                        console.log("error in update address")
                     });
             }
             if(this.fileChanged){
@@ -556,25 +554,22 @@ export default {
                                 this.orders.forEach(el => {el.order_number = this.$route.params.id})
                                 axios.post('api/orderlist', this.$data.orders)
                                     .then(response => {
-                                        UIkit.notification({message: 'Заказ обновлен!', status:'success'})
+                                        UIkit.notification({message: 'Order updated!', status:'success'})
                                         this.$router.push({name: 'dashboard'})
                                     })
                                     .catch(error => {
                                         this.show2 = false
                                         UIkit.notification({message: error, status:'danger'})
-                                        console.log("error in update order list")
                                     });
                             })
                             .catch(error => {
                                 this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
-                                console.log("error in update order")
                             });
                     })
                     .catch(error => {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
-                        console.log("error in file upload")
                     });
             }
             else{
@@ -599,19 +594,17 @@ export default {
                         this.orders.forEach(el => {el.order_number = this.$route.params.id})
                         axios.post('api/orderlist', this.$data.orders)
                             .then(response => {
-                                UIkit.notification({message: 'Заказ обновлен!', status:'success'})
+                                UIkit.notification({message: 'Order updated!', status:'success'})
                                 this.$router.push({name: 'dashboard'})
                             })
                             .catch(error => {
                                 this.show2 = false
                                 UIkit.notification({message: error, status:'danger'})
-                                console.log("error in update order list")
                             });
                     })
                     .catch(error => {
                         this.show2 = false
                         UIkit.notification({message: error, status:'danger'})
-                        console.log("error in update order")
                     });
             }
             this.show2 = false

@@ -211,11 +211,11 @@ export default {
             })
                 .then(res => {
                     this.show2 = false
-                    UIkit.notification({message: 'Поставщик обновлен'})
+                    UIkit.notification({message: 'Supplier updated!'})
                     UIkit.modal("#modal-change").hide()
                 }).catch(({response:{data}})=>{
                 this.show2 = false
-                UIkit.notification({message: 'Ошибка изменения. Обратитесь к администратору'})
+                UIkit.notification({message: 'Fatal error on update. Please contact admin'})
             }).finally(()=>{
                 UIkit.modal("#modal-change").hide()
                 this.getProvider();
@@ -227,12 +227,12 @@ export default {
                 axios.post('/api/provider/delete', {id: param[0], name: 'null', address: 'null', email: 'null'})
                     .then(res => {
                         this.show2 = true
-                        UIkit.notification({message: 'Поставщик удален'})
+                        UIkit.notification({message: 'Supplier deleted!'})
                         this.results.splice(param[1],1)
                         this.allresults.splice(param[1],1)
                     }).catch(({response:{data}})=>{
                     this.show2 = true
-                    UIkit.notification({message: 'Ошибка удаления. Поставщик указан в заказах'})
+                    UIkit.notification({message: 'Error on delete Supplier. Supplier has another orders'})
                 }).finally(()=>{
                     UIkit.modal("#modal-change").hide()
                     this.getProvider();

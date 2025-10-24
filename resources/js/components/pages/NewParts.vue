@@ -62,13 +62,13 @@ export default {
     methods:{
         newParts(){
             if(this.checkedName !== 'uk-form-success'){
-                UIkit.notification({message: 'P/N уже существует'})
+                UIkit.notification({message: 'P/N already exist '})
                 return;
             }
             this.show2 = true
             axios.post('/api/parts', {pn: this.pn, description: this.description})
                 .then(res =>{
-                    UIkit.notification({message: 'Новая позиция добавлена!', status:'success'})
+                    UIkit.notification({message: 'New item list added!', status:'success'})
                     this.$data.results.push(
                         {
                             pn : this.pn,
@@ -95,7 +95,7 @@ export default {
                         this.$data.checkedName = 'uk-form-success'
                     }else{
                         this.$data.checkedName = 'uk-form-danger'
-                        UIkit.notification({message: 'Позиция с таким "P/N" уже существует'})
+                        UIkit.notification({message: 'Item list with P/N already exist'})
                     }
                 })
                 .catch(error => {
